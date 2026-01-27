@@ -1,0 +1,77 @@
+{# templates/beneficiaire/index.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block title %}المنتفعون{% endblock %}
+
+{% block body %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>قائمة المنتفعين</h2>
+    <div>
+        <a href="{{ path('app_export_beneficiaires_excel') }}" class="btn btn-success">
+            <i class="bi bi-file-excel"></i> تصدير Excel
+        </a>
+        <a href="{{ path('app_beneficiaire_new') }}" class="btn btn-primary">
+            <i class="bi bi-plus-circle"></i> إضافة منتفع
+        </a>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead class="table-light">
+                    <tr>
+                        <th>الاسم الكامل</th>
+                        <th>تاريخ الميلاد</th>
+                        <th>العمر</th>
+                        <th>الجنس</th>
+                        <th>مستوى التوحد</th>
+                        <th>العائلة</th>
+                        <th>الحالة</th>
+                        <th>الإجراءات</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for beneficiaire in pagination %}
+                    <tr>
+                        <td>{{ beneficiaire.nom }} {{ beneficiaire.prenom }}</td>
+                        <td>{{ beneficiaire.dateNaissance|date('d/m/Y') }}</td>
+                        <td>{{ beneficiaire.age }} سنة</td>
+                        <td>{{ beneficiaire.genre }}</td>
+                        <td>
+                            <span class="badge 
+                                {% if beneficiaire.niveauAutisme == 'Léger' %}bg-success
+                                {% elseif beneficiaire.niveauAutisme == 'Modéré' %}bg-warning
+                                {% else %}bg-danger{% endif %}">
+                                {{ beneficiaire.niveauAutisme }}
+                            </span>
+                        </td>
+                        <td>{{ beneficiaire.famille }}</td>
+                        <td>
+                            {% if beneficiaire.actif %}
+                                <span class="badge bg-success">نشط</span>
+                            {% else %}
+                                <span class="badge bg-secondary">غير نشط</span>
+                            {% endif %}
+                        </td>
+                        <td class="table-actions">
+                            <a href="{{ path('app_beneficiaire_show', {'id': beneficiaire.id}) }}" class="btn btn-sm btn-info">
+                                <i class="bi bi-eye"></i>
+                            </a>
+                            <a href="{{ path('app_beneficiaire_edit', {'id': beneficiaire.id}) }}" class="btn btn-sm btn-warning">
+                                <i class="bi bi-pencil"></i>
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="navigation d-flex justify-content-center">
+            {{ knp_pagination_render(pagination) }}
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,187 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}لوحة القيادة{% endblock %}
+
+{% block body %}
+<h2 class="mb-4">لوحة القيادة</h2>
+
+<div class="row">
+    <div class="col-md-3">
+        <div class="card text-white" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+            <div class="card-body text-center">
+                <i class="bi bi-people fs-1"></i>
+                <h3 class="mt-3">{{ totalBeneficiaires }}</h3>
+                <p>منتفع</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-white" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+            <div class="card-body text-center">
+                <i class="bi bi-house-heart fs-1"></i>
+                <h3 class="mt-3">{{ totalFamilles }}</h3>
+                <p>عائلة</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-white" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+            <div class="card-body text-center">
+                <i class="bi bi-calendar-event fs-1"></i>
+                <h3 class="mt-3">{{ totalActivites }}</h3>
+                <p>نشاط</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-white" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+            <div class="card-body text-center">
+                <i class="bi bi-person-badge fs-1"></i>
+                <h3 class="mt-3">{{ totalPersonnel }}</h3>
+                <p>موظف</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">مرحباً بكم في نظام إدارة جمعية حلم البراءة للتوحد</h5>
+            </div>
+            <div class="card-body">
+                <p class="lead">يمكنك من هنا إدارة جميع بيانات الجمعية:</p>
+                <ul>
+                    <li>إدارة المنتفعين وملفاتهم</li>
+                    <li>متابعة العائلات</li>
+                    <li>تنظيم الأنشطة والفعاليات</li>
+                    <li>إدارة الموظفين</li>
+                    <li>إنشاء التقارير والإحصائيات</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+{# Section CMS - Gestion du Contenu du Site Web #}
+<div class="row mt-4">
+    <div class="col-md-12">
+        <h3 class="mb-3"><i class="bi bi-globe"></i> إدارة محتوى الموقع</h3>
+    </div>
+    
+    <div class="col-md-4 mb-3">
+        <a href="{{ path('admin_content_index') }}" class="text-decoration-none">
+            <div class="card hover-card" style="border-left: 4px solid #667eea;">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <i class="bi bi-file-text text-primary fs-1 ms-3"></i>
+                        <div>
+                            <h5 class="mb-1">محتوى الصفحات</h5>
+                            <p class="text-muted mb-0">إدارة النصوص والفيديوهات</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </a>
+    </div>
+
+    <div class="col-md-4 mb-3">
+        <a href="{{ path('admin_gallery_index') }}" class="text-decoration-none">
+            <div class="card hover-card" style="border-left: 4px solid #764ba2;">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <i class="bi bi-images text-secondary fs-1 ms-3"></i>
+                        <div>
+                            <h5 class="mb-1">معرض الصور</h5>
+                            <p class="text-muted mb-0">إدارة صور الأنشطة</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </a>
+    </div>
+
+    <div class="col-md-4 mb-3">
+        <a href="{{ path('admin_donation_index') }}" class="text-decoration-none">
+            <div class="card hover-card" style="border-left: 4px solid #f093fb;">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <i class="bi bi-cash-stack text-success fs-1 ms-3"></i>
+                        <div>
+                            <h5 class="mb-1">حملات التبرع</h5>
+                            <p class="text-muted mb-0">إدارة حملات جمع التبرعات</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </a>
+    </div>
+</div>
+
+{# Accès Rapide #}
+<div class="row mt-4">
+    <div class="col-md-12">
+        <h3 class="mb-3"><i class="bi bi-lightning-charge"></i> وصول سريع</h3>
+    </div>
+
+    <div class="col-md-3 mb-3">
+        <a href="{{ path('app_beneficiaire_index') }}" class="text-decoration-none">
+            <div class="card text-center hover-card">
+                <div class="card-body">
+                    <i class="bi bi-people-fill text-primary" style="font-size: 2.5rem;"></i>
+                    <h6 class="mt-2">المنتفعون</h6>
+                </div>
+            </div>
+        </a>
+    </div>
+
+    <div class="col-md-3 mb-3">
+        <a href="{{ path('app_famille_index') }}" class="text-decoration-none">
+            <div class="card text-center hover-card">
+                <div class="card-body">
+                    <i class="bi bi-house-heart-fill text-danger" style="font-size: 2.5rem;"></i>
+                    <h6 class="mt-2">العائلات</h6>
+                </div>
+            </div>
+        </a>
+    </div>
+
+    <div class="col-md-3 mb-3">
+        <a href="{{ path('app_activite_index') }}" class="text-decoration-none">
+            <div class="card text-center hover-card">
+                <div class="card-body">
+                    <i class="bi bi-calendar-event-fill text-warning" style="font-size: 2.5rem;"></i>
+                    <h6 class="mt-2">الأنشطة</h6>
+                </div>
+            </div>
+        </a>
+    </div>
+
+    <div class="col-md-3 mb-3">
+        <a href="{{ path('app_personnel_index') }}" class="text-decoration-none">
+            <div class="card text-center hover-card">
+                <div class="card-body">
+                    <i class="bi bi-person-badge-fill text-info" style="font-size: 2.5rem;"></i>
+                    <h6 class="mt-2">الموظفون</h6>
+                </div>
+            </div>
+        </a>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block stylesheets %}
+<style>
+    .hover-card {
+        transition: all 0.3s ease;
+        cursor: pointer;
+    }
+    
+    .hover-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 30px rgba(0,0,0,0.15) !important;
+    }
+</style>
+{% endblock %}

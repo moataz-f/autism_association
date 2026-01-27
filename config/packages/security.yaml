@@ -1,0 +1,50 @@
+# config/packages/security.yaml
+security:
+    password_hashers:
+        Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface: 'auto'
+    
+    providers:
+        app_user_provider:
+            entity:
+                class: App\Entity\User
+                property: email
+    
+    firewalls:
+        dev:
+            pattern: ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+        
+        main:
+            lazy: true
+            provider: app_user_provider
+            
+            form_login:
+                login_path: app_login
+                check_path: app_login
+                enable_csrf: true
+                default_target_path: app_dashboard  # Rediriger vers le dashboard après connexion
+            
+            logout:
+                path: app_logout
+                target: app_home  # Rediriger vers la page d'accueil après déconnexion
+
+    access_control:
+        # Routes publiques (accessibles à tous)
+        - { path: ^/$, roles: PUBLIC_ACCESS }           # Page d'accueil
+        - { path: ^/login, roles: PUBLIC_ACCESS }       # Page de connexion
+    
+        - { path: ^/admin/content, roles: ROLE_ADMIN }
+        - { path: ^/admin/gallery, roles: ROLE_ADMIN }
+        - { path: ^/admin/donation-campaigns, roles: ROLE_ADMIN }
+        # Routes protégées (nécessitent une authentification)
+        - { path: ^/dashboard, roles: ROLE_USER }
+        - { path: ^/beneficiaire, roles: ROLE_USER }
+        - { path: ^/famille, roles: ROLE_USER }
+        - { path: ^/activite, roles: ROLE_USER }
+        - { path: ^/personnel, roles: ROLE_ADMIN }      # Seulement admin
+        - { path: ^/export, roles: ROLE_USER }
+        - { path: ^/rapport, roles: ROLE_USER }
+
+    role_hierarchy:
+        ROLE_ADMIN: [ROLE_USER, ROLE_PERSONNEL]
+        ROLE_PERSONNEL: ROLE_USER

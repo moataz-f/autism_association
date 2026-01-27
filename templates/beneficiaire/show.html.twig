@@ -1,0 +1,60 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}تفاصيل المنتفع{% endblock %}
+
+{% block body %}
+<div class="mb-4">
+    <a href="{{ path('app_beneficiaire_index') }}" class="btn btn-secondary">
+        <i class="bi bi-arrow-right"></i> رجوع
+    </a>
+</div>
+
+<div class="card">
+    <div class="card-header bg-info text-white">
+        <h4>{{ beneficiaire.nom }} {{ beneficiaire.prenom }}</h4>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-6">
+                <p><strong>تاريخ الميلاد:</strong> {{ beneficiaire.dateNaissance|date('d/m/Y') }}</p>
+                <p><strong>العمر:</strong> {{ beneficiaire.age }} سنة</p>
+                <p><strong>الجنس:</strong> {{ beneficiaire.genre }}</p>
+                <p><strong>الهاتف:</strong> {{ beneficiaire.telephone ?? 'غير محدد' }}</p>
+            </div>
+            <div class="col-md-6">
+                <p><strong>مستوى التوحد:</strong> 
+                    <span class="badge 
+                        {% if beneficiaire.niveauAutisme == 'Léger' %}bg-success
+                        {% elseif beneficiaire.niveauAutisme == 'Modéré' %}bg-warning
+                        {% else %}bg-danger{% endif %}">
+                        {{ beneficiaire.niveauAutisme }}
+                    </span>
+                </p>
+                <p><strong>العائلة:</strong> {{ beneficiaire.famille }}</p>
+                <p><strong>تاريخ التسجيل:</strong> {{ beneficiaire.dateInscription|date('d/m/Y') }}</p>
+            </div>
+        </div>
+        <hr>
+        <div>
+            <h5>التشخيص:</h5>
+            <p>{{ beneficiaire.diagnostic ?? 'لا يوجد تشخيص' }}</p>
+        </div>
+        <hr>
+        <div>
+            <h5>الأنشطة المسجل فيها:</h5>
+            <ul>
+                {% for activite in beneficiaire.activites %}
+                    <li>{{ activite.titre }} - {{ activite.type }}</li>
+                {% else %}
+                    <li>لا توجد أنشطة</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+    <div class="card-footer">
+        <a href="{{ path('app_beneficiaire_edit', {id: beneficiaire.id}) }}" class="btn btn-warning">
+            <i class="bi bi-pencil"></i> تعديل
+        </a>
+    </div>
+</div>
+{% endblock %}

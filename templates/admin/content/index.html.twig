@@ -1,0 +1,80 @@
+{# templates/admin/content/index.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block title %}إدارة المحتوى{% endblock %}
+
+{% block body %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2><i class="bi bi-file-text"></i> إدارة محتوى الصفحة الرئيسية</h2>
+    <a href="{{ path('admin_content_new') }}" class="btn btn-primary">
+        <i class="bi bi-plus-circle"></i> إضافة محتوى جديد
+    </a>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead class="table-light">
+                    <tr>
+                        <th>القسم</th>
+                        <th>العنوان</th>
+                        <th>فيديو</th>
+                        <th>صورة</th>
+                        <th>الحالة</th>
+                        <th>آخر تحديث</th>
+                        <th>الإجراءات</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for content in contents %}
+                    <tr>
+                        <td>
+                            <span class="badge bg-info">{{ content.sectionKey }}</span>
+                        </td>
+                        <td>{{ content.titre }}</td>
+                        <td>
+                            {% if content.videoPath %}
+                                <i class="bi bi-camera-video text-success"></i>
+                            {% else %}
+                                <i class="bi bi-x-circle text-muted"></i>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if content.imagePath %}
+                                <i class="bi bi-image text-success"></i>
+                            {% else %}
+                                <i class="bi bi-x-circle text-muted"></i>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if content.actif %}
+                                <span class="badge bg-success">نشط</span>
+                            {% else %}
+                                <span class="badge bg-secondary">غير نشط</span>
+                            {% endif %}
+                        </td>
+                        <td>{{ content.updatedAt|date('d/m/Y H:i') }}</td>
+                        <td>
+                            <a href="{{ path('admin_content_edit', {id: content.id}) }}" class="btn btn-sm btn-warning">
+                                <i class="bi bi-pencil"></i>
+                            </a>
+                            <form method="post" action="{{ path('admin_content_delete', {id: content.id}) }}" style="display:inline" onsubmit="return confirm('هل أنت متأكد؟');">
+                                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ content.id) }}">
+                                <button class="btn btn-sm btn-danger">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="7" class="text-center">لا يوجد محتوى</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

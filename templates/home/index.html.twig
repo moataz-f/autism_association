@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>جمعية حلم البراءة للتوحد</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <style>
+        :root {
+            --primary-color: #667eea;
+            --secondary-color: #764ba2;
+            --accent-color: #f093fb;
+        }
+
+        body {
+            font-family: 'Cairo', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow-x: hidden;
+            direction: rtl;
+            text-align: right;
+        }
+
+        /* Navbar */
+        .navbar {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            box-shadow: 0 2px 15px rgba(0,0,0,.1);
+            padding: 1rem 0;
+        }
+
+        .navbar-brand {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: white !important;
+        }
+
+        .nav-link {
+            color: rgba(255,255,255,0.9) !important;
+            margin: 0 0.5rem;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+
+        .nav-link:hover {
+            color: white !important;
+            transform: translateY(-2px);
+        }
+
+        /* Hero Video Section */
+        .hero-section {
+            position: relative;
+            height: 80vh;
+            overflow: hidden;
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+        }
+
+        .video-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .video-container video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.4;
+        }
+
+        .video-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.8) 0%, rgba(118, 75, 162, 0.8) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: white;
+        }
+
+        .hero-content h1 {
+            font-size: 3.5rem;
+            font-weight: bold;
+            margin-bottom: 1.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .hero-content p {
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .btn-hero {
+            padding: 15px 40px;
+            font-size: 1.2rem;
+            border-radius: 50px;
+            margin: 0 10px;
+            transition: all 0.3s;
+        }
+
+        .btn-hero:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+
+        /* Gallery Section */
+        .gallery-section {
+            padding: 100px 0;
+            background: white;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            right: 0;
+            width: 100px;
+            height: 4px;
+            background: linear-gradient(to left, var(--primary-color), var(--accent-color));
+            border-radius: 2px;
+        }
+
+        .gallery-item {
+            position: relative;
+            overflow: hidden;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            cursor: pointer;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+            transition: all 0.5s;
+        }
+
+        .gallery-item:hover img {
+            transform: scale(1.1);
+        }
+
+        .gallery-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, transparent 0%, rgba(102, 126, 234, 0.9) 100%);
+            opacity: 0;
+            transition: all 0.3s;
+            display: flex;
+            align-items: flex-end;
+            padding: 20px;
+        }
+
+        .gallery-item:hover .gallery-overlay {
+            opacity: 1;
+        }
+
+        .gallery-overlay h5 {
+            color: white;
+            margin: 0;
+        }
+
+        /* Donation Section */
+        .donation-section {
+            padding: 100px 0;
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .donation-card {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 30px;
+            border: 2px solid rgba(255,255,255,0.2);
+            transition: all 0.3s;
+        }
+
+        .donation-card:hover {
+            background: rgba(255,255,255,0.2);
+            transform: translateY(-5px);
+        }
+
+        .donation-card i {
+            font-size: 4rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .donation-amount {
+            font-size: 3rem;
+            font-weight: bold;
+            margin: 20px 0;
+        }
+
+        .progress-bar-custom {
+            height: 30px;
+            border-radius: 15px;
+            background: rgba(255,255,255,0.3);
+            overflow: hidden;
+            margin: 20px 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(to right, #4facfe, #00f2fe);
+            border-radius: 15px;
+            transition: width 1s ease;
+        }
+
+        .btn-donate {
+            background: white;
+            color: var(--primary-color);
+            padding: 15px 50px;
+            font-size: 1.3rem;
+            font-weight: bold;
+            border: none;
+            border-radius: 50px;
+            transition: all 0.3s;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+        }
+
+        .btn-donate:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            background: #f8f9fa;
+        }
+
+        /* Footer */
+        .footer {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            color: white;
+            padding: 60px 0 30px;
+        }
+
+        .footer h5 {
+            margin-bottom: 20px;
+            color: var(--accent-color);
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="#home">
+                <i class="bi bi-heart-pulse"></i> جمعية حلم البراءة
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#home">الرئيسية</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#gallery">معرض الصور</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#donate">التبرعات</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link btn btn-light text-primary px-4 rounded-pill" href="{{ path('app_login') }}">
+                            <i class="bi bi-box-arrow-in-left"></i> دخول النظام
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Section Hero -->
+    <section id="home" class="hero-section">
+        <div class="video-container">
+            {% if heroContent and heroContent.videoPath %}
+            <video autoplay muted loop playsinline>
+                <source src="{{ vich_uploader_asset(heroContent, 'videoFile') }}" type="video/mp4">
+            </video>
+            {% endif %}
+        </div>
+        <div class="video-overlay">
+            <div class="hero-content animate__animated animate__fadeIn">
+                <h1>{{ heroContent ? heroContent.titre : 'جمعية حلم البراءة للتوحد' }}</h1>
+                <p class="lead">{{ heroContent ? heroContent.sousTitre : 'معاً نصنع الأمل... معاً نحقق الحلم' }}</p>
+                <p>{{ heroContent ? heroContent.description : 'جمعية متخصصة في رعاية وتأهيل الأطفال ذوي اضطراب التوحد بقبلي' }}</p>
+                <div class="mt-4">
+                    <a href="#gallery" class="btn btn-light btn-hero">
+                        <i class="bi bi-info-circle"></i> اكتشف المزيد
+                    </a>
+                    <a href="#donate" class="btn btn-warning btn-hero">
+                        <i class="bi bi-heart"></i> تبرع الآن
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section Galerie -->
+    <section id="gallery" class="gallery-section">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="section-title">معرض الصور</h2>
+                <p class="lead text-muted mt-4">لحظات من أنشطتنا وفعالياتنا</p>
+            </div>
+
+            <div class="row">
+                {% for image in galleryImages %}
+                <div class="col-lg-4 col-md-6">
+                    <div class="gallery-item">
+                        <img src="{{ vich_uploader_asset(image, 'imageFile') }}" alt="{{ image.titre }}">
+                        <div class="gallery-overlay">
+                            <h5>{{ image.titre }}</h5>
+                        </div>
+                    </div>
+                </div>
+                {% else %}
+                <div class="col-12 text-center">
+                    <p class="text-muted">لا توجد صور في المعرض حالياً</p>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+
+    <!-- Section Donation -->
+    {% if mainCampaign %}
+    <section id="donate" class="donation-section">
+        <div class="container position-relative">
+            <div class="text-center mb-5">
+                <h2 class="display-4 fw-bold mb-4">ندائات للتبرع</h2>
+                <p class="lead">مساهمتك تصنع الفرق في حياة أطفالنا</p>
+            </div>
+
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <div class="donation-card text-center">
+                        <i class="bi bi-heart-fill"></i>
+                        <h3>{{ mainCampaign.titre }}</h3>
+                        <p class="lead">{{ mainCampaign.description }}</p>
+                        
+                        <div class="donation-amount">
+                            <span>{{ mainCampaign.montantCollecte|number_format(0, '.', ',') }}</span> / 
+                            <span class="fs-4">{{ mainCampaign.montantObjectif|number_format(0, '.', ',') }} دينار</span>
+                        </div>
+                        
+                        <div class="progress-bar-custom">
+                            <div class="progress-fill" style="width: {{ mainCampaign.pourcentage }}%"></div>
+                        </div>
+                        
+                        <p class="mb-4">تم جمع {{ mainCampaign.pourcentage }}% من المبلغ المطلوب</p>
+                        
+                        <button class="btn btn-donate">
+                            <i class="bi bi-credit-card"></i> تبرع الآن
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    {% endif %}
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 mb-4">
+                    <h5>جمعية حلم البراءة للتوحد</h5>
+                    <p>جمعية تونسية متخصصة في رعاية وتأهيل الأطفال ذوي اضطراب التوحد في ولاية قبلي.</p>
+                </div>
+                <div class="col-lg-4 mb-4">
+                    <h5>اتصل بنا</h5>
+                    <p><i class="bi bi-geo-alt"></i> قبلي، تونس</p>
+                    <p><i class="bi bi-telephone"></i> +216 XX XXX XXX</p>
+                    <p><i class="bi bi-envelope"></i> contact@autism-kebili.tn</p>
+                </div>
+                <div class="col-lg-4 mb-4">
+                    <h5>روابط سريعة</h5>
+                    <p><a href="#home" class="text-white-50">الرئيسية</a></p>
+                    <p><a href="#gallery" class="text-white-50">معرض الصور</a></p>
+                    <p><a href="{{ path('app_login') }}" class="text-white-50">دخول النظام</a></p>
+                </div>
+            </div>
+            <hr class="my-4" style="border-color: rgba(255,255,255,0.2);">
+            <div class="text-center">
+                <p class="mb-0">&copy; 2025 جمعية حلم البراءة للتوحد. جميع الحقوق محفوظة.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

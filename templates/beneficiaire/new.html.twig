@@ -1,0 +1,65 @@
+{# templates/beneficiaire/new.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block title %}إضافة منتفع{% endblock %}
+
+{% block body %}
+<div class="mb-4">
+    <a href="{{ path('app_beneficiaire_index') }}" class="btn btn-secondary">
+        <i class="bi bi-arrow-right"></i> رجوع
+    </a>
+</div>
+
+<div class="card">
+    <div class="card-header bg-primary text-white">
+        <h4 class="mb-0">إضافة منتفع جديد</h4>
+    </div>
+    <div class="card-body">
+        {{ form_start(form) }}
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                {{ form_row(form.nom) }}
+            </div>
+            <div class="col-md-6 mb-3">
+                {{ form_row(form.prenom) }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                {{ form_row(form.dateNaissance) }}
+            </div>
+            <div class="col-md-6 mb-3">
+                {{ form_row(form.genre) }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                {{ form_row(form.telephone) }}
+            </div>
+            <div class="col-md-6 mb-3">
+                {{ form_row(form.niveauAutisme) }}
+            </div>
+        </div>
+        <div class="mb-3">
+            {{ form_row(form.adresse) }}
+        </div>
+        <div class="mb-3">
+            {{ form_row(form.diagnostic) }}
+        </div>
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                {{ form_row(form.famille) }}
+            </div>
+            <div class="col-md-6 mb-3">
+                {{ form_row(form.actif) }}
+            </div>
+        </div>
+        <div class="text-center">
+            <button type="submit" class="btn btn-primary btn-lg">
+                <i class="bi bi-save"></i> حفظ
+            </button>
+        </div>
+        {{ form_end(form) }}
+    </div>
+</div>
+{% endblock %}

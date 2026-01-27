@@ -1,0 +1,63 @@
+{# templates/admin/gallery/index.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block title %}معرض الصور{% endblock %}
+
+{% block body %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2><i class="bi bi-images"></i> إدارة معرض الصور</h2>
+    <a href="{{ path('admin_gallery_new') }}" class="btn btn-primary">
+        <i class="bi bi-plus-circle"></i> إضافة صورة جديدة
+    </a>
+</div>
+
+<div class="row">
+    {% for image in pagination %}
+    <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+        <div class="card h-100">
+            {% if image.imagePath %}
+            <img src="{{ vich_uploader_asset(image, 'imageFile') }}" class="card-img-top" style="height: 200px; object-fit: cover;">
+            {% else %}
+            <div class="card-img-top bg-secondary d-flex align-items-center justify-content-center" style="height: 200px;">
+                <i class="bi bi-image text-white" style="font-size: 3rem;"></i>
+            </div>
+            {% endif %}
+            <div class="card-body">
+                <h5 class="card-title">{{ image.titre }}</h5>
+                <p class="card-text text-muted small">{{ image.description|slice(0, 50) }}...</p>
+                <p class="mb-1">
+                    <span class="badge bg-info">الترتيب: {{ image.ordre }}</span>
+                    {% if image.actif %}
+                        <span class="badge bg-success">نشط</span>
+                    {% else %}
+                        <span class="badge bg-secondary">غير نشط</span>
+                    {% endif %}
+                </p>
+            </div>
+            <div class="card-footer">
+                <a href="{{ path('admin_gallery_edit', {id: image.id}) }}" class="btn btn-sm btn-warning">
+                    <i class="bi bi-pencil"></i> تعديل
+                </a>
+                <form method="post" action="{{ path('admin_gallery_delete', {id: image.id}) }}" style="display:inline" onsubmit="return confirm('هل أنت متأكد؟');">
+                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ image.id) }}">
+                    <button class="btn btn-sm btn-danger">
+                        <i class="bi bi-trash"></i> حذف
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <div class="col-12">
+        <div class="alert alert-info text-center">
+            <i class="bi bi-info-circle"></i> لا توجد صور في المعرض
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<div class="d-flex justify-content-center mt-4">
+    {{ knp_pagination_render(pagination) }}
+</div>
+{% endblock %}
+

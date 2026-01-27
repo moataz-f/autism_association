@@ -1,0 +1,21 @@
+{# templates/admin/content/new.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block title %}إضافة محتوى{% endblock %}
+
+{% block body %}
+<div class="mb-4">
+    <a href="{{ path('admin_content_index') }}" class="btn btn-secondary">
+        <i class="bi bi-arrow-right"></i> رجوع
+    </a>
+</div>
+
+<div class="card">
+    <div class="card-header bg-primary text-white">
+        <h4 class="mb-0">إضافة محتوى جديد</h4>
+    </div>
+    <div class="card-body">
+        {{ include('admin/content/_form.html.twig') }}
+    </div>
+</div>
+{% endblock %}

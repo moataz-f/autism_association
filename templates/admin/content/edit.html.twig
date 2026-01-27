@@ -1,0 +1,87 @@
+{# templates/admin/content/edit.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block title %}تعديل المحتوى{% endblock %}
+
+{% block body %}
+<div class="mb-4">
+    <a href="{{ path('admin_content_index') }}" class="btn btn-secondary">
+        <i class="bi bi-arrow-right"></i> رجوع
+    </a>
+</div>
+
+<div class="card">
+    <div class="card-header bg-warning">
+        <h4 class="mb-0">تعديل المحتوى</h4>
+    </div>
+    <div class="card-body">
+        {{ form_start(form) }}
+        
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                {{ form_row(form.sectionKey) }}
+            </div>
+            <div class="col-md-6 mb-3">
+                <div class="form-check mt-4">
+                    {{ form_widget(form.actif) }}
+                    {{ form_label(form.actif) }}
+                </div>
+            </div>
+        </div>
+
+        <div class="mb-3">
+            {{ form_row(form.titre) }}
+        </div>
+
+        <div class="mb-3">
+            {{ form_row(form.sousTitre) }}
+        </div>
+
+        <div class="mb-3">
+            {{ form_row(form.description) }}
+        </div>
+
+        <hr>
+
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                {{ form_row(form.videoFile) }}
+                {% if content.videoPath %}
+                    <div class="mt-2">
+                        <video width="100%" height="200" controls>
+                            <source src="{{ vich_uploader_asset(content, 'videoFile') }}" type="video/mp4">
+                        </video>
+                    </div>
+                {% endif %}
+            </div>
+            <div class="col-md-6 mb-3">
+                {{ form_row(form.imageFile) }}
+                {% if content.imagePath %}
+                    <div class="mt-2">
+                        <img src="{{ vich_uploader_asset(content, 'imageFile') }}" class="img-fluid rounded" style="max-height: 200px;">
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <hr>
+
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                {{ form_row(form.buttonText) }}
+            </div>
+            <div class="col-md-6 mb-3">
+                {{ form_row(form.buttonLink) }}
+            </div>
+        </div>
+
+        <div class="text-center mt-4">
+            <button type="submit" class="btn btn-primary btn-lg">
+                <i class="bi bi-save"></i> حفظ التعديلات
+            </button>
+        </div>
+
+        {{ form_end(form) }}
+    </div>
+</div>
+{% endblock %}

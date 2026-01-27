@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}تعديل منتفع{% endblock %}
+
+{% block body %}
+<div class="mb-4">
+    <a href="{{ path('app_beneficiaire_index') }}" class="btn btn-secondary">
+        <i class="bi bi-arrow-right"></i> رجوع
+    </a>
+</div>
+
+<div class="card">
+    <div class="card-header bg-warning">
+        <h4 class="mb-0">تعديل بيانات المنتفع</h4>
+    </div>
+    <div class="card-body">
+        {{ include('beneficiaire/_form.html.twig', {'button_label': 'تحديث'}) }}
+    </div>
+</div>
+
+<div class="mt-3">
+    {{ include('beneficiaire/_delete_form.html.twig') }}
+</div>
+{% endblock %}
