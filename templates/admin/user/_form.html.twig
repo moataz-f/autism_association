@@ -1,0 +1,41 @@
+{{ form_start(form) }}
+    <div class="row">
+        <div class="col-md-6 mb-3">
+            {{ form_row(form.prenom) }}
+        </div>
+        <div class="col-md-6 mb-3">
+            {{ form_row(form.nom) }}
+        </div>
+    </div>
+    <div class="mb-3">
+        {{ form_row(form.email) }}
+    </div>
+    <div class="mb-3">
+        {{ form_row(form.numtlf) }}
+    </div>
+    
+    {% if form.plainPassword is defined %}
+    <div class="mb-3">
+        {{ form_row(form.plainPassword) }}
+    </div>
+    {% endif %}
+    
+    <div class="mb-4 card bg-light border-0">
+        <div class="card-body">
+            <h6 class="mb-3">{{ form_label(form.roles) }}</h6>
+            <div class="roles-grid">
+                {{ form_widget(form.roles) }}
+            </div>
+        </div>
+    </div>
+
+    <button class="btn btn-primary w-100 py-2">{{ button_label|default('حفظ المستخدم') }}</button>
+{{ form_end(form) }}
+
+<style>
+    .roles-grid .form-check {
+        display: inline-block;
+        width: 48%;
+        margin-bottom: 0.5rem;
+    }
+</style>

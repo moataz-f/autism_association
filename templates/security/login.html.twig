@@ -1,55 +1,118 @@
-
-{# templates/security/login.html.twig #}
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>تسجيل الدخول</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تسجيل الدخول - جمعية حلم البراءة</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --primary-blue: #2563EB;
+            --bg-light: #F8FAFC;
+            --text-dark: #0F172A;
+            --border-color: #E2E8F0;
+        }
         body {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background-color: var(--primary-blue);
+            background: linear-gradient(135deg, #2563EB 0%, #1E40AF 100%);
             min-height: 100vh;
             display: flex;
             align-items: center;
+            font-family: 'Tajawal', sans-serif;
+            direction: rtl;
         }
         .login-card {
-            border-radius: 20px;
-            box-shadow: 0 10px 40px rgba(0,0,0,.2);
+            border: none;
+            border-radius: 24px;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2), 0 10px 10px -5px rgba(0, 0, 0, 0.1);
+            background: white;
+            overflow: hidden;
+        }
+        .login-header {
+            background: #F8FAFC;
+            padding: 3rem 2rem;
+            text-align: center;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .login-header h2 {
+            color: var(--text-dark);
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+        .login-header p {
+            color: #64748B;
+            margin-bottom: 0;
+            font-size: 1.1rem;
+        }
+        .form-control {
+            padding: 0.85rem 1rem;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            background: #F8FAFC;
+        }
+        .form-control:focus {
+            border-color: var(--primary-blue);
+            box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+            background: white;
+        }
+        .btn-primary {
+            background-color: var(--primary-blue);
+            border: none;
+            padding: 1rem;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.2);
+            transition: all 0.2s ease;
+        }
+        .btn-primary:hover {
+            background-color: #1D4ED8;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(37, 99, 235, 0.3);
         }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="row justify-content-center">
-            <div class="col-md-5">
+            <div class="col-md-5 col-lg-4">
                 <div class="card login-card">
-                    <div class="card-body p-5">
-                        <h3 class="text-center mb-4">جمعية حلم البراءة للتوحد</h3>
-                        
+                    <div class="login-header">
+                        <h2>حلم البراءة</h2>
+                        <p>بوابة إدارة الجمعية</p>
+                    </div>
+                    <div class="card-body p-4 p-md-5">
                         {% if error %}
-                            <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+                            <div class="alert alert-danger border-0 small py-3 rounded-4 mb-4">
+                                {{ error.messageKey|trans(error.messageData, 'security') }}
+                            </div>
                         {% endif %}
 
                         <form method="post">
-                            <div class="mb-3">
-                                <label for="inputEmail" class="form-label">البريد الإلكتروني</label>
-                                <input type="email" value="{{ last_username }}" name="_username" id="inputEmail" class="form-control" required autofocus>
+                            <div class="mb-4">
+                                <label for="inputEmail" class="form-label small fw-bold text-secondary mb-2">البريد الإلكتروني</label>
+                                <input type="email" value="{{ last_username }}" name="_username" id="inputEmail" class="form-control" autocomplete="email" required autofocus placeholder="admin@association.org">
                             </div>
 
-                            <div class="mb-3">
-                                <label for="inputPassword" class="form-label">كلمة المرور</label>
-                                <input type="password" name="_password" id="inputPassword" class="form-control" required>
+                            <div class="mb-4">
+                                <label for="inputPassword" class="form-label small fw-bold text-secondary mb-2">كلمة المرور</label>
+                                <input type="password" name="_password" id="inputPassword" class="form-control" autocomplete="current-password" required placeholder="••••••••">
                             </div>
 
                             <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
 
-                            <button class="btn btn-primary w-100 py-2" type="submit">
-                                تسجيل الدخول
+                            <button class="btn btn-primary w-100 py-3 mt-2" type="submit">
+                                دخول للنظام
                             </button>
                         </form>
                     </div>
                 </div>
+                <p class="text-center mt-4 text-white opacity-75 small">
+                    جميع الحقوق محفوظة &copy; {{ "now"|date("Y") }} جمعية حلم البراءة للتوحد
+                </p>
             </div>
         </div>
     </div>

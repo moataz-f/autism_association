@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}إضافة مستخدم جديد{% endblock %}
+
+{% block body %}
+<div class="page-header">
+    <h2 class="mb-0">إضافة مستخدم جديد</h2>
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ path('app_dashboard') }}">لوحة القيادة</a></li>
+            <li class="breadcrumb-item"><a href="{{ path('admin_user_index') }}">المستخدمون</a></li>
+            <li class="breadcrumb-item active">إضافة</li>
+        </ol>
+    </nav>
+</div>
+
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-body">
+                {{ include('admin/user/_form.html.twig') }}
+                
+                <div class="mt-4 border-top pt-3">
+                    <a href="{{ path('admin_user_index') }}" class="btn btn-light text-primary">
+                        <i class="bi bi-arrow-right"></i>
+                        العودة للقائمة
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

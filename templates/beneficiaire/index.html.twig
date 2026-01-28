@@ -1,77 +1,118 @@
-{# templates/beneficiaire/index.html.twig #}
 {% extends 'base.html.twig' %}
 
-{% block title %}المنتفعون{% endblock %}
+{% block title %}إدارة المنتفعين{% endblock %}
 
 {% block body %}
-<div class="d-flex justify-content-between align-items-center mb-4">
-    <h2>قائمة المنتفعين</h2>
+<div class="page-header d-flex justify-content-between align-items-center">
     <div>
-        <a href="{{ path('app_export_beneficiaires_excel') }}" class="btn btn-success">
-            <i class="bi bi-file-excel"></i> تصدير Excel
-        </a>
-        <a href="{{ path('app_beneficiaire_new') }}" class="btn btn-primary">
-            <i class="bi bi-plus-circle"></i> إضافة منتفع
-        </a>
+        <h2 class="mb-0">قائمة الأطفال المنتفعين</h2>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{{ path('app_dashboard') }}">لوحة القيادة</a></li>
+                <li class="breadcrumb-item active">المنتفعون</li>
+            </ol>
+        </nav>
     </div>
+    <a href="{{ path('app_beneficiaire_new') }}" class="btn btn-primary">
+        <i class="bi bi-person-plus-fill"></i> إضافة طفل جديد
+    </a>
 </div>
 
-<div class="card">
-    <div class="card-body">
+<div class="card shadow-sm border-0">
+    <div class="card-body p-0">
         <div class="table-responsive">
-            <table class="table table-hover">
-                <thead class="table-light">
+            <table class="table table-hover align-middle mb-0 text-center">
+                <thead class="bg-light">
                     <tr>
-                        <th>الاسم الكامل</th>
+                        <th class="text-end ps-4">الطفل</th>
                         <th>تاريخ الميلاد</th>
-                        <th>العمر</th>
-                        <th>الجنس</th>
-                        <th>مستوى التوحد</th>
+                        <th>المستوى</th>
                         <th>العائلة</th>
                         <th>الحالة</th>
-                        <th>الإجراءات</th>
+                        <th class="text-start pe-4">الإجراءات</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {% for beneficiaire in pagination %}
+                {% for beneficiaire in pagination %}
                     <tr>
-                        <td>{{ beneficiaire.nom }} {{ beneficiaire.prenom }}</td>
-                        <td>{{ beneficiaire.dateNaissance|date('d/m/Y') }}</td>
-                        <td>{{ beneficiaire.age }} سنة</td>
-                        <td>{{ beneficiaire.genre }}</td>
+                        <td class="text-end ps-4">
+                            <div class="d-flex align-items-center">
+                                <div class="avatar-circle ms-3">
+                                    {{ beneficiaire.prenom|first|upper }}{{ beneficiaire.nom|first|upper }}
+                                </div>
+                                <div>
+                                    <div class="fw-bold">{{ beneficiaire.prenom }} {{ beneficiaire.nom }}</div>
+                                    <small class="text-muted">السن: {{ beneficiaire.age }} سنة</small>
+                                </div>
+                            </div>
+                        </td>
+                        <td>{{ beneficiaire.dateNaissance|date('Y-m-d') }}</td>
                         <td>
-                            <span class="badge 
+                            <span class="badge rounded-pill 
                                 {% if beneficiaire.niveauAutisme == 'Léger' %}bg-success
                                 {% elseif beneficiaire.niveauAutisme == 'Modéré' %}bg-warning
                                 {% else %}bg-danger{% endif %}">
                                 {{ beneficiaire.niveauAutisme }}
                             </span>
                         </td>
-                        <td>{{ beneficiaire.famille }}</td>
+                        <td class="fw-500 text-secondary">{{ beneficiaire.famille ?: '-' }}</td>
                         <td>
-                            {% if beneficiaire.actif %}
-                                <span class="badge bg-success">نشط</span>
-                            {% else %}
-                                <span class="badge bg-secondary">غير نشط</span>
-                            {% endif %}
+                            <span class="dot-indicator bg-{{ beneficiaire.actif ? 'success' : 'secondary' }}"></span>
+                            {{ beneficiaire.actif ? 'نشط' : 'موجه' }}
                         </td>
-                        <td class="table-actions">
-                            <a href="{{ path('app_beneficiaire_show', {'id': beneficiaire.id}) }}" class="btn btn-sm btn-info">
-                                <i class="bi bi-eye"></i>
-                            </a>
-                            <a href="{{ path('app_beneficiaire_edit', {'id': beneficiaire.id}) }}" class="btn btn-sm btn-warning">
-                                <i class="bi bi-pencil"></i>
-                            </a>
+                        <td class="text-start pe-4">
+                            <div class="btn-group">
+                                <a href="{{ path('app_beneficiaire_show', {'id': beneficiaire.id}) }}" class="btn btn-sm btn-outline-primary" title="عرض">
+                                    <i class="bi bi-eye-fill"></i>
+                                </a>
+                                <a href="{{ path('app_beneficiaire_edit', {'id': beneficiaire.id}) }}" class="btn btn-sm btn-outline-secondary" title="تعديل">
+                                    <i class="bi bi-pencil-square"></i>
+                                </a>
+                            </div>
                         </td>
                     </tr>
-                    {% endfor %}
+                {% else %}
+                    <tr>
+                        <td colspan="6" class="text-center py-5">
+                            <i class="bi bi-people text-muted opacity-25" style="font-size: 4rem;"></i>
+                            <p class="text-muted mt-3">لا يوجد أطفال مسجلون حالياً.</p>
+                        </td>
+                    </tr>
+                {% endfor %}
                 </tbody>
             </table>
         </div>
         
-        <div class="navigation d-flex justify-content-center">
-            {{ knp_pagination_render(pagination) }}
+        <div class="mt-4 px-4 pb-4">
+            {{ knp_pagination_render(pagination, '@KnpPaginator/Pagination/bootstrap_v5_pagination.html.twig') }}
+        </div>
+            </table>
         </div>
     </div>
 </div>
+
+<style>
+    .avatar-circle {
+        width: 45px;
+        height: 45px;
+        background-color: var(--primary-blue);
+        color: white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    .dot-indicator {
+        height: 10px;
+        width: 10px;
+        border-radius: 50%;
+        display: inline-block;
+        margin-left: 5px;
+    }
+    .fw-500 { font-weight: 500; }
+    .btn-outline-primary { border-color: var(--primary-blue); color: var(--primary-blue); }
+    .btn-outline-primary:hover { background-color: var(--primary-blue); color: white; }
+</style>
 {% endblock %}

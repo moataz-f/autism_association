@@ -31,6 +31,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 100)]
     private ?string $prenom = null;
 
+    #[ORM\Column(length: 20, nullable: true)]
+    private ?string $numtlf = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -99,6 +102,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setPrenom(string $prenom): self
     {
         $this->prenom = $prenom;
+        return $this;
+    }
+
+    public function getNumtlf(): ?string
+    {
+        return $this->numtlf;
+    }
+
+    public function setNumtlf(?string $numtlf): self
+    {
+        $this->numtlf = $numtlf;
         return $this;
     }
 }

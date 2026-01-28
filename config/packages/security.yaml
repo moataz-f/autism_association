@@ -27,12 +27,13 @@ security:
             logout:
                 path: app_logout
                 target: app_home  # Rediriger vers la page d'accueil après déconnexion
-
+            
     access_control:
         # Routes publiques (accessibles à tous)
         - { path: ^/$, roles: PUBLIC_ACCESS }           # Page d'accueil
         - { path: ^/login, roles: PUBLIC_ACCESS }       # Page de connexion
     
+        - { path: ^/admin/user, roles: ROLE_ADMIN }
         - { path: ^/admin/content, roles: ROLE_ADMIN }
         - { path: ^/admin/gallery, roles: ROLE_ADMIN }
         - { path: ^/admin/donation-campaigns, roles: ROLE_ADMIN }
@@ -46,5 +47,9 @@ security:
         - { path: ^/rapport, roles: ROLE_USER }
 
     role_hierarchy:
-        ROLE_ADMIN: [ROLE_USER, ROLE_PERSONNEL]
-        ROLE_PERSONNEL: ROLE_USER
+        ROLE_ADMIN: [ROLE_SPECIALIST, ROLE_PARENT, ROLE_STAFF, ROLE_VOLUNTEER, ROLE_DONOR, ROLE_USER]
+        ROLE_SPECIALIST: ROLE_USER
+        ROLE_PARENT: ROLE_USER
+        ROLE_STAFF: ROLE_USER
+        ROLE_VOLUNTEER: ROLE_USER
+        ROLE_DONOR: ROLE_USER

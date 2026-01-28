@@ -1,0 +1,32 @@
+{{ form_start(form) }}
+    <div class="row g-4">
+        <div class="col-md-6">
+            <div class="form-group mb-4">
+                {{ form_label(form.title, 'العنوان', {'label_attr': {'class': 'form-label fw-bold'}}) }}
+                {{ form_widget(form.title, {'attr': {'class': 'form-control', 'placeholder': 'أدخل عنوان الصفحة...'}}) }}
+                <div class="text-danger small mt-1">{{ form_errors(form.title) }}</div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group mb-4">
+                {{ form_label(form.slug, 'الرابط المختصر (Slug)', {'label_attr': {'class': 'form-label fw-bold'}}) }}
+                {{ form_widget(form.slug, {'attr': {'class': 'form-control', 'placeholder': 'مثال: about-us'}}) }}
+                <div class="text-danger small mt-1">{{ form_errors(form.slug) }}</div>
+            </div>
+        </div>
+        <div class="col-12">
+            <div class="form-group mb-4">
+                {{ form_label(form.content, 'المحتوى', {'label_attr': {'class': 'form-label fw-bold'}}) }}
+                {{ form_widget(form.content, {'attr': {'class': 'form-control', 'rows': '10', 'placeholder': 'اكتب المحتوى هنا...'}}) }}
+                <div class="text-danger small mt-1">{{ form_errors(form.content) }}</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="mt-4 border-top pt-4 text-start">
+        <button class="btn btn-primary px-5">
+            <i class="bi bi-check-lg ms-2"></i>
+            حفظ التعديلات
+        </button>
+    </div>
+{{ form_end(form) }}

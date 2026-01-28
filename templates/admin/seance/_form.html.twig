@@ -1,0 +1,44 @@
+{{ form_start(form) }}
+    <div class="mb-4">
+        {{ form_row(form.titre) }}
+    </div>
+
+    <div class="row">
+        <div class="col-md-4 mb-3">
+            {{ form_row(form.type) }}
+        </div>
+        <div class="col-md-4 mb-3">
+            {{ form_row(form.date) }}
+        </div>
+        <div class="col-md-4 mb-3">
+            {{ form_row(form.etat) }}
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6 mb-3">
+            {{ form_row(form.heureDebut) }}
+        </div>
+        <div class="col-md-6 mb-3">
+            {{ form_row(form.heureFin) }}
+        </div>
+    </div>
+
+    <div class="mb-3">
+        {{ form_row(form.specialiste) }}
+    </div>
+
+    <div class="mb-3">
+        {{ form_row(form.beneficiaires) }}
+        <small class="text-muted d-block mt-1">اضغط على Ctrl لاختيار أكثر من طفل في الحصص الجماعية</small>
+    </div>
+
+    <div class="mb-4">
+        {{ form_row(form.notes) }}
+    </div>
+
+    <button class="btn btn-primary w-100 py-3 shadow-sm fw-bold">
+        <i class="bi bi-check2-circle"></i>
+        {{ button_label|default('حفظ الحصة مبرمجة') }}
+    </button>
+{{ form_end(form) }}

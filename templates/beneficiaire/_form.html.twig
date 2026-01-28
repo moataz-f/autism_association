@@ -1,45 +1,44 @@
 {{ form_start(form) }}
-<div class="row">
-    <div class="col-md-6 mb-3">
-        {{ form_row(form.nom) }}
+    <div class="row">
+        <div class="col-md-6 mb-3">
+            {{ form_row(form.nom) }}
+        </div>
+        <div class="col-md-6 mb-3">
+            {{ form_row(form.prenom) }}
+        </div>
     </div>
-    <div class="col-md-6 mb-3">
-        {{ form_row(form.prenom) }}
+    <div class="row">
+        <div class="col-md-4 mb-3">
+            {{ form_row(form.dateNaissance) }}
+        </div>
+        <div class="col-md-4 mb-3">
+            {{ form_row(form.genre) }}
+        </div>
+        <div class="col-md-4 mb-3">
+            {{ form_row(form.niveauAutisme) }}
+        </div>
     </div>
-</div>
-<div class="row">
-    <div class="col-md-6 mb-3">
-        {{ form_row(form.dateNaissance) }}
+    <div class="row">
+        <div class="col-md-6 mb-3">
+            {{ form_row(form.telephone) }}
+        </div>
+        <div class="col-md-6 mb-3">
+            {{ form_row(form.famille) }}
+        </div>
     </div>
-    <div class="col-md-6 mb-3">
-        {{ form_row(form.genre) }}
+    <div class="mb-3">
+        {{ form_row(form.adresse) }}
     </div>
-</div>
-<div class="row">
-    <div class="col-md-6 mb-3">
-        {{ form_row(form.telephone) }}
+    <div class="mb-3">
+        {{ form_row(form.diagnostic) }}
     </div>
-    <div class="col-md-6 mb-3">
-        {{ form_row(form.niveauAutisme) }}
+    <div class="mb-4">
+        <div class="form-check form-switch">
+            {{ form_widget(form.actif) }}
+            {{ form_label(form.actif) }}
+        </div>
     </div>
-</div>
-<div class="mb-3">
-    {{ form_row(form.adresse) }}
-</div>
-<div class="mb-3">
-    {{ form_row(form.diagnostic) }}
-</div>
-<div class="row">
-    <div class="col-md-6 mb-3">
-        {{ form_row(form.famille) }}
-    </div>
-    <div class="col-md-6 mb-3">
-        {{ form_row(form.actif) }}
-    </div>
-</div>
-<div class="text-center">
-    <button type="submit" class="btn btn-primary btn-lg">
-        <i class="bi bi-save"></i> {{ button_label|default('حفظ') }}
+    <button class="btn btn-primary w-100 py-3 shadow-sm fw-bold">
+        <i class="bi bi-check2-circle"></i> {{ button_label|default('حفظ المعلومات') }}
     </button>
-</div>
 {{ form_end(form) }}

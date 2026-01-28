@@ -26,6 +26,11 @@ class UserProfileType extends AbstractType
                 'label' => 'Email',
                 'attr' => ['class' => 'form-control']
             ])
+            ->add('numtlf', TextType::class, [
+                'label' => 'Numéro de téléphone',
+                'required' => false,
+                'attr' => ['class' => 'form-control', 'placeholder' => 'ex: 216...']
+            ])
         ;
     }
 

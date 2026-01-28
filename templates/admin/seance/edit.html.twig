@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}تعديل الحصة{% endblock %}
+
+{% block body %}
+<div class="page-header">
+    <h2 class="mb-0">تعديل الحصة: {{ seance.titre }}</h2>
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ path('app_dashboard') }}">لوحة القيادة</a></li>
+            <li class="breadcrumb-item"><a href="{{ path('admin_seance_index') }}">الحصص</a></li>
+            <li class="breadcrumb-item active">تعديل</li>
+        </ol>
+    </nav>
+</div>
+
+<div class="row justify-content-center">
+    <div class="col-md-10">
+        <div class="card">
+            <div class="card-body p-4">
+                {{ include('admin/seance/_form.html.twig', {'button_label': 'تحديث الحصة'}) }}
+                
+                <div class="mt-4 border-top pt-3">
+                    <a href="{{ path('admin_seance_index') }}" class="btn btn-light text-primary">
+                        <i class="bi bi-arrow-right"></i>
+                        العودة لجدول الحصص
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

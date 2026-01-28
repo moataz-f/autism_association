@@ -3,58 +3,122 @@
 {% block title %}تفاصيل المنتفع{% endblock %}
 
 {% block body %}
-<div class="mb-4">
-    <a href="{{ path('app_beneficiaire_index') }}" class="btn btn-secondary">
-        <i class="bi bi-arrow-right"></i> رجوع
-    </a>
-</div>
-
-<div class="card">
-    <div class="card-header bg-info text-white">
-        <h4>{{ beneficiaire.nom }} {{ beneficiaire.prenom }}</h4>
+<div class="page-header d-flex justify-content-between align-items-center">
+    <div>
+        <h2 class="mb-0">ملف المنتفع: {{ beneficiaire.prenom }} {{ beneficiaire.nom }}</h2>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{{ path('app_dashboard') }}">لوحة القيادة</a></li>
+                <li class="breadcrumb-item"><a href="{{ path('app_beneficiaire_index') }}">المنتفعون</a></li>
+                <li class="breadcrumb-item active">تفاصيل</li>
+            </ol>
+        </nav>
     </div>
-    <div class="card-body">
-        <div class="row">
-            <div class="col-md-6">
-                <p><strong>تاريخ الميلاد:</strong> {{ beneficiaire.dateNaissance|date('d/m/Y') }}</p>
-                <p><strong>العمر:</strong> {{ beneficiaire.age }} سنة</p>
-                <p><strong>الجنس:</strong> {{ beneficiaire.genre }}</p>
-                <p><strong>الهاتف:</strong> {{ beneficiaire.telephone ?? 'غير محدد' }}</p>
-            </div>
-            <div class="col-md-6">
-                <p><strong>مستوى التوحد:</strong> 
-                    <span class="badge 
-                        {% if beneficiaire.niveauAutisme == 'Léger' %}bg-success
-                        {% elseif beneficiaire.niveauAutisme == 'Modéré' %}bg-warning
-                        {% else %}bg-danger{% endif %}">
-                        {{ beneficiaire.niveauAutisme }}
-                    </span>
-                </p>
-                <p><strong>العائلة:</strong> {{ beneficiaire.famille }}</p>
-                <p><strong>تاريخ التسجيل:</strong> {{ beneficiaire.dateInscription|date('d/m/Y') }}</p>
-            </div>
-        </div>
-        <hr>
-        <div>
-            <h5>التشخيص:</h5>
-            <p>{{ beneficiaire.diagnostic ?? 'لا يوجد تشخيص' }}</p>
-        </div>
-        <hr>
-        <div>
-            <h5>الأنشطة المسجل فيها:</h5>
-            <ul>
-                {% for activite in beneficiaire.activites %}
-                    <li>{{ activite.titre }} - {{ activite.type }}</li>
-                {% else %}
-                    <li>لا توجد أنشطة</li>
-                {% endfor %}
-            </ul>
-        </div>
-    </div>
-    <div class="card-footer">
-        <a href="{{ path('app_beneficiaire_edit', {id: beneficiaire.id}) }}" class="btn btn-warning">
-            <i class="bi bi-pencil"></i> تعديل
+    <div class="d-flex gap-2">
+        <a href="{{ path('app_beneficiaire_edit', {'id': beneficiaire.id}) }}" class="btn btn-primary">
+            <i class="bi bi-pencil"></i> تعديل البيانات
+        </a>
+        <a href="{{ path('app_beneficiaire_index') }}" class="btn btn-light">
+            <i class="bi bi-arrow-right"></i> العودة للقائمة
         </a>
     </div>
 </div>
+
+<div class="row">
+    <div class="col-md-4">
+        <div class="card shadow-sm border-0 mb-4 text-center">
+            <div class="card-body py-5">
+                <div class="avatar-huge bg-primary mx-auto mb-3">
+                    {{ beneficiaire.prenom|first|upper }}{{ beneficiaire.nom|first|upper }}
+                </div>
+                <h3>{{ beneficiaire.prenom }} {{ beneficiaire.nom }}</h3>
+                <span class="badge bg-{{ beneficiaire.actif ? 'success' : 'secondary' }} rounded-pill mb-3">
+                    {{ beneficiaire.actif ? 'حساب نشط' : 'حساب غير نشط' }}
+                </span>
+                <p class="text-muted">{{ beneficiaire.genre }} - {{ beneficiaire.age }} سنة</p>
+            </div>
+        </div>
+
+        <div class="card shadow-sm border-0">
+            <div class="card-body">
+                <h5 class="mb-3 border-bottom pb-2">معلومات التواصل</h5>
+                <div class="mb-3">
+                    <label class="small text-muted d-block">العائلة</label>
+                    <span class="fw-bold">{{ beneficiaire.famille ?: 'غير محدد' }}</span>
+                </div>
+                <div class="mb-3">
+                    <label class="small text-muted d-block">رقم الهاتف</label>
+                    <span class="fw-bold">{{ beneficiaire.telephone ?: 'غير متوفر' }}</span>
+                </div>
+                <div class="mb-0">
+                    <label class="small text-muted d-block">العنوان</label>
+                    <span class="fw-bold">{{ beneficiaire.adresse ?: 'غير محدد' }}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-8">
+        <div class="card shadow-sm border-0 mb-4">
+            <div class="card-body">
+                <h5 class="mb-4 border-bottom pb-2">الحالة الصحية والتشخيص</h5>
+                <div class="row g-4">
+                    <div class="col-md-6">
+                        <div class="p-3 bg-light rounded-3">
+                            <label class="small text-muted d-block">مستوى التوحد</label>
+                            <span class="fw-bold fs-5 text-primary">{{ beneficiaire.niveauAutisme }}</span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="p-3 bg-light rounded-3">
+                            <label class="small text-muted d-block">تاريخ الميلاد</label>
+                            <span class="fw-bold fs-5">{{ beneficiaire.dateNaissance|date('Y-m-d') }}</span>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="p-3 bg-light rounded-3">
+                            <label class="small text-muted d-block">التشخيص الطبي</label>
+                            <p class="mb-0 mt-2">{{ beneficiaire.diagnostic ?: 'لا توجد ملاحظات طبية حالياً.' }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card shadow-sm border-0">
+            <div class="card-body">
+                <h5 class="mb-4 border-bottom pb-2">الأنشطة المسجل فيها</h5>
+                <div class="list-group list-group-flush">
+                {% for activite in beneficiaire.activites %}
+                    <div class="list-group-item px-0 border-light">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6 class="mb-1">{{ activite.titre }}</h6>
+                                <small class="text-muted">{{ activite.type }}</small>
+                            </div>
+                            <span class="badge bg-light text-primary">مسجل</span>
+                        </div>
+                    </div>
+                {% else %}
+                    <p class="text-muted mb-0">لا توجد أنشطة مسجلة لهذا الطفل حالياً.</p>
+                {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .avatar-huge {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2rem;
+        font-weight: bold;
+        color: white;
+    }
+</style>
 {% endblock %}

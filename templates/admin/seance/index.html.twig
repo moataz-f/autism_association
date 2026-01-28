@@ -1,0 +1,97 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}إدارة الحصص{% endblock %}
+
+{% block body %}
+<div class="page-header d-flex justify-content-between align-items-center">
+    <div>
+        <h2 class="mb-0">برنامج الحصص</h2>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{{ path('app_dashboard') }}">لوحة القيادة</a></li>
+                <li class="breadcrumb-item active">الحصص</li>
+            </ol>
+        </nav>
+    </div>
+    <a href="{{ path('admin_seance_new') }}" class="btn btn-primary">
+        <i class="bi bi-calendar-plus"></i>
+        إضافة حصة جديدة
+    </a>
+</div>
+
+<div class="card shadow-sm border-0">
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0 text-center">
+                <thead class="bg-light">
+                    <tr>
+                        <th>الموضوع</th>
+                        <th>النوع</th>
+                        <th>التاريخ</th>
+                        <th>الوقت</th>
+                        <th>الأخصائي</th>
+                        <th>الأطفال</th>
+                        <th>الحالة</th>
+                        <th>الإجراءات</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for seance in seances %}
+                    <tr>
+                        <td class="fw-bold">{{ seance.titre }}</td>
+                        <td>
+                            <span class="badge border {{ seance.type == 'Individuelle' ? 'text-primary border-primary' : 'text-purple border-purple' }}">
+                                {{ seance.type == 'Individuelle' ? 'فردية' : 'جماعية' }}
+                            </span>
+                        </td>
+                        <td>{{ seance.date|date('Y-m-d') }}</td>
+                        <td>
+                            <small class="text-muted">
+                                {{ seance.heureDebut|date('H:i') }} - {{ seance.heureFin|date('H:i') }}
+                            </small>
+                        </td>
+                        <td>{{ seance.specialiste.prenom }} {{ seance.specialiste.nom }}</td>
+                        <td>
+                            <span class="badge bg-light text-dark rounded-pill">
+                                {{ seance.beneficiaires|length }} أطفال
+                            </span>
+                        </td>
+                        <td>
+                            {% set status_label = '' %}
+                            {% set status_color = 'secondary' %}
+                            {% if seance.etat == 'Planned' %}{% set status_label = 'مبرمجة' %}{% set status_color = 'primary' %}
+                            {% elseif seance.etat == 'Completed' %}{% set status_label = 'تمت' %}{% set status_color = 'success' %}
+                            {% elseif seance.etat == 'Cancelled' %}{% set status_label = 'ملغاة' %}{% set status_color = 'danger' %}
+                            {% endif %}
+                            <span class="badge bg-{{ status_color }}">{{ status_label }}</span>
+                        </td>
+                        <td>
+                            <div class="btn-group">
+                                <a href="{{ path('admin_seance_edit', {'id': seance.id}) }}" class="btn btn-sm btn-outline-primary" title="تعديل">
+                                    <i class="bi bi-pencil"></i>
+                                </a>
+                                <form method="post" action="{{ path('admin_seance_delete', {'id': seance.id}) }}" onsubmit="return confirm('هل أنت متأكد من حذف هذه الحصة؟');" style="display: inline-block;">
+                                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ seance.id) }}">
+                                    <button class="btn btn-sm btn-outline-danger" title="حذف">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="8" class="text-center py-4 text-muted">لا توجد حصص مبرمجة حالياً.</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<style>
+    .text-purple { color: #6f42c1; }
+    .border-purple { border-color: #6f42c1; }
+</style>
+{% endblock %}
