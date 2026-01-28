@@ -7,4 +7,10 @@
 /public/bundles/
 /var/
 /vendor/
+# Doctrine Migrations
+/migrations/
+
+# Symfony environment file
+/.env
+
 ###< symfony/framework-bundle ###
