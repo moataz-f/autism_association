@@ -1,0 +1,58 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}تعديل بيانات الموظف{% endblock %}
+
+{% block body %}
+<div class="page-header d-flex justify-content-between align-items-center">
+    <div>
+        <h2 class="mb-0">تعديل بيانات الموظف: {{ personnel.nom }} {{ personnel.prenom }}</h2>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{{ path('app_dashboard') }}">لوحة القيادة</a></li>
+                <li class="breadcrumb-item"><a href="{{ path('app_personnel_index') }}">الموظفون</a></li>
+                <li class="breadcrumb-item active">تعديل</li>
+            </ol>
+        </nav>
+    </div>
+    <a href="{{ path('app_personnel_index') }}" class="btn btn-light">
+        <i class="bi bi-arrow-right"></i> العودة للقائمة
+    </a>
+</div>
+
+<div class="row justify-content-center">
+    <div class="col-md-10">
+        {% if personnel.user %}
+             <div class="alert alert-success border-0 shadow-sm mb-4">
+                <div class="d-flex align-items-center">
+                    <i class="bi bi-check-circle-fill fs-4 me-3"></i>
+                    <div>
+                        <h6 class="fw-bold mb-0">حساب مستخدم مرتبط</h6>
+                        <small>أي تغييرات هنا ستنعكس تلقائيًا على حساب المستخدم المرتبط (الاسم، البريد الإلكتروني، الرتبة).</small>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+
+        <div class="card shadow-sm border-0 mb-4">
+            <div class="card-body p-4">
+                {{ include('personnel/_form.html.twig', {'button_label': 'تحديث البيانات'}) }}
+            </div>
+        </div>
+
+        <div class="card shadow-sm border-0 border-top-danger" style="border-top: 3px solid #FCA5A5 !important;">
+            <div class="card-body p-4 d-flex justify-content-between align-items-center">
+                <div>
+                    <h5 class="text-danger mb-1">منطقة خطرة</h5>
+                    <p class="text-muted mb-0 small">حذف الموظف سيؤدي إلى حذف حساب المستخدم المرتبط به نهائياً.</p>
+                </div>
+                <form method="post" action="{{ path('app_personnel_delete', {'id': personnel.id}) }}" onsubmit="return confirm('هل أنت متأكد من حذف هذا الموظف؟');">
+                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ personnel.id) }}">
+                    <button class="btn btn-outline-danger">
+                        <i class="bi bi-trash me-1"></i> حذف الموظف
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

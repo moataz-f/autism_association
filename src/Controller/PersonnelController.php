@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Personnel;
+use App\Entity\User;
 use App\Form\PersonnelType;
 use App\Repository\PersonnelRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -11,6 +12,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Knp\Component\Pager\PaginatorInterface;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 #[Route('/personnel')]
 class PersonnelController extends AbstractController
@@ -37,17 +39,49 @@ class PersonnelController extends AbstractController
     }
 
     #[Route('/new', name: 'app_personnel_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    public function new(
+        Request $request, 
+        EntityManagerInterface $entityManager,
+        UserPasswordHasherInterface $userPasswordHasher
+    ): Response
     {
         $personnel = new Personnel();
         $form = $this->createForm(PersonnelType::class, $personnel);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            // Create associated User
+            $user = new User();
+            $user->setEmail($personnel->getEmail());
+            $user->setNom($personnel->getNom());
+            $user->setPrenom($personnel->getPrenom());
+            $user->setNumtlf($personnel->getTelephone());
+            
+            // Set default password
+            $user->setPassword(
+                $userPasswordHasher->hashPassword(
+                    $user,
+                    'pass123'
+                )
+            );
+
+            // Determine role
+            $roles = ['ROLE_PERSONNEL'];
+            if ($personnel->getRole() === 'Administrateur') {
+                $roles[] = 'ROLE_ADMIN';
+            } elseif ($personnel->getRole() === 'Éducateur') {
+                $roles[] = 'ROLE_EDUCATEUR';
+            }
+            $user->setRoles($roles);
+
+            // Link them
+            $personnel->setUser($user);
+
+            $entityManager->persist($user);
             $entityManager->persist($personnel);
             $entityManager->flush();
 
-            $this->addFlash('success', 'Personnel ajouté avec succès!');
+            $this->addFlash('success', 'Personnel ajouté avec succès! Un compte utilisateur a été créé (Mdp: pass123).');
             return $this->redirectToRoute('app_personnel_index');
         }
 
@@ -72,9 +106,32 @@ class PersonnelController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            // Sync User if exists
+            if ($personnel->getUser()) {
+                $user = $personnel->getUser();
+                $user->setEmail($personnel->getEmail());
+                $user->setNom($personnel->getNom());
+                $user->setPrenom($personnel->getPrenom());
+                $user->setNumtlf($personnel->getTelephone());
+                
+                // Update roles based on new role
+                $roles = $user->getRoles();
+                // Reset basic roles
+                $roles = array_diff($roles, ['ROLE_ADMIN', 'ROLE_EDUCATEUR']);
+                $roles[] = 'ROLE_PERSONNEL'; // Ensure base role
+                
+                if ($personnel->getRole() === 'Administrateur') {
+                    $roles[] = 'ROLE_ADMIN';
+                } elseif ($personnel->getRole() === 'Éducateur') {
+                    $roles[] = 'ROLE_EDUCATEUR';
+                }
+                
+                $user->setRoles(array_unique($roles));
+            }
+
             $entityManager->flush();
 
-            $this->addFlash('success', 'Personnel modifié avec succès!');
+            $this->addFlash('success', 'Personnel et compte utilisateur modifiés avec succès!');
             return $this->redirectToRoute('app_personnel_index');
         }
 
@@ -82,5 +139,20 @@ class PersonnelController extends AbstractController
             'personnel' => $personnel,
             'form' => $form,
         ]);
+    }
+
+    #[Route('/{id}', name: 'app_personnel_delete', methods: ['POST'])]
+    public function delete(Request $request, Personnel $personnel, EntityManagerInterface $entityManager): Response
+    {
+        if ($this->isCsrfTokenValid('delete'.$personnel->getId(), $request->request->get('_token'))) {
+            // User will be auto-deleted due to cascade remove if configured, 
+            // but we configured it on the Personnel side (cascade=['persist', 'remove']).
+            // So removing personnel should remove user.
+            $entityManager->remove($personnel);
+            $entityManager->flush();
+            $this->addFlash('success', 'Personnel supprimé avec succès!');
+        }
+
+        return $this->redirectToRoute('app_personnel_index');
     }
 }

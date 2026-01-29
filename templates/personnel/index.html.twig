@@ -3,19 +3,124 @@
 {% block title %}الموظفون{% endblock %}
 
 {% block body %}
-<div class="d-flex justify-content-between align-items-center mb-4">
-    <h2>قائمة الموظفين</h2>
-    <a href="#" class="btn btn-primary">
-        <i class="bi bi-plus-circle"></i> إضافة موظف
+<div class="page-header justify-content-between">
+    <div class="page-title">
+        <h2>قائمة الموظفين</h2>
+        <p>إدارة الطاقم التربوي والإداري والأخصائيين</p>
+    </div>
+    <a href="{{ path('app_personnel_new') }}" class="btn btn-primary">
+        <i class="bi bi-person-plus-fill ms-2"></i> إضافة موظف
     </a>
 </div>
 
-<div class="card">
-    <div class="card-body">
-        <p class="text-center text-muted">لا يوجد موظفون بعد.</p>
-        <p class="text-center">
-            <a href="#" class="btn btn-primary">إضافة أول موظف</a>
-        </p>
+<div class="card border-0">
+    <div class="card-body p-0">
+        {% if pagination.items|length > 0 %}
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="bg-light">
+                        <tr>
+                            <th class="ps-4">الموظف</th>
+                            <th>الدور</th>
+                            <th>معلومات الاتصال</th>
+                            <th>حساب المستخدم</th>
+                            <th>الحالة</th>
+                            <th class="text-end pe-4">الإجراءات</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for personnel in pagination %}
+                        <tr>
+                            <td class="ps-4">
+                                <div class="d-flex align-items-center">
+                                    <div class="avatar-circle-sm bg-primary text-white me-3">
+                                        {{ personnel.nom|first }}{{ personnel.prenom|first }}
+                                    </div>
+                                    <div>
+                                        <div class="fw-800 text-main">{{ personnel.nom }} {{ personnel.prenom }}</div>
+                                        <small class="text-muted fw-600">منذ {{ personnel.dateEmbauche|date('Y-m-d') }}</small>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <span class="badge bg-light text-dark border">{{ personnel.role }}</span>
+                                {% if personnel.specialisation %}
+                                    <div class="small text-muted mt-1">{{ personnel.specialisation|slice(0, 30) }}...</div>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <div class="d-flex align-items-center mb-1">
+                                    <i class="bi bi-envelope text-muted me-2 small"></i>
+                                    <span>{{ personnel.email }}</span>
+                                </div>
+                                <div class="d-flex align-items-center">
+                                    <i class="bi bi-telephone text-muted me-2 small"></i>
+                                    <span>{{ personnel.telephone }}</span>
+                                </div>
+                            </td>
+                            <td>
+                                {% if personnel.user %}
+                                    <span class="badge bg-success-subtle text-success">
+                                        <i class="bi bi-check-circle-fill me-1"></i> مفعل
+                                    </span>
+                                {% else %}
+                                    <span class="badge bg-warning-subtle text-warning">
+                                        <i class="bi bi-exclamation-triangle-fill me-1"></i> غير مرتبط
+                                    </span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if personnel.actif %}
+                                    <span class="status-dot bg-success" title="نشط"></span>
+                                {% else %}
+                                    <span class="status-dot bg-danger" title="غير نشط"></span>
+                                {% endif %}
+                            </td>
+                            <td class="text-end pe-4">
+                                <div class="d-flex gap-2 justify-content-end">
+                                    <a href="{{ path('app_personnel_show', {'id': personnel.id}) }}" class="btn btn-sm btn-light text-primary" title="عرض">
+                                        <i class="bi bi-eye"></i>
+                                    </a>
+                                    <a href="{{ path('app_personnel_edit', {'id': personnel.id}) }}" class="btn btn-sm btn-light text-warning" title="تعديل">
+                                        <i class="bi bi-pencil"></i>
+                                    </a>
+                                    <form method="post" action="{{ path('app_personnel_delete', {'id': personnel.id}) }}" onsubmit="return confirm('هل أنت متأكد من حذف هذا الموظف؟ سيتم حذف حساب المستخدم المرتبط به أيضاً.');" class="d-inline">
+                                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ personnel.id) }}">
+                                        <button class="btn btn-sm btn-light text-danger" title="حذف">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="p-4 border-top">
+                {{ knp_pagination_render(pagination) }}
+            </div>
+        {% else %}
+            <div class="empty-state text-center p-5">
+                <div class="mb-4">
+                    <i class="bi bi-people text-muted opacity-25" style="font-size: 5rem;"></i>
+                </div>
+                <h5 class="fw-800 text-main mb-3">لا يوجد موظفون مسجلون بعد</h5>
+                <p class="text-muted fw-600 mb-4">أضف الموظفين، الأخصائيين، والإداريين لإدارة الجمعية.</p>
+                <a href="{{ path('app_personnel_new') }}" class="btn btn-primary px-4 py-2">
+                    <i class="bi bi-plus-circle me-1"></i> إضافة أول موظف
+                </a>
+            </div>
+        {% endif %}
     </div>
 </div>
+
+<style>
+    .status-dot {
+        display: inline-block;
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+    }
+</style>
 {% endblock %}

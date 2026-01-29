@@ -45,6 +45,7 @@
                         <td>
                             <div class="d-flex flex-wrap justify-content-center gap-1">
                             {% for role in user.roles %}
+                                {% set label = null %}
                                 {% set color = 'secondary' %}
                                 {% if role == 'ROLE_ADMIN' %}{% set label = 'مدير' %}{% set color = 'danger' %}
                                 {% elseif role == 'ROLE_SPECIALIST' %}{% set label = 'أخصائي' %}{% set color = 'primary' %}

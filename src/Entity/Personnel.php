@@ -48,6 +48,10 @@ class Personnel
     #[ORM\Column(type: 'text', nullable: true)]
     private ?string $specialisation = null;
 
+    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
+    #[ORM\JoinColumn(nullable: true)]
+    private ?User $user = null;
+
     public function __construct()
     {
         $this->activites = new ArrayCollection();
@@ -139,6 +143,17 @@ class Personnel
     public function setActif(bool $actif): self
     {
         $this->actif = $actif;
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): self
+    {
+        $this->user = $user;
         return $this;
     }
 

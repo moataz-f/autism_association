@@ -1,0 +1,114 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}تفاصيل الموظف{% endblock %}
+
+{% block body %}
+<div class="page-header d-flex justify-content-between align-items-center">
+    <div>
+        <h2 class="mb-0">تفاصيل الموظف</h2>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{{ path('app_dashboard') }}">لوحة القيادة</a></li>
+                <li class="breadcrumb-item"><a href="{{ path('app_personnel_index') }}">الموظفون</a></li>
+                <li class="breadcrumb-item active">تفاصيل</li>
+            </ol>
+        </nav>
+    </div>
+    <div class="d-flex gap-2">
+        <a href="{{ path('app_personnel_index') }}" class="btn btn-light">
+            <i class="bi bi-arrow-right"></i> العودة للقائمة
+        </a>
+        <a href="{{ path('app_personnel_edit', {'id': personnel.id}) }}" class="btn btn-primary">
+            <i class="bi bi-pencil"></i> تعديل
+        </a>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card shadow-sm border-0 mb-4">
+            <div class="card-header bg-white py-3">
+                <h5 class="mb-0 text-primary fw-bold">{{ personnel.nom }} {{ personnel.prenom }}</h5>
+            </div>
+            <div class="card-body p-4">
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <label class="text-muted small fw-bold text-uppercase">الدور</label>
+                        <p class="fs-5 fw-bold">{{ personnel.role }}</p>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="text-muted small fw-bold text-uppercase">تاريخ التعيين</label>
+                        <p class="fs-5">{{ personnel.dateEmbauche|date('Y-m-d') }}</p>
+                    </div>
+                </div>
+
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <label class="text-muted small fw-bold text-uppercase">رقم الهاتف</label>
+                        <div class="d-flex align-items-center mt-1">
+                            <i class="bi bi-telephone text-primary me-2"></i>
+                            <span class="fs-5">{{ personnel.telephone }}</span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="text-muted small fw-bold text-uppercase">البريد الإلكتروني</label>
+                        <div class="d-flex align-items-center mt-1">
+                            <i class="bi bi-envelope text-primary me-2"></i>
+                            <span class="fs-5">{{ personnel.email }}</span>
+                        </div>
+                    </div>
+                </div>
+
+                {% if personnel.specialisation %}
+                    <div class="mb-4">
+                        <label class="text-muted small fw-bold text-uppercase">Spécialisation</label>
+                        <div class="p-3 bg-light rounded border mt-2">
+                            {{ personnel.specialisation|nl2br }}
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        {% if personnel.user %}
+            <div class="card shadow-sm border-0 mb-4">
+                <div class="card-header bg-success text-white py-3">
+                    <h5 class="mb-0 fw-bold"><i class="bi bi-shield-lock-fill me-2"></i>حساب المستخدم</h5>
+                </div>
+                <div class="card-body p-4">
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="avatar-circle-sm bg-success-subtle text-success me-3">
+                            <i class="bi bi-person-fill"></i>
+                        </div>
+                        <div>
+                            <small class="text-muted d-block">Identifiant</small>
+                            <strong>{{ personnel.user.email }}</strong>
+                        </div>
+                    </div>
+                    <div class="d-flex align-items-center">
+                        <div class="avatar-circle-sm bg-success-subtle text-success me-3">
+                            <i class="bi bi-key-fill"></i>
+                        </div>
+                        <div>
+                            <small class="text-muted d-block">Rôle système</small>
+                            {% for role in personnel.user.roles %}
+                                <span class="badge bg-light text-dark border">{{ role }}</span>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% else %}
+             <div class="card shadow-sm border-0 mb-4">
+                <div class="card-body p-4 text-center">
+                    <i class="bi bi-exclamation-triangle text-warning fs-1 mb-2"></i>
+                    <h6 class="fw-bold">Aucun compte utilisateur</h6>
+                    <p class="text-muted small">Ce personnel n'a pas de compte de connexion associé.</p>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
