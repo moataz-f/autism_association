@@ -1,0 +1,46 @@
+{{ form_start(form) }}
+    <div class="row g-4">
+        <div class="col-md-6">
+            <div class="form-group mb-4">
+                {{ form_label(form.prenomResponsable, 'اسم المسئول', {'label_attr': {'class': 'form-label fw-bold'}}) }}
+                {{ form_widget(form.prenomResponsable, {'attr': {'class': 'form-control', 'placeholder': 'أدخل الاسم الشخصي...'}}) }}
+                <div class="text-danger small mt-1">{{ form_errors(form.prenomResponsable) }}</div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group mb-4">
+                {{ form_label(form.nomResponsable, 'لقب المسئول', {'label_attr': {'class': 'form-label fw-bold'}}) }}
+                {{ form_widget(form.nomResponsable, {'attr': {'class': 'form-control', 'placeholder': 'أدخل اللقب...'}}) }}
+                <div class="text-danger small mt-1">{{ form_errors(form.nomResponsable) }}</div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group mb-4">
+                {{ form_label(form.telephone, 'رقم الهاتف', {'label_attr': {'class': 'form-label fw-bold'}}) }}
+                {{ form_widget(form.telephone, {'attr': {'class': 'form-control', 'placeholder': 'مثال: 12345678'}}) }}
+                <div class="text-danger small mt-1">{{ form_errors(form.telephone) }}</div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group mb-4">
+                {{ form_label(form.email, 'البريد الإلكتروني', {'label_attr': {'class': 'form-label fw-bold'}}) }}
+                {{ form_widget(form.email, {'attr': {'class': 'form-control', 'placeholder': 'example@mail.com'}}) }}
+                <div class="text-danger small mt-1">{{ form_errors(form.email) }}</div>
+            </div>
+        </div>
+        <div class="col-12">
+            <div class="form-group mb-4">
+                {{ form_label(form.adresse, 'العنوان الشخصي', {'label_attr': {'class': 'form-label fw-bold'}}) }}
+                {{ form_widget(form.adresse, {'attr': {'class': 'form-control', 'rows': '3', 'placeholder': 'أدخل العنوان بالتفصيل...'}}) }}
+                <div class="text-danger small mt-1">{{ form_errors(form.adresse) }}</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="mt-4 border-top pt-4 text-start">
+        <button class="btn btn-primary px-5 btn-lg">
+            <i class="bi bi-check-lg ms-2"></i>
+            {{ button_label|default('حفظ البيانات') }}
+        </button>
+    </div>
+{{ form_end(form) }}

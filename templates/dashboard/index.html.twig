@@ -3,162 +3,145 @@
 {% block title %}لوحة القيادة{% endblock %}
 
 {% block body %}
-<div class="page-header mb-4">
-    <h2 class="mb-0">لوحة القيادة والمتابعة</h2>
-    <p class="text-muted mt-2 mb-0">مرحباً بك في نظام إدارة جمعية حلم البراءة للتوحد. إليك نظرة سريعة على أهم الإحصائيات.</p>
+<div class="page-header">
+    <div class="page-title">
+        <h2>لوحة القيادة والمتابعة</h2>
+        <p>نظرة شاملة على نشاط جمعية حلم البراءة</p>
+    </div>
+</div>
+
+<div class="row g-4 mb-5">
+    <div class="col-lg-3">
+        <div class="card h-100 p-4 border-0">
+            <div class="d-flex flex-column h-100">
+                <div class="stat-icon-2026 mb-4" style="background: rgba(37, 99, 235, 0.08); color: var(--primary);">
+                    <i class="bi bi-person-heart"></i>
+                </div>
+                <h3 class="fw-900 mb-1">{{ totalBeneficiaires }}</h3>
+                <span class="text-muted fw-600 small">طفل منتفع مسجل</span>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3">
+        <div class="card h-100 p-4 border-0">
+            <div class="d-flex flex-column h-100">
+                <div class="stat-icon-2026 mb-4" style="background: rgba(16, 185, 129, 0.08); color: var(--secondary);">
+                    <i class="bi bi-house-door"></i>
+                </div>
+                <h3 class="fw-900 mb-1">{{ totalFamilles }}</h3>
+                <span class="text-muted fw-600 small">عائلة مسجلة حالياً</span>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3">
+        <div class="card h-100 p-4 border-0">
+            <div class="d-flex flex-column h-100">
+                <div class="stat-icon-2026 mb-4" style="background: rgba(245, 158, 11, 0.08); color: var(--warning);">
+                    <i class="bi bi-calendar-check"></i>
+                </div>
+                <h3 class="fw-900 mb-1">{{ totalActivites }}</h3>
+                <span class="text-muted fw-600 small">نشاط مبرمج هذا الشهر</span>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3">
+        <div class="card h-100 p-4 border-0">
+            <div class="d-flex flex-column h-100">
+                <div class="stat-icon-2026 mb-4" style="background: rgba(239, 68, 68, 0.08); color: var(--danger);">
+                    <i class="bi bi-person-badge"></i>
+                </div>
+                <h3 class="fw-900 mb-1">{{ totalPersonnel }}</h3>
+                <span class="text-muted fw-600 small">موظف ومتطوع فعال</span>
+            </div>
+        </div>
+    </div>
 </div>
 
 <div class="row g-4">
-    <div class="col-md-3">
-        <div class="card shadow-sm border-0 h-100" style="border-right: 5px solid var(--primary-blue) !important;">
-            <div class="card-body text-center py-4">
-                <div class="mb-3">
-                    <i class="bi bi-people-fill text-primary fs-1"></i>
+    {# Big Bento Section: Quick Access #}
+    <div class="col-lg-8">
+        <div class="card h-100 p-5 border-0">
+            <h5 class="fw-900 mb-5 d-flex align-items-center">
+                <i class="bi bi-lightning-charge-fill ms-3 text-warning"></i>
+                الوصول السريع والعمليات
+            </h5>
+            <div class="row g-4">
+                <div class="col-md-3">
+                    <a href="{{ path('app_beneficiaire_index') }}" class="bento-link">
+                        <div class="b-icon"><i class="bi bi-people-fill"></i></div>
+                        <span>المنتفعون</span>
+                    </a>
                 </div>
-                <h3 class="fw-bold mb-1">{{ totalBeneficiaires }}</h3>
-                <p class="text-muted mb-0">طفل منتفع</p>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-3">
-        <div class="card shadow-sm border-0 h-100" style="border-right: 5px solid var(--secondary-green) !important;">
-            <div class="card-body text-center py-4">
-                <div class="mb-3">
-                    <i class="bi bi-house-heart-fill text-success fs-1"></i>
+                <div class="col-md-3">
+                    <a href="{{ path('app_famille_index') }}" class="bento-link">
+                        <div class="b-icon"><i class="bi bi-house-heart-fill"></i></div>
+                        <span>العائلات</span>
+                    </a>
                 </div>
-                <h3 class="fw-bold mb-1">{{ totalFamilles }}</h3>
-                <p class="text-muted mb-0">عائلة مسجلة</p>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-3">
-        <div class="card shadow-sm border-0 h-100" style="border-right: 5px solid var(--accent-amber) !important;">
-            <div class="card-body text-center py-4">
-                <div class="mb-3">
-                    <i class="bi bi-calendar-event-fill text-warning fs-1"></i>
+                <div class="col-md-3">
+                    <a href="{{ path('admin_donation_index') }}" class="bento-link">
+                        <div class="b-icon"><i class="bi bi-gift-fill"></i></div>
+                        <span>التبرعات</span>
+                    </a>
                 </div>
-                <h3 class="fw-bold mb-1">{{ totalActivites }}</h3>
-                <p class="text-muted mb-0">نشاط مبرمج</p>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-3">
-        <div class="card shadow-sm border-0 h-100" style="border-right: 5px solid #64748B !important;">
-            <div class="card-body text-center py-4">
-                <div class="mb-3">
-                    <i class="bi bi-person-badge-fill text-secondary fs-1"></i>
+                <div class="col-md-3">
+                    <a href="{{ path('admin_seance_index') }}" class="bento-link">
+                        <div class="b-icon"><i class="bi bi-clock-fill"></i></div>
+                        <span>الجدولة</span>
+                    </a>
                 </div>
-                <h3 class="fw-bold mb-1">{{ totalPersonnel }}</h3>
-                <p class="text-muted mb-0">موظف ومتطوع</p>
             </div>
-        </div>
-    </div>
-</div>
 
-<div class="row g-4 mt-2">
-    <div class="col-md-8">
-        <div class="card shadow-sm border-0 h-100">
-            <div class="card-body p-4">
-                <h5 class="mb-4 d-flex align-items-center">
-                    <i class="bi bi-lightning-charge-fill text-warning ms-2"></i>
-                    وصول سريع للبيانات
-                </h5>
+            <div class="mt-5 pt-5 border-top">
+                <h5 class="fw-900 mb-4">النشر الرقمي</h5>
                 <div class="row g-3">
-                    <div class="col-md-6 col-lg-3">
-                        <a href="{{ path('app_beneficiaire_index') }}" class="text-decoration-none">
-                            <div class="quick-link-card text-center p-3 rounded-3">
-                                <i class="bi bi-people-fill fs-2 mb-2 d-block text-primary"></i>
-                                <span class="fw-bold">المنتفعون</span>
+                    <div class="col-md-6">
+                        <a href="{{ path('admin_content_index') }}" class="bento-sublink">
+                            <div class="s-icon bg-primary bg-opacity-10 text-primary"><i class="bi bi-pencil-square"></i></div>
+                            <div>
+                                <h6 class="mb-0 fw-800">محتوى الصفحات</h6>
+                                <p class="mb-0 small text-muted">إدارة النصوص والروابط</p>
                             </div>
                         </a>
                     </div>
-                    <div class="col-md-6 col-lg-3">
-                        <a href="{{ path('app_famille_index') }}" class="text-decoration-none">
-                            <div class="quick-link-card text-center p-3 rounded-3">
-                                <i class="bi bi-house-heart-fill fs-2 mb-2 d-block text-success"></i>
-                                <span class="fw-bold">العائلات</span>
+                    <div class="col-md-6">
+                        <a href="{{ path('admin_gallery_index') }}" class="bento-sublink">
+                            <div class="s-icon bg-secondary bg-opacity-10 text-secondary"><i class="bi bi-images"></i></div>
+                            <div>
+                                <h6 class="mb-0 fw-800">معرض الصور</h6>
+                                <p class="mb-0 small text-muted">تحديث ألبوم الجمعية</p>
                             </div>
                         </a>
-                    </div>
-                    <div class="col-md-6 col-lg-3">
-                        <a href="{{ path('app_activite_index') }}" class="text-decoration-none">
-                            <div class="quick-link-card text-center p-3 rounded-3">
-                                <i class="bi bi-calendar-event-fill fs-2 mb-2 d-block text-warning"></i>
-                                <span class="fw-bold">الأنشطة</span>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="col-md-6 col-lg-3">
-                        <a href="{{ path('admin_seance_index') }}" class="text-decoration-none">
-                            <div class="quick-link-card text-center p-3 rounded-3">
-                                <i class="bi bi-clock-fill fs-2 mb-2 d-block text-info"></i>
-                                <span class="fw-bold">جدول الحصص</span>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-
-                <div class="mt-5">
-                    <h5 class="mb-4 d-flex align-items-center">
-                        <i class="bi bi-globe text-primary ms-2"></i>
-                        بوابة الموقع الإلكتروني
-                    </h5>
-                    <div class="row g-3">
-                        <div class="col-md-4">
-                            <a href="{{ path('admin_content_index') }}" class="btn btn-light w-100 text-start py-3 px-4 rounded-3 border-0 shadow-sm d-flex align-items-center">
-                                <i class="bi bi-file-text-fill fs-4 ms-3 text-primary"></i>
-                                <span>محتوى الصفحات</span>
-                            </a>
-                        </div>
-                        <div class="col-md-4">
-                            <a href="{{ path('admin_gallery_index') }}" class="btn btn-light w-100 text-start py-3 px-4 rounded-3 border-0 shadow-sm d-flex align-items-center">
-                                <i class="bi bi-images fs-4 ms-3 text-secondary"></i>
-                                <span>معرض الصور</span>
-                            </a>
-                        </div>
-                        <div class="col-md-4">
-                            <a href="{{ path('admin_donation_index') }}" class="btn btn-light w-100 text-start py-3 px-4 rounded-3 border-0 shadow-sm d-flex align-items-center">
-                                <i class="bi bi-cash-stack fs-4 ms-3 text-success"></i>
-                                <span>حملات التبرع</span>
-                            </a>
-                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="col-md-4">
-        <div class="card shadow-sm border-0 h-100">
-            <div class="card-body p-4">
-                <h5 class="mb-4">تحكم المستخدمين</h5>
-                <div class="list-group list-group-flush gap-3 mt-2">
-                    {% if is_granted('ROLE_ADMIN') %}
-                    <a href="{{ path('admin_user_index') }}" class="list-group-item list-group-item-action border-0 rounded-3 p-3 bg-light d-flex align-items-center">
-                        <div class="bg-primary bg-opacity-10 p-2 rounded-2 ms-3">
-                            <i class="bi bi-shield-lock-fill text-primary fs-5"></i>
-                        </div>
-                        <div>
-                            <h6 class="mb-1">إدارة الصلاحيات</h6>
-                            <small class="text-muted">المستخدمين والأدوار</small>
-                        </div>
-                    </a>
-                    {% endif %}
+    {# Sidebar Bento: System #}
+    <div class="col-lg-4">
+        <div class="card h-100 p-5 border-0 bg-dark text-white shadow-lg" style="background: var(--text-main) !important;">
+            <h5 class="fw-900 mb-4">إدارة النظام</h5>
+            <div class="d-flex flex-column gap-3">
+                {% if is_granted('ROLE_ADMIN') %}
+                <a href="{{ path('admin_user_index') }}" class="sys-link-dark">
+                    <i class="bi bi-shield-lock ms-3"></i>
+                    <span>الصلاحيات والمستخدمين</span>
+                </a>
+                {% endif %}
+                <a href="{{ path('app_profile_edit') }}" class="sys-link-dark">
+                    <i class="bi bi-person-circle ms-3"></i>
+                    <span>إعدادات الحساب</span>
+                </a>
+            </div>
 
-                    <a href="{{ path('app_profile_edit') }}" class="list-group-item list-group-item-action border-0 rounded-3 p-3 bg-light d-flex align-items-center">
-                        <div class="bg-success bg-opacity-10 p-2 rounded-2 ms-3">
-                            <i class="bi bi-person-gear-fill text-success fs-5"></i>
-                        </div>
-                        <div>
-                            <h6 class="mb-1">الملف الشخصي</h6>
-                            <small class="text-muted">تعديل بياناتك الشخصية</small>
-                        </div>
-                    </a>
-                </div>
-
-                <div class="mt-4 p-4 rounded-4 bg-primary bg-opacity-10 text-center border border-primary border-opacity-25">
-                    <h6 class="text-primary fw-bold">تحتاج مساعدة؟</h6>
-                    <p class="small text-muted mb-0">إذا واجهت أي مشكلة تقنية، يرجى التواصل مع فريق الدعم الفني للجمعية.</p>
+            <div class="mt-auto pt-5">
+                <div class="premium-support-box p-4 rounded-4" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);">
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="p-icon ms-3"><i class="bi bi-headset"></i></div>
+                        <h6 class="mb-0 fw-800">الدعم الذكي 2026</h6>
+                    </div>
+                    <p class="small text-white-50 mb-0">نظام المساعدة المتقدم متاح دائماً لخدمتكم.</p>
                 </div>
             </div>
         </div>
@@ -166,22 +149,59 @@
 </div>
 
 <style>
-    .quick-link-card {
-        background: white;
-        border: 1px solid var(--border-color);
-        transition: all 0.2s ease;
-        color: var(--text-dark);
+    .stat-icon-2026 {
+        width: 56px;
+        height: 56px;
+        border-radius: 18px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
     }
-    .quick-link-card:hover {
-        background: #F1F5F9;
-        border-color: var(--primary-blue);
-        color: var(--primary-blue);
-        transform: translateY(-3px);
-        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    .fw-900 { font-weight: 900; }
+    .fw-800 { font-weight: 800; }
+    
+    .bento-link {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 2.5rem 1.5rem;
+        background: #F8FAFC;
+        border-radius: var(--radius-bento);
+        text-decoration: none;
+        color: var(--text-main);
+        font-weight: 800;
+        transition: var(--transition-smooth);
     }
-    .text-primary { color: var(--primary-blue) !important; }
-    .text-success { color: var(--secondary-green) !important; }
-    .text-warning { color: var(--accent-amber) !important; }
-    .text-info { color: #0EA5E9 !important; }
+    .b-icon { font-size: 2.5rem; margin-bottom: 1rem; color: var(--primary); }
+    .bento-link:hover { background: white; box-shadow: var(--shadow-hover); transform: scale(1.05); }
+
+    .bento-sublink {
+        display: flex;
+        align-items: center;
+        padding: 1.5rem;
+        background: #F8FAFC;
+        border-radius: 20px;
+        text-decoration: none;
+        color: inherit;
+        transition: var(--transition-smooth);
+    }
+    .bento-sublink:hover { background: white; box-shadow: var(--shadow-neo); }
+    .s-icon { width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-left: 1rem; font-size: 1.2rem; }
+
+    .sys-link-dark {
+        display: flex;
+        align-items: center;
+        padding: 1rem 1.25rem;
+        background: rgba(255,255,255,0.03);
+        border-radius: 15px;
+        text-decoration: none;
+        color: rgba(255,255,255,0.7);
+        font-weight: 600;
+        transition: var(--transition-smooth);
+    }
+    .sys-link-dark:hover { background: rgba(255,255,255,0.1); color: white; }
+    
+    .p-icon { font-size: 1.5rem; color: var(--primary); }
 </style>
 {% endblock %}

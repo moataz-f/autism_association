@@ -3,56 +3,54 @@
 {% block title %}إدارة الحصص{% endblock %}
 
 {% block body %}
-<div class="page-header d-flex justify-content-between align-items-center">
-    <div>
-        <h2 class="mb-0">برنامج الحصص</h2>
-        <nav aria-label="breadcrumb">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="{{ path('app_dashboard') }}">لوحة القيادة</a></li>
-                <li class="breadcrumb-item active">الحصص</li>
-            </ol>
-        </nav>
+<div class="page-header justify-content-between">
+    <div class="page-title">
+        <h2>برنامج الحصص والجلسات</h2>
+        <p>متابعة الجدولة الزمنية للحصص الفردية والجماعية</p>
     </div>
     <a href="{{ path('admin_seance_new') }}" class="btn btn-primary">
-        <i class="bi bi-calendar-plus"></i>
-        إضافة حصة جديدة
+        <i class="bi bi-calendar-plus ms-2"></i> إضافة حصة جديدة
     </a>
 </div>
 
-<div class="card shadow-sm border-0">
+<div class="card border-0">
     <div class="card-body p-0">
         <div class="table-responsive">
             <table class="table table-hover align-middle mb-0 text-center">
-                <thead class="bg-light">
+                <thead>
                     <tr>
-                        <th>الموضوع</th>
+                        <th class="text-end ps-4">الحصة / الموضوع</th>
                         <th>النوع</th>
-                        <th>التاريخ</th>
-                        <th>الوقت</th>
+                        <th>التاريخ والوقت</th>
                         <th>الأخصائي</th>
-                        <th>الأطفال</th>
+                        <th>المشاركون</th>
                         <th>الحالة</th>
-                        <th>الإجراءات</th>
+                        <th class="text-start pe-4">الإجراءات</th>
                     </tr>
                 </thead>
                 <tbody>
                 {% for seance in seances %}
                     <tr>
-                        <td class="fw-bold">{{ seance.titre }}</td>
+                        <td class="text-end ps-4">
+                            <div class="fw-800 text-main">{{ seance.titre }}</div>
+                            <small class="text-muted fw-600">ID: #{{ seance.id }}</small>
+                        </td>
                         <td>
-                            <span class="badge border {{ seance.type == 'Individuelle' ? 'text-primary border-primary' : 'text-purple border-purple' }}">
+                            {% set type_color = seance.type == 'Individuelle' ? 'primary' : 'secondary' %}
+                            <span class="badge-2026" style="background: var(--{{ type_color }})0D; color: var(--{{ type_color }});">
+                                <i class="bi {{ seance.type == 'Individuelle' ? 'bi-person' : 'bi-people' }} ms-1"></i>
                                 {{ seance.type == 'Individuelle' ? 'فردية' : 'جماعية' }}
                             </span>
                         </td>
-                        <td>{{ seance.date|date('Y-m-d') }}</td>
-                        <td>
-                            <small class="text-muted">
-                                {{ seance.heureDebut|date('H:i') }} - {{ seance.heureFin|date('H:i') }}
+                        <td class="fw-600">
+                            <div>{{ seance.date|date('Y-m-d') }}</div>
+                            <small class="text-muted fw-700">
+                                {{ seance.heureDebut|date('H:i') }} <i class="bi bi-arrow-left small mx-1"></i> {{ seance.heureFin|date('H:i') }}
                             </small>
                         </td>
-                        <td>{{ seance.specialiste.prenom }} {{ seance.specialiste.nom }}</td>
+                        <td class="fw-700 text-muted">{{ seance.specialiste.prenom }} {{ seance.specialiste.nom }}</td>
                         <td>
-                            <span class="badge bg-light text-dark rounded-pill">
+                            <span class="badge-2026 bg-light text-main border">
                                 {{ seance.beneficiaires|length }} أطفال
                             </span>
                         </td>
@@ -60,19 +58,22 @@
                             {% set status_label = '' %}
                             {% set status_color = 'secondary' %}
                             {% if seance.etat == 'Planned' %}{% set status_label = 'مبرمجة' %}{% set status_color = 'primary' %}
-                            {% elseif seance.etat == 'Completed' %}{% set status_label = 'تمت' %}{% set status_color = 'success' %}
+                            {% elseif seance.etat == 'Completed' %}{% set status_label = 'تمت' %}{% set status_color = 'secondary' %}
                             {% elseif seance.etat == 'Cancelled' %}{% set status_label = 'ملغاة' %}{% set status_color = 'danger' %}
                             {% endif %}
-                            <span class="badge bg-{{ status_color }}">{{ status_label }}</span>
+                            <div class="d-flex align-items-center justify-content-center">
+                                <span class="dot-indicator bg-{{ status_color }} ms-2"></span>
+                                <span class="fw-700 text-{{ status_color }}">{{ status_label }}</span>
+                            </div>
                         </td>
-                        <td>
-                            <div class="btn-group">
-                                <a href="{{ path('admin_seance_edit', {'id': seance.id}) }}" class="btn btn-sm btn-outline-primary" title="تعديل">
+                        <td class="text-start pe-4">
+                            <div class="d-flex gap-2 justify-content-start">
+                                <a href="{{ path('admin_seance_edit', {'id': seance.id}) }}" class="action-btn-2026" title="تعديل">
                                     <i class="bi bi-pencil"></i>
                                 </a>
-                                <form method="post" action="{{ path('admin_seance_delete', {'id': seance.id}) }}" onsubmit="return confirm('هل أنت متأكد من حذف هذه الحصة؟');" style="display: inline-block;">
+                                <form method="post" action="{{ path('admin_seance_delete', {'id': seance.id}) }}" onsubmit="return confirm('هل أنت متأكد من حذف هذه الحصة؟');">
                                     <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ seance.id) }}">
-                                    <button class="btn btn-sm btn-outline-danger" title="حذف">
+                                    <button class="action-btn-2026" style="color: var(--danger); border-color: rgba(239, 68, 68, 0.1);" title="حذف">
                                         <i class="bi bi-trash"></i>
                                     </button>
                                 </form>
@@ -81,7 +82,12 @@
                     </tr>
                 {% else %}
                     <tr>
-                        <td colspan="8" class="text-center py-4 text-muted">لا توجد حصص مبرمجة حالياً.</td>
+                        <td colspan="7" class="text-center py-5">
+                            <div class="empty-state">
+                                <i class="bi bi-calendar-x text-muted opacity-25" style="font-size: 4rem;"></i>
+                                <p class="text-muted mt-3 fw-600">لا توجد حصص مبرمجة حالياً.</p>
+                            </div>
+                        </td>
                     </tr>
                 {% endfor %}
                 </tbody>
@@ -91,7 +97,10 @@
 </div>
 
 <style>
-    .text-purple { color: #6f42c1; }
-    .border-purple { border-color: #6f42c1; }
+    .fw-800 { font-weight: 800; }
+    .fw-700 { font-weight: 700; }
+    .fw-600 { font-weight: 600; }
+    .dot-indicator { height: 8px; width: 8px; border-radius: 50%; display: inline-block; }
+    th { font-weight: 800 !important; color: var(--text-muted) !important; font-size: 0.85rem; letter-spacing: 0.05em; text-transform: uppercase; }
 </style>
 {% endblock %}

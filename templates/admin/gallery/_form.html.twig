@@ -1,0 +1,49 @@
+{{ form_start(form) }}
+    <div class="row g-4">
+        <div class="col-md-8">
+            <div class="form-group mb-4">
+                {{ form_label(form.titre, 'عنوان الصورة / الحدث', {'label_attr': {'class': 'form-label fw-bold'}}) }}
+                {{ form_widget(form.titre, {'attr': {'class': 'form-control', 'placeholder': 'أدخل عنواناً معبراً...'}}) }}
+                <div class="text-danger small mt-1">{{ form_errors(form.titre) }}</div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="form-group mb-4">
+                {{ form_label(form.ordre, 'ترتيب العرض', {'label_attr': {'class': 'form-label fw-bold'}}) }}
+                {{ form_widget(form.ordre, {'attr': {'class': 'form-control'}}) }}
+                <div class="text-danger small mt-1">{{ form_errors(form.ordre) }}</div>
+            </div>
+        </div>
+        
+        <div class="col-12">
+            <div class="form-group mb-4">
+                {{ form_label(form.description, 'وصف الصورة', {'label_attr': {'class': 'form-label fw-bold'}}) }}
+                {{ form_widget(form.description, {'attr': {'class': 'form-control', 'rows': '3', 'placeholder': 'اكتب وصفاً مختصراً (اختياري)...'}}) }}
+                <div class="text-danger small mt-1">{{ form_errors(form.description) }}</div>
+            </div>
+        </div>
+
+        <div class="col-12">
+            <div class="form-group mb-4 p-4 border rounded-4 bg-light bg-opacity-50">
+                {{ form_label(form.imageFile, 'تحميل الصورة', {'label_attr': {'class': 'form-label fw-bold d-block mb-3'}}) }}
+                {{ form_widget(form.imageFile, {'attr': {'class': 'form-control'}}) }}
+                <small class="text-muted d-block mt-2">الصيغ المدعومة: JPG, PNG, WEBP. الحجم الأقصى: 2MB.</small>
+                <div class="text-danger small mt-1">{{ form_errors(form.imageFile) }}</div>
+            </div>
+        </div>
+
+        <div class="col-12">
+            <div class="form-check form-switch mb-4 mt-2">
+                {{ form_widget(form.actif, {'attr': {'class': 'form-check-input'}}) }}
+                {{ form_label(form.actif, 'صورة نشطة (تظهر في المعرض)', {'label_attr': {'class': 'form-check-label fw-700 ms-3'}}) }}
+            </div>
+        </div>
+    </div>
+
+    <div class="mt-4 border-top pt-4 text-start">
+        <button class="btn btn-primary px-5">
+            <i class="bi bi-cloud-upload ms-2"></i>
+            حفظ الصورة
+        </button>
+    </div>
+{{ form_end(form) }}

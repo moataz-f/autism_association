@@ -8,365 +8,484 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Tajawal:wght@300;400;500;700;800;900&display=swap" rel="stylesheet">
     <style>
-        /* ===== Design System: Vibrant & Friendly Colors ===== */
+        /* ===== Modern 2024 Design System ===== */
         :root {
-            --primary-blue: #2563EB;
-            --secondary-green: #10B981;
-            --accent-amber: #F59E0B;
-            --bg-light: #F8FAFC;
-            --text-dark: #0F172A;
-            --sidebar-dark: #1E293B;
-            --sidebar-text: #E2E8F0;
-            --border-color: #E2E8F0;
-            --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-            --sidebar-width: 260px;
+            /* Colors */
+            --primary: #2563EB;
+            --primary-light: #60A5FA;
+            --primary-dark: #1E40AF;
+            --secondary: #10B981;
+            --warning: #F59E0B;
+            --danger: #EF4444;
+            
+            /* Modern Neutrals (Slate) */
+            --bg-body: #F8FAFC;
+            --text-main: #0F172A;
+            --text-muted: #64748B;
+            --border-soft: rgba(226, 232, 240, 0.6);
+            
+            /* Structural (2026 Evolution) */
+            --sidebar-width: 280px;
+            --sidebar-bg: #0F111A; /* Deep Indigo Navy */
+            --radius-bento: 28px;
+            --radius-xl: 24px;
+            --radius-lg: 18px;
+            --radius-md: 12px;
+            --border-micro: rgba(15, 23, 42, 0.04);
+            
+            /* Effects */
+            --shadow-ambient: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
+            --shadow-float: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+            --shadow-neo: 0 1px 2px rgba(0,0,0,0.02), 0 8px 24px rgba(0,0,0,0.02);
+            --transition-smooth: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
         }
 
-        /* ===== Typography ===== */
+        /* ===== Global Reset & Typography ===== */
         body {
             direction: rtl;
             text-align: right;
-            font-family: 'Tajawal', 'Segoe UI', Tahoma, sans-serif;
-            font-size: 16px;
-            line-height: 1.6;
-            color: var(--text-dark);
-            background: var(--bg-light);
+            font-family: 'Tajawal', sans-serif;
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            letter-spacing: -0.01em;
         }
 
         h1, h2, h3, h4, h5, h6 {
             font-weight: 700;
-            color: var(--text-dark);
-            margin-bottom: 1.25rem;
+            color: var(--text-main);
+            letter-spacing: -0.025em;
         }
 
-        /* ===== Sidebar (Fixed & Independent) ===== */
+        /* ===== Fixed Premium Sidebar ===== */
         .sidebar {
             height: 100vh;
-            background: var(--sidebar-dark);
+            width: var(--sidebar-width);
+            background: var(--sidebar-bg);
             position: fixed;
             top: 0;
             right: 0;
-            width: var(--sidebar-width);
             z-index: 1050;
-            box-shadow: 4px 0 15px rgba(0,0,0,0.2);
             display: flex;
             flex-direction: column;
-            overflow-x: hidden;
-            overflow-y: auto;
+            box-shadow: 10px 0 30px rgba(0,0,0,0.05);
             border-left: 1px solid rgba(255,255,255,0.05);
-        }
-
-        /* Customize Scrollbar for Sidebar */
-        .sidebar::-webkit-scrollbar {
-            width: 4px;
-        }
-        .sidebar::-webkit-scrollbar-track {
-            background: transparent;
-        }
-        .sidebar::-webkit-scrollbar-thumb {
-            background: rgba(255,255,255,0.1);
-            border-radius: 10px;
         }
 
         .sidebar-header {
             padding: 2.5rem 1.5rem;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-            background: rgba(255,255,255,0.02);
             flex-shrink: 0;
         }
 
-        .sidebar-header h4 {
-            margin: 0;
-            font-weight: 700;
+        .sidebar-brand {
             display: flex;
             align-items: center;
             color: white;
-            font-size: 1.25rem;
+            text-decoration: none;
         }
 
-        .sidebar-header i {
-            margin-left: 0.5rem;
-            font-size: 1.5rem;
-            color: var(--primary-blue);
+        .sidebar-logo-img {
+            width: 80px;
+            height: 80px;
+            object-fit: contain;
+            transition: var(--transition-smooth);
+        }
+        
+        .sidebar-brand:hover .sidebar-logo-img {
+            transform: scale(1.1) rotate(-5deg);
         }
 
-        .sidebar-header small {
+        .sidebar-brand h4 {
+            margin: 0;
+            color: white;
+            font-size: 1.2rem;
+            font-weight: 800;
+        }
+
+        .sidebar-brand small {
             color: #94A3B8;
-            font-size: 0.85rem;
+            font-size: 0.75rem;
             display: block;
-            margin-top: 0.25rem;
+            margin-top: 2px;
         }
 
-        .sidebar .nav-link {
-            color: var(--sidebar-text);
-            padding: 0.65rem 1.25rem;
-            margin: 0.1rem 0.6rem;
-            border-radius: 8px;
+        /* Navigation Links */
+        .nav-wrapper {
+            flex-grow: 1;
+            padding: 0.25rem 0.75rem;
+            overflow-y: auto; /* Re-enable scroll */
+            scrollbar-width: none; /* Firefox */
+            -ms-overflow-style: none; /* IE/Edge */
+        }
+        .nav-wrapper::-webkit-scrollbar { display: none; } /* Chrome/Safari */
+
+        .nav-section-label {
+            color: #475569;
+            font-size: 0.65rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            padding: 1rem 1rem 0.4rem;
+            letter-spacing: 0.1em;
+        }
+
+        .nav-link {
             display: flex;
             align-items: center;
+            color: #94A3B8;
+            padding: 0.85rem 1rem;
+            margin-bottom: 0.25rem;
+            border-radius: 16px;
             font-size: 0.95rem;
-            font-weight: 500;
+            font-weight: 600;
             text-decoration: none;
-            transition: all 0.2s ease;
+            transition: var(--transition-smooth);
         }
 
-        .sidebar .nav-link i {
-            margin-left: 0.6rem;
-            font-size: 1.15rem;
-            color: #64748B;
-            transition: all 0.2s ease;
+        /* Complex Navigation Link with Subtitle */
+        .nav-link.complex {
+            padding: 1rem;
+            align-items: flex-start;
         }
 
-        .sidebar .nav-link:hover {
+        .nav-link.complex .link-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .nav-link.complex .sub {
+            font-size: 0.75rem;
+            font-weight: 500;
+            opacity: 0.6;
+            margin-top: 2px;
+            display: block;
+        }
+
+        .nav-link i {
+            font-size: 1.25rem;
+            margin-left: 12px;
+            color: #475569;
+            transition: color 0.3s ease;
+        }
+
+        .nav-link:hover {
             background: rgba(255,255,255,0.05);
             color: white;
         }
 
-        .sidebar .nav-link:hover i {
-            color: var(--primary-blue);
+        .nav-link:hover i {
+            color: var(--primary-light);
         }
 
-        .sidebar .nav-link.active {
-            background: var(--primary-blue);
-            color: white;
-            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+        .nav-link.active {
+            background: rgba(37, 99, 235, 0.1);
+            color: var(--primary-light);
+            position: relative;
         }
 
-        .sidebar .nav-link.active i {
-            color: white;
+        .nav-link.active::after {
+            content: '';
+            position: absolute;
+            right: 0;
+            top: 20%;
+            bottom: 20%;
+            width: 4px;
+            background: var(--primary);
+            border-radius: 4px 0 0 4px;
         }
 
-        hr.sidebar-divider {
-            border-color: rgba(255,255,255,0.1);
-            margin: 0.75rem 0;
+        .nav-link.active i {
+            color: var(--primary-light);
         }
 
-        .nav-section-title {
-            color: #64748B;
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            padding: 0.5rem 1.25rem;
-            margin-top: 0.5rem;
-            font-weight: 700;
-            letter-spacing: 0.5px;
-        }
-
+        /* Sidebar Footer & User Profile */
         .sidebar-footer {
-            padding: 1.25rem;
-            border-top: 1px solid rgba(255,255,255,0.1);
-            background: rgba(255,255,255,0.02);
-            margin-top: auto;
+            padding: 1rem;
+            border-top: 1px solid rgba(255,255,255,0.05);
             flex-shrink: 0;
+            background: rgba(0,0,0,0.25);
         }
 
-        /* ===== Main Content ===== */
+        .user-pill {
+            display: flex;
+            align-items: center;
+            padding: 0.6rem;
+            background: rgba(255,255,255,0.03);
+            border-radius: 12px;
+            margin-bottom: 0.75rem;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .user-pill .user-info {
+            display: flex;
+            flex-direction: column;
+            margin-right: 10px;
+            overflow: hidden;
+            width: 100%;
+        }
+
+        .user-pill .u-name {
+            color: white;
+            font-size: 0.8rem;
+            font-weight: 700;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            overflow: hidden;
+        }
+
+        .user-pill .u-role {
+            color: #64748B;
+            font-size: 0.65rem;
+            font-weight: 500;
+        }
+
+        .footer-actions {
+            display: flex;
+            gap: 4px;
+        }
+
+        .footer-btn {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 0.5rem;
+            border-radius: 10px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-decoration: none;
+            transition: var(--transition-smooth);
+            background: rgba(255,255,255,0.05);
+            color: #94A3B8;
+        }
+
+        .footer-btn:hover {
+            background: rgba(255,255,255,0.1);
+            color: white;
+        }
+
+        .footer-btn.logout {
+            color: #F87171;
+            background: rgba(239, 68, 68, 0.05);
+        }
+
+        .footer-btn.logout:hover {
+            background: var(--danger);
+            color: white;
+        }
+
+        /* ===== Main Layout ===== */
         .main-content {
             margin-right: var(--sidebar-width);
-            padding: 2.25rem;
+            padding: 2.5rem;
             min-height: 100vh;
             width: calc(100% - var(--sidebar-width));
         }
 
-        /* ===== Cards (More Depth) ===== */
+        /* ===== Modern Components ===== */
         .card {
-            border: none;
-            border-radius: 12px;
-            box-shadow: var(--card-shadow);
-            margin-bottom: 1.5rem;
             background: white;
-            transition: transform 0.2s ease;
+            border: 1px solid var(--border-soft);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-ambient);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .card:hover {
+            box-shadow: var(--shadow-float);
+            transform: translateY(-4px);
         }
 
         .card-body {
             padding: 2rem;
         }
 
-        /* ===== Page Header ===== */
+        /* Page Header */
         .page-header {
+            margin-bottom: 2.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             background: white;
-            padding: 2rem;
-            border-radius: 12px;
-            margin-bottom: 2rem;
-            box-shadow: var(--card-shadow);
+            padding: 1.5rem 2rem;
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border-soft);
+            box-shadow: var(--shadow-ambient);
         }
 
-        .breadcrumb-item a {
-            color: var(--primary-blue);
-            font-weight: 500;
+        .page-title h2 {
+            font-size: 1.5rem;
+            margin: 0;
+            font-weight: 800;
         }
 
-        /* ===== Buttons (Vibrant & Compact) ===== */
-        .btn-primary, .btn {
-            border-radius: 8px;
-            font-weight: 600;
+        /* Buttons (Sleek) */
+        .btn {
+            border-radius: 10px;
+            padding: 0.6rem 1.25rem;
+            font-weight: 700;
+            font-size: 0.9rem;
             transition: all 0.2s ease;
         }
 
-        .btn {
-            padding: 0.6rem 1.25rem;
-            font-size: 0.95rem;
-        }
-
-        .btn-sm {
-            padding: 0.4rem 0.85rem;
-            font-size: 0.85rem;
-        }
-
         .btn-primary {
-            background: var(--primary-blue);
+            background: var(--primary);
             border: none;
             color: white;
-            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+            box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.2);
         }
 
         .btn-primary:hover {
-            background: #1D4ED8;
+            background: var(--primary-dark);
             transform: translateY(-1px);
-            box-shadow: 0 6px 15px rgba(37, 99, 235, 0.3);
+            box-shadow: 0 10px 15px -3px rgba(37, 99, 235, 0.3);
         }
 
-        /* ===== Tables ===== */
-        .table thead {
-            background: #F1F5F9;
+        /* 2026 Signature Components */
+        .avatar-sq {
+            width: 48px;
+            height: 48px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            font-size: 1rem;
+            transition: var(--transition-smooth);
         }
 
-        .table td {
-            padding: 1rem 0.75rem;
-            font-size: 0.95rem;
+        .badge-2026 {
+            padding: 0.4rem 0.8rem;
+            border-radius: 10px;
+            font-weight: 800;
+            font-size: 0.75rem;
+            letter-spacing: 0.02em;
         }
 
-        /* ===== Badges (Saturated) ===== */
-        .badge {
-            padding: 0.45rem 0.85rem;
-            font-weight: 600;
-            font-size: 0.8rem;
+        .action-btn-2026 {
+            width: 38px;
+            height: 38px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            background: white;
+            color: var(--primary);
+            border: 1px solid var(--border-micro);
+            transition: var(--transition-smooth);
         }
+        .action-btn-2026:hover { background: var(--primary); color: white; border-color: var(--primary); transform: translateY(-3px); }
 
-        .bg-primary { background-color: var(--primary-blue) !important; color: white !important; }
-        .bg-success { background-color: var(--secondary-green) !important; color: white !important; }
-        .bg-warning { background-color: var(--accent-amber) !important; color: white !important; }
-        .bg-danger { background-color: #EF4444 !important; color: white !important; }
+        /* Status Colors */
+        .bg-primary { background-color: var(--primary) !important; color: white !important; }
+        .bg-secondary { background-color: var(--secondary) !important; color: white !important; }
+        .bg-warning { background-color: var(--warning) !important; color: black !important; }
+        .bg-danger { background-color: var(--danger) !important; color: white !important; }
 
-        @media (max-width: 768px) {
-            .sidebar { width: 100%; position: relative; min-height: auto; }
-            .main-content { margin-right: 0; padding: 1.5rem; }
+        @media (max-width: 992px) {
+            .sidebar { transform: translateX(100%); transition: transform 0.3s ease; }
+            .sidebar.active { transform: translateX(0); }
+            .main-content { margin-right: 0; width: 100%; padding: 1.5rem; }
         }
     </style>
     {% block stylesheets %}{% endblock %}
 </head>
 <body>
     <div class="container-fluid p-0">
-        <div class="row g-0">
-            {# Sidebar #}
-            <div class="sidebar">
-                <div class="sidebar-header">
-                    <h4>
-                        <i class="bi bi-heart-fill"></i>
-                        حلم البراءة
-                    </h4>
-                    <small>نظام الإدارة المتكامل</small>
-                </div>
-                
-                <nav class="nav flex-column py-3">
-                    <a class="nav-link {{ app.request.get('_route') == 'app_dashboard' ? 'active' : '' }}" 
-                       href="{{ path('app_dashboard') }}">
-                        <i class="bi bi-grid-1x2-fill"></i>
-                        لوحة القيادة
-                    </a>
-                    
-                    <hr class="sidebar-divider">
-                    <div class="nav-section-title">إدارة الجمعية</div>
-                    
-                    <a class="nav-link {{ app.request.get('_route') starts with 'app_beneficiaire' ? 'active' : '' }}" 
-                       href="{{ path('app_beneficiaire_index') }}">
-                        <i class="bi bi-person-heart"></i>
-                        المنتفعون
-                    </a>
-                    
-                    <a class="nav-link {{ app.request.get('_route') starts with 'app_famille' ? 'active' : '' }}" 
-                       href="{{ path('app_famille_index') }}">
-                        <i class="bi bi-house-fill"></i>
-                        العائلات
-                    </a>
-                    
-                    <a class="nav-link {{ app.request.get('_route') starts with 'app_activite' ? 'active' : '' }}" 
-                       href="{{ path('app_activite_index') }}">
-                        <i class="bi bi-calendar3"></i>
-                        الأنشطة
-                    </a>
-
-                    <a class="nav-link {{ app.request.get('_route') starts with 'admin_seance' ? 'active' : '' }}" 
-                       href="{{ path('admin_seance_index') }}">
-                        <i class="bi bi-clock-fill"></i>
-                        جدول الحصص
-                    </a>
-                    
-                    {% if is_granted('ROLE_ADMIN') %}
-                    <a class="nav-link {{ app.request.get('_route') starts with 'app_personnel' ? 'active' : '' }}" 
-                       href="{{ path('app_personnel_index') }}">
-                        <i class="bi bi-person-badge-fill"></i>
-                        الموظفون
-                    </a>
-
-                    <a class="nav-link {{ app.request.get('_route') starts with 'admin_user' ? 'active' : '' }}" 
-                       href="{{ path('admin_user_index') }}">
-                        <i class="bi bi-people-fill"></i>
-                        المستخدمون
-                    </a>
-                    {% endif %}
-
-                    <hr class="sidebar-divider">
-                    <div class="nav-section-title">الموقع العام</div>
-                    
-                    {% if is_granted('ROLE_ADMIN') %}
-                    <a class="nav-link {{ app.request.get('_route') starts with 'admin_content' ? 'active' : '' }}" 
-                       href="{{ path('admin_content_index') }}">
-                        <i class="bi bi-file-earmark-richtext-fill"></i>
-                        المحتوى
-                    </a>
-                    
-                    <a class="nav-link {{ app.request.get('_route') starts with 'admin_gallery' ? 'active' : '' }}" 
-                       href="{{ path('admin_gallery_index') }}">
-                        <i class="bi bi-images"></i>
-                        المعرض
-                    </a>
-                    {% endif %}
-                    
-                    <hr class="sidebar-divider">
-                    
-                    <a class="nav-link {{ app.request.get('_route') == 'app_profile_edit' ? 'active' : '' }}" href="{{ path('app_profile_edit') }}">
-                        <i class="bi bi-gear-fill"></i>
-                        الإعدادات
-                    </a>
-                </nav>
-
-                <div class="sidebar-footer">
-                    <a class="btn btn-danger w-100 d-flex align-items-center justify-content-center py-2 shadow-sm" href="{{ path('app_logout') }}">
-                        <i class="bi bi-box-arrow-right ms-2"></i>
-                        تسجيل الخروج
-                    </a>
-                </div>
+        {# Sidebar #}
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <a href="{{ path('app_dashboard') }}" class="sidebar-brand">
+                    <img src="{{ asset('assets/images/logo.png') }}" alt="Logo" class="sidebar-logo-img ms-3">
+                    <div>
+                        <h4>حلم البراءة</h4>
+                        <small>Association Autism</small>
+                    </div>
+                </a>
             </div>
+            
+            <div class="nav-wrapper">
+                <nav class="nav flex-column">
+                    <a class="nav-link {{ app.request.get('_route') == 'app_dashboard' ? 'active' : '' }}" href="{{ path('app_dashboard') }}">
+                        <i class="bi bi-grid-fill"></i> لوحة القيادة
+                    </a>
+                    
+                    <div class="nav-section-label">الإدارة</div>
+                    <a class="nav-link {{ app.request.get('_route') starts with 'app_beneficiaire' ? 'active' : '' }}" href="{{ path('app_beneficiaire_index') }}">
+                        <i class="bi bi-person-fill"></i> المنتفعون
+                    </a>
+                    <a class="nav-link {{ app.request.get('_route') starts with 'app_famille' ? 'active' : '' }}" href="{{ path('app_famille_index') }}">
+                        <i class="bi bi-house-fill"></i> العائلات
+                    </a>
+                    <a class="nav-link {{ app.request.get('_route') starts with 'admin_donation' ? 'active' : '' }}" href="{{ path('admin_donation_index') }}">
+                        <i class="bi bi-gift-fill"></i> حملات التبرع
+                    </a>
+                    <a class="nav-link {{ app.request.get('_route') starts with 'admin_seance' ? 'active' : '' }}" href="{{ path('admin_seance_index') }}">
+                        <i class="bi bi-clock-fill"></i> الجدولة
+                    </a>
 
-            {# Main Content #}
-            <div class="main-content">
-                {# Flash Messages #}
-                {% for label, messages in app.flashes %}
-                    {% for message in messages %}
-                        <div class="alert alert-{{ label }} alert-dismissible fade show border-0 shadow-sm mb-4" role="alert">
-                            <i class="bi bi-info-circle-fill ms-2"></i>
-                            {{ message }}
-                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    <div class="nav-section-label">النشر الرقمي</div>
+                    <a class="nav-link complex {{ app.request.get('_route') starts with 'admin_content' ? 'active' : '' }}" href="{{ path('admin_content_index') }}">
+                        <i class="bi bi-pencil-square"></i>
+                        <div class="link-info">
+                            <span>محتوى الصفحات</span>
+                            <span class="sub">إدارة النصوص والروابط</span>
                         </div>
-                    {% endfor %}
-                {% endfor %}
+                    </a>
+                    <a class="nav-link complex {{ app.request.get('_route') starts with 'admin_gallery' ? 'active' : '' }}" href="{{ path('admin_gallery_index') }}">
+                        <i class="bi bi-images"></i>
+                        <div class="link-info">
+                            <span>معرض الصور</span>
+                            <span class="sub">تحديث ألبوم الجمعية</span>
+                        </div>
+                    </a>
 
-                {# Page Content #}
-                {% block body %}{% endblock %}
+                    {% if is_granted('ROLE_ADMIN') %}
+                    <div class="nav-section-label">النظام</div>
+                    <a class="nav-link {{ app.request.get('_route') starts with 'app_personnel' ? 'active' : '' }}" href="{{ path('app_personnel_index') }}">
+                        <i class="bi bi-people-fill"></i> الفريق
+                    </a>
+                    <a class="nav-link {{ app.request.get('_route') starts with 'admin_user' ? 'active' : '' }}" href="{{ path('admin_user_index') }}">
+                        <i class="bi bi-shield-lock-fill"></i> الصلاحيات
+                    </a>
+                    {% endif %}
+                </nav>
             </div>
-        </div>
+
+            <div class="sidebar-footer">
+                {% if app.user %}
+                <div class="user-pill">
+                    <div class="avatar-sq" style="width: 28px; height: 28px; font-size: 0.7rem; background: var(--primary); color: white; border-radius: 8px;">
+                        {{ app.user.prenom|first|upper }}{{ app.user.nom|first|upper }}
+                    </div>
+                    <div class="user-info">
+                        <span class="u-name">{{ app.user.prenom }} {{ app.user.nom }}</span>
+                        <span class="u-role">ID: #{{ app.user.id }}</span>
+                    </div>
+                </div>
+                {% endif %}
+
+                <div class="footer-actions">
+                    <a href="{{ path('app_profile_edit') }}" class="footer-btn" title="الإعدادات">
+                        <i class="bi bi-gear-fill"></i>
+                        <span>الإعدادات</span>
+                    </a>
+                    <a href="{{ path('app_logout') }}" class="footer-btn logout" title="خروج">
+                        <i class="bi bi-box-arrow-right"></i>
+                        <span>خروج</span>
+                    </a>
+                </div>
+            </div>
+        </aside>
+
+        {# Main Content #}
+        <main class="main-content">
+            {% block body %}{% endblock %}
+        </main>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

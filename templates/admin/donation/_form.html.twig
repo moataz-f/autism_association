@@ -1,0 +1,69 @@
+{{ form_start(form) }}
+    <div class="row g-4">
+        <div class="col-md-12">
+            <div class="form-group mb-4">
+                {{ form_label(form.titre, 'عنوان الحملة', {'label_attr': {'class': 'form-label fw-bold'}}) }}
+                {{ form_widget(form.titre, {'attr': {'class': 'form-control', 'placeholder': 'مثال: حملة التبرع لشراء الكراسي...'}}) }}
+                <div class="text-danger small mt-1">{{ form_errors(form.titre) }}</div>
+            </div>
+        </div>
+        
+        <div class="col-12">
+            <div class="form-group mb-4">
+                {{ form_label(form.description, 'وصف الحملة', {'label_attr': {'class': 'form-label fw-bold'}}) }}
+                {{ form_widget(form.description, {'attr': {'class': 'form-control', 'rows': '5', 'placeholder': 'اكتب تفاصيل الحملة وأهدافها...'}}) }}
+                <div class="text-danger small mt-1">{{ form_errors(form.description) }}</div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="form-group mb-4">
+                {{ form_label(form.montantObjectif, 'المبلغ المستهدف (دينار)', {'label_attr': {'class': 'form-label fw-bold'}}) }}
+                {{ form_widget(form.montantObjectif, {'attr': {'class': 'form-control', 'placeholder': '0.00'}}) }}
+                <div class="text-danger small mt-1">{{ form_errors(form.montantObjectif) }}</div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group mb-4">
+                {{ form_label(form.montantCollecte, 'المبلغ المجموع حالياً (دينار)', {'label_attr': {'class': 'form-label fw-bold'}}) }}
+                {{ form_widget(form.montantCollecte, {'attr': {'class': 'form-control', 'placeholder': '0.00'}}) }}
+                <div class="text-danger small mt-1">{{ form_errors(form.montantCollecte) }}</div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="form-group mb-4">
+                {{ form_label(form.dateDebut, 'تاريخ البداية', {'label_attr': {'class': 'form-label fw-bold'}}) }}
+                {{ form_widget(form.dateDebut, {'attr': {'class': 'form-control'}}) }}
+                <div class="text-danger small mt-1">{{ form_errors(form.dateDebut) }}</div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group mb-4">
+                {{ form_label(form.dateFin, 'تاريخ النهاية', {'label_attr': {'class': 'form-label fw-bold'}}) }}
+                {{ form_widget(form.dateFin, {'attr': {'class': 'form-control'}}) }}
+                <div class="text-danger small mt-1">{{ form_errors(form.dateFin) }}</div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="form-check form-switch mb-4 mt-2">
+                {{ form_widget(form.actif, {'attr': {'class': 'form-check-input'}}) }}
+                {{ form_label(form.actif, 'حملة نشطة', {'label_attr': {'class': 'form-check-label fw-700 ms-3'}}) }}
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-check form-switch mb-4 mt-2">
+                {{ form_widget(form.principale, {'attr': {'class': 'form-check-input'}}) }}
+                {{ form_label(form.principale, 'عرض في الصفحة الرئيسية', {'label_attr': {'class': 'form-check-label fw-700 ms-3'}}) }}
+            </div>
+        </div>
+    </div>
+
+    <div class="mt-4 border-top pt-4 text-start">
+        <button class="btn btn-primary px-5">
+            <i class="bi bi-check-lg ms-2"></i>
+            حفظ الحملة
+        </button>
+    </div>
+{{ form_end(form) }}

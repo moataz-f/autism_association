@@ -3,29 +3,23 @@
 {% block title %}إدارة المستخدمين{% endblock %}
 
 {% block body %}
-<div class="page-header d-flex justify-content-between align-items-center">
-    <div>
-        <h2 class="mb-0">قائمة المستخدمين والصلاحيات</h2>
-        <nav aria-label="breadcrumb">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="{{ path('app_dashboard') }}">لوحة القيادة</a></li>
-                <li class="breadcrumb-item active">المستخدمون</li>
-            </ol>
-        </nav>
+<div class="page-header justify-content-between">
+    <div class="page-title">
+        <h2>قائمة المستخدمين والصلاحيات</h2>
+        <p>إدارة الأدوار وصلاحيات الوصول للنظام</p>
     </div>
     <a href="{{ path('admin_user_new') }}" class="btn btn-primary">
-        <i class="bi bi-person-plus-fill"></i>
-        إضافة مستخدم جديد
+        <i class="bi bi-person-plus-fill ms-2"></i> إضافة مستخدم جديد
     </a>
 </div>
 
-<div class="card shadow-sm border-0">
+<div class="card border-0">
     <div class="card-body p-0">
         <div class="table-responsive">
             <table class="table table-hover align-middle mb-0 text-center">
-                <thead class="bg-light">
+                <thead>
                     <tr>
-                        <th class="text-end ps-4">المستخدم</th>
+                        <th class="text-end ps-4" style="width: 30%;">المستخدم</th>
                         <th>البريد الإلكتروني</th>
                         <th>الهاتف</th>
                         <th>الصلاحيات</th>
@@ -37,31 +31,30 @@
                     <tr>
                         <td class="text-end ps-4">
                             <div class="d-flex align-items-center">
-                                <div class="avatar-circle ms-3">
+                                <div class="avatar-sq ms-3" style="background: rgba(37, 99, 235, 0.08); color: var(--primary);">
                                     {{ user.prenom|first|upper }}{{ user.nom|first|upper }}
                                 </div>
                                 <div>
-                                    <div class="fw-bold">{{ user.prenom }} {{ user.nom }}</div>
-                                    <small class="text-muted">ID: #{{ user.id }}</small>
+                                    <div class="fw-800 text-main">{{ user.prenom }} {{ user.nom }}</div>
+                                    <small class="text-muted fw-600">ID: #{{ user.id }}</small>
                                 </div>
                             </div>
                         </td>
-                        <td class="text-secondary fw-500">{{ user.email }}</td>
-                        <td>{{ user.numtlf ?: '-' }}</td>
+                        <td class="text-primary fw-600">{{ user.email }}</td>
+                        <td class="fw-600">{{ user.numtlf ?: '-' }}</td>
                         <td>
                             <div class="d-flex flex-wrap justify-content-center gap-1">
                             {% for role in user.roles %}
-                                {% set label = '' %}
                                 {% set color = 'secondary' %}
                                 {% if role == 'ROLE_ADMIN' %}{% set label = 'مدير' %}{% set color = 'danger' %}
                                 {% elseif role == 'ROLE_SPECIALIST' %}{% set label = 'أخصائي' %}{% set color = 'primary' %}
-                                {% elseif role == 'ROLE_PARENT' %}{% set label = 'ولي أمر' %}{% set color = 'success' %}
-                                {% elseif role == 'ROLE_STAFF' %}{% set label = 'موظف' %}{% set color = 'info' %}
+                                {% elseif role == 'ROLE_PARENT' %}{% set label = 'ولي أمر' %}{% set color = 'secondary' %}
+                                {% elseif role == 'ROLE_STAFF' %}{% set label = 'موظف' %}{% set color = 'secondary' %}
                                 {% elseif role == 'ROLE_VOLUNTEER' %}{% set label = 'متطوع' %}{% set color = 'warning' %}
                                 {% elseif role == 'ROLE_DONOR' %}{% set label = 'متبرع' %}{% set color = 'dark' %}
                                 {% endif %}
                                 {% if label %}
-                                    <span class="badge bg-{{ color }} rounded-pill" style="font-size: 0.75rem;">
+                                    <span class="badge-2026" style="background: var(--{{ color == 'secondary' ? 'text-muted' : (color == 'primary' ? 'primary' : (color == 'danger' ? 'danger' : (color == 'warning' ? 'warning' : 'text-main'))) }})0D; color: var(--{{ color == 'secondary' ? 'text-muted' : (color == 'primary' ? 'primary' : (color == 'danger' ? 'danger' : (color == 'warning' ? 'warning' : 'text-main'))) }});">
                                         {{ label }}
                                     </span>
                                 {% endif %}
@@ -69,9 +62,9 @@
                             </div>
                         </td>
                         <td class="text-start pe-4">
-                            <div class="btn-group">
-                                <a href="{{ path('admin_user_edit', {'id': user.id}) }}" class="btn btn-sm btn-outline-primary" title="تعديل">
-                                    <i class="bi bi-pencil-square"></i>
+                            <div class="d-flex gap-2 justify-content-start">
+                                <a href="{{ path('admin_user_edit', {'id': user.id}) }}" class="action-btn-2026" title="تعديل">
+                                    <i class="bi bi-pencil"></i>
                                 </a>
                                 {{ include('admin/user/_delete_form.html.twig') }}
                             </div>
@@ -79,7 +72,12 @@
                     </tr>
                 {% else %}
                     <tr>
-                        <td colspan="5" class="text-center py-5 text-muted">لا يوجد مستخدمون مسجلون حالياً.</td>
+                        <td colspan="5" class="text-center py-5">
+                            <div class="empty-state">
+                                <i class="bi bi-shield-lock text-muted opacity-25" style="font-size: 4rem;"></i>
+                                <p class="text-muted mt-3 fw-600">لا يوجد مستخدمون مسجلون حالياً.</p>
+                            </div>
+                        </td>
                     </tr>
                 {% endfor %}
                 </tbody>
@@ -89,28 +87,10 @@
 </div>
 
 <style>
-    .avatar-circle {
-        width: 40px;
-        height: 40px;
-        background-color: var(--primary-blue);
-        color: white;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-weight: bold;
-        font-size: 0.9rem;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    }
-    .fw-500 { font-weight: 500; }
-    .btn-outline-primary {
-        border-color: var(--primary-blue);
-        color: var(--primary-blue);
-    }
-    .btn-outline-primary:hover {
-        background-color: var(--primary-blue);
-        color: white;
-    }
-    .bg-info { background-color: #0EA5E9 !important; }
+    .fw-800 { font-weight: 800; }
+    .fw-700 { font-weight: 700; }
+    .fw-600 { font-weight: 600; }
+    
+    th { font-weight: 800 !important; color: var(--text-muted) !important; font-size: 0.85rem; letter-spacing: 0.05em; text-transform: uppercase; }
 </style>
 {% endblock %}
