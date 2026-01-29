@@ -64,6 +64,14 @@ class SeanceController extends AbstractController
         ]);
     }
 
+    #[Route('/{id}', name: 'admin_seance_show', methods: ['GET'])]
+    public function show(Seance $seance): Response
+    {
+        return $this->render('admin/seance/show.html.twig', [
+            'seance' => $seance,
+        ]);
+    }
+
     #[Route('/{id}', name: 'admin_seance_delete', methods: ['POST'])]
     public function delete(Request $request, Seance $seance, EntityManagerInterface $entityManager): Response
     {

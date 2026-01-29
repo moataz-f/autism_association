@@ -29,6 +29,8 @@ class BeneficiaireType extends AbstractType
             ->add('dateNaissance', DateType::class, [
                 'label' => 'Date de Naissance',
                 'widget' => 'single_text',
+                'html5' => true,
+                'format' => 'yyyy-MM-dd',
                 'attr' => ['class' => 'form-control']
             ])
             ->add('genre', ChoiceType::class, [

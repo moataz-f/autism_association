@@ -14,17 +14,93 @@
 </div>
 
 <div class="card border-0">
-    <div class="card-body p-5">
-        <div class="empty-state text-center">
-            <div class="mb-4">
-                <i class="bi bi-house-heart text-muted opacity-25" style="font-size: 5rem;"></i>
+    <div class="card-body p-0">
+        {% if pagination.items|length > 0 %}
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="bg-light">
+                        <tr>
+                            <th class="ps-4">المسؤول</th>
+                            <th>معلومات الاتصال</th>
+                            <th>الأطفال المسجلين</th>
+                            <th>تاريخ التسجيل</th>
+                            <th class="text-end pe-4">الإجراءات</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for famille in pagination %}
+                        <tr>
+                            <td class="ps-4">
+                                <div class="fw-800 text-main">{{ famille.nomResponsable }} {{ famille.prenomResponsable }}</div>
+                                <small class="text-muted fw-600">{{ famille.email|default('---') }}</small>
+                            </td>
+                            <td>
+                                <div class="d-flex align-items-center mb-1">
+                                    <i class="bi bi-telephone text-primary me-2"></i>
+                                    <span>{{ famille.telephone }}</span>
+                                </div>
+                                <div class="d-flex align-items-center text-muted small">
+                                    <i class="bi bi-geo-alt me-2"></i>
+                                    <span class="text-truncate" style="max-width: 200px;">{{ famille.adresse }}</span>
+                                </div>
+                            </td>
+                            <td>
+                                {% if famille.beneficiaires|length > 0 %}
+                                    <div class="d-flex -space-x-2">
+                                        {% for enfant in famille.beneficiaires|slice(0, 3) %}
+                                            <div class="avatar-circle-sm bg-primary text-white border border-2 border-white" title="{{ enfant.prenom }}">
+                                                {{ enfant.prenom|first }}
+                                            </div>
+                                        {% endfor %}
+                                        {% if famille.beneficiaires|length > 3 %}
+                                            <div class="avatar-circle-sm bg-light text-muted border border-2 border-white small">
+                                                +{{ famille.beneficiaires|length - 3 }}
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                {% else %}
+                                    <span class="badge bg-light text-muted border">لا يوجد أطفال</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <span class="text-muted fw-600">{{ famille.dateInscription|date('Y-m-d') }}</span>
+                            </td>
+                            <td class="text-end pe-4">
+                                <div class="d-flex gap-2 justify-content-end">
+                                    <a href="{{ path('app_famille_show', {'id': famille.id}) }}" class="btn btn-sm btn-light text-primary" title="عرض">
+                                        <i class="bi bi-eye"></i>
+                                    </a>
+                                    <a href="{{ path('app_famille_edit', {'id': famille.id}) }}" class="btn btn-sm btn-light text-warning" title="تعديل">
+                                        <i class="bi bi-pencil"></i>
+                                    </a>
+                                    <form method="post" action="{{ path('app_famille_delete', {'id': famille.id}) }}" onsubmit="return confirm('هل أنت متأكد من حذف هذه العائلة؟');" class="d-inline">
+                                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ famille.id) }}">
+                                        <button class="btn btn-sm btn-light text-danger" title="حذف">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
             </div>
-            <h5 class="fw-800 text-main mb-3">لا توجد عائلات مسجلة بعد</h5>
-            <p class="text-muted fw-600 mb-4">ابدأ بإضافة أول عائلة للنظام لتتمكن من ربطها بالأطفال المنتفعين.</p>
-            <a href="{{ path('app_famille_new') }}" class="btn btn-primary px-4 py-2">
-                <i class="bi bi-plus-circle me-1"></i> إضافة أول عائلة
-            </a>
-        </div>
+            <div class="p-4 border-top">
+                {{ knp_pagination_render(pagination) }}
+            </div>
+        {% else %}
+            <div class="empty-state text-center p-5">
+                <div class="mb-4">
+                    <i class="bi bi-house-heart text-muted opacity-25" style="font-size: 5rem;"></i>
+                </div>
+                <h5 class="fw-800 text-main mb-3">لا توجد عائلات مسجلة بعد</h5>
+                <p class="text-muted fw-600 mb-4">ابدأ بإضافة أول عائلة للنظام لتتمكن من ربطها بالأطفال المنتفعين.</p>
+                <a href="{{ path('app_famille_new') }}" class="btn btn-primary px-4 py-2">
+                    <i class="bi bi-plus-circle me-1"></i> إضافة أول عائلة
+                </a>
+            </div>
+        {% endif %}
     </div>
 </div>
 

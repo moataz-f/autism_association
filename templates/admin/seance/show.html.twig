@@ -1,0 +1,119 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}تفاصيل الحصة{% endblock %}
+
+{% block body %}
+<div class="page-header d-flex justify-content-between align-items-center">
+    <div>
+        <h2 class="mb-0">تفاصيل الحصة</h2>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{{ path('app_dashboard') }}">لوحة القيادة</a></li>
+                <li class="breadcrumb-item"><a href="{{ path('admin_seance_index') }}">الحصص</a></li>
+                <li class="breadcrumb-item active">تفاصيل</li>
+            </ol>
+        </nav>
+    </div>
+    <div class="d-flex gap-2">
+        <a href="{{ path('admin_seance_index') }}" class="btn btn-light">
+            <i class="bi bi-arrow-right"></i> العودة للقائمة
+        </a>
+        <a href="{{ path('admin_seance_edit', {'id': seance.id}) }}" class="btn btn-primary">
+            <i class="bi bi-pencil"></i> تعديل
+        </a>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card shadow-sm border-0 mb-4">
+            <div class="card-header bg-white py-3">
+                <h5 class="mb-0 text-primary fw-bold">{{ seance.titre }}</h5>
+            </div>
+            <div class="card-body p-4">
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <label class="text-muted small fw-bold text-uppercase">النوع</label>
+                        <p class="fs-5 fw-bold">{{ seance.type == 'Individuelle' ? 'فردية' : 'جماعية' }}</p>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="text-muted small fw-bold text-uppercase">الحالة</label>
+                        <div>
+                            {% set status_label = '' %}
+                            {% set status_color = 'secondary' %}
+                            {% if seance.etat == 'Planned' %}{% set status_label = 'مبرمجة' %}{% set status_color = 'primary' %}
+                            {% elseif seance.etat == 'Completed' %}{% set status_label = 'تمت' %}{% set status_color = 'success' %}
+                            {% elseif seance.etat == 'Cancelled' %}{% set status_label = 'ملغاة' %}{% set status_color = 'danger' %}
+                            {% endif %}
+                            <span class="badge bg-{{ status_color }}">{{ status_label }}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mb-4">
+                    <div class="col-md-4">
+                        <label class="text-muted small fw-bold text-uppercase">التاريخ</label>
+                        <p class="fs-5">{{ seance.date|date('Y-m-d') }}</p>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="text-muted small fw-bold text-uppercase">وقت البدء</label>
+                        <p class="fs-5">{{ seance.heureDebut|date('H:i') }}</p>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="text-muted small fw-bold text-uppercase">وقت النهاية</label>
+                        <p class="fs-5">{{ seance.heureFin|date('H:i') }}</p>
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <label class="text-muted small fw-bold text-uppercase">الأخصائي المشرف</label>
+                    <div class="d-flex align-items-center mt-2">
+                        <div class="avatar-circle bg-light border border-2 text-primary">
+                            {{ seance.specialiste.prenom|first }}
+                        </div>
+                        <div class="ms-3">
+                            <h6 class="mb-0 fw-bold">{{ seance.specialiste.prenom }} {{ seance.specialiste.nom }}</h6>
+                            <small class="text-muted">{{ seance.specialiste.email }}</small>
+                        </div>
+                    </div>
+                </div>
+
+                {% if seance.notes %}
+                    <div class="mb-4">
+                        <label class="text-muted small fw-bold text-uppercase">ملاحظات</label>
+                        <div class="p-3 bg-light rounded border mt-2">
+                            {{ seance.notes|nl2br }}
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card shadow-sm border-0 mb-4">
+            <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+                <h5 class="mb-0 fw-bold">المشاركون</h5>
+                <span class="badge bg-primary rounded-pill">{{ seance.beneficiaires|length }}</span>
+            </div>
+            <div class="list-group list-group-flush">
+                {% for beneficiaire in seance.beneficiaires %}
+                    <a href="{{ path('app_beneficiaire_show', {'id': beneficiaire.id}) }}" class="list-group-item list-group-item-action p-3 d-flex align-items-center">
+                        <div class="avatar-circle-sm bg-info text-white me-3">
+                            {{ beneficiaire.prenom|first }}
+                        </div>
+                        <div>
+                            <h6 class="mb-0 fw-bold">{{ beneficiaire.prenom }} {{ beneficiaire.nom }}</h6>
+                            <small class="text-muted">{{ beneficiaire.age }} سنة</small>
+                        </div>
+                    </a>
+                {% else %}
+                    <div class="p-4 text-center text-muted">
+                        لا يوجد مشاركون مسجلون في هذه الحصة
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
