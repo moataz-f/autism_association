@@ -34,15 +34,20 @@
             overflow-x: hidden;
         }
 
-        /* Nav 2026 */
+        /* Nav 2026 - Original Full Width */
         .navbar {
             backdrop-filter: blur(12px);
             background: rgba(255, 255, 255, 0.8);
             border-bottom: 1px solid var(--border-micro);
             padding: 1.25rem 0;
             transition: var(--transition-smooth);
+            z-index: 1000;
         }
-        .navbar.scrolled { padding: 0.75rem 0; box-shadow: var(--shadow-neo); }
+        .navbar.scrolled { 
+            padding: 0.75rem 0; 
+            background: rgba(255, 255, 255, 0.95);
+            box-shadow: var(--shadow-neo); 
+        }
 
         .nav-link {
             color: var(--text-main) !important;
