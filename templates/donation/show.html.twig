@@ -1,0 +1,63 @@
+{% extends 'base_public.html.twig' %}
+
+{% block title %}{{ campaign.titre }}{% endblock %}
+
+{% block body %}
+<div class="container py-5">
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ path('app_home') }}">الرئيسية</a></li>
+            <li class="breadcrumb-item"><a href="{{ path('app_donation_index') }}">التبرعات</a></li>
+            <li class="breadcrumb-item active" aria-current="page">{{ campaign.titre }}</li>
+        </ol>
+    </nav>
+
+    <div class="row gx-5">
+        <div class="col-lg-8 mb-5 mb-lg-0">
+            <h1 class="display-5 fw-900 text-primary mb-4">{{ campaign.titre }}</h1>
+            
+            <div class="bg-white p-5 rounded-4 shadow-sm mb-4 border">
+                <h5 class="fw-bold mb-3"><i class="bi bi-info-circle-fill text-primary me-2"></i> عن الحملة</h5>
+                <p class="lead text-muted lh-lg">
+                    {{ campaign.description|nl2br }}
+                </p>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="card border-0 shadow-lg rounded-4 overflow-hidden sticky-lg-top" style="top: 100px;">
+                <div class="card-header bg-primary text-white p-4 text-center border-0">
+                    <h5 class="mb-0 fw-bold">ساهم الآن</h5>
+                </div>
+                <div class="card-body p-4">
+                    <div class="text-center mb-4">
+                        <div class="display-6 fw-900 text-dark mb-1">{{ campaign.montantCollecte|number_format(0) }} <small class="fs-6 text-muted">د.ت</small></div>
+                        <p class="text-muted small fw-bold text-uppercase">تم جمعها من أصل {{ campaign.montantObjectif|number_format(0) }} د.ت</p>
+                    </div>
+
+                    <div class="progress mb-3" style="height: 15px; border-radius: 20px;">
+                        <div class="progress-bar bg-success progress-bar-striped progress-bar-animated" role="progressbar" style="width: {{ campaign.pourcentage }}%"></div>
+                    </div>
+                    <div class="d-flex justify-content-between fw-bold small text-muted mb-4">
+                        <span>{{ campaign.pourcentage }}% مكتمل</span>
+                        <span>ينتهي في: {{ campaign.dateFin|date('Y-m-d') }}</span>
+                    </div>
+
+                    <div class="d-grid gap-2">
+                        <button class="btn btn-primary btn-lg fw-bold rounded-pill py-3">
+                            <i class="bi bi-wallet2 me-2"></i> تبرع إلكتروني
+                        </button>
+                        <button class="btn btn-outline-dark btn-lg fw-bold rounded-pill py-3">
+                            <i class="bi bi-telephone mb-1 me-2"></i> اتصل للتبرع
+                        </button>
+                    </div>
+                    
+                    <div class="alert alert-light mt-4 mb-0 text-center small text-muted">
+                        <i class="bi bi-shield-check me-1"></i> تبرعك سيذهب مباشرة لدعم هذه المبادرة.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

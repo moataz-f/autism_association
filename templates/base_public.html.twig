@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}جمعية حلم البراءة{% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Tajawal:wght@300;400;500;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #8E97FD;
+            --primary-dark: #6C757D; 
+            --navy: #3D4451;
+            --bg-body: #FDFBFA;
+        }
+        body { font-family: 'Tajawal', sans-serif; background-color: var(--bg-body); color: var(--navy); }
+        .fw-900 { font-weight: 900; }
+        .text-primary { color: var(--primary) !important; }
+        .btn-primary { background-color: var(--primary); border-color: var(--primary); }
+        .btn-primary:hover { background-color: #7b84e8; border-color: #7b84e8; }
+        .bg-primary { background-color: var(--primary) !important; }
+        .navbar-brand img { height: 40px; }
+        a { text-decoration: none; }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg bg-white border-bottom sticky-top">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center" href="{{ path('app_home') }}">
+                <img src="{{ asset('assets/images/logo-v2.jpg') }}" alt="Logo" class="ms-2">
+                <span class="fw-bold fs-4">حلم البراءة</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0 fw-bold">
+                    <li class="nav-item"><a class="nav-link" href="{{ path('app_home') }}">الرئيسية</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ path('app_gallery_index') }}">معرض الصور</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ path('app_donation_index') }}">التبرعات</a></li>
+                    <li class="nav-item ms-lg-3"><a class="btn btn-outline-primary rounded-pill px-4" href="{{ path('app_login') }}">دخول النظام</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    {% block body %}{% endblock %}
+
+    <footer class="bg-dark text-white py-5 mt-5">
+        <div class="container text-center">
+            <p class="mb-0">&copy; 2026 جمعية حلم البراءة للتوحد. جميع الحقوق محفوظة.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/masonry-layout@4.2.2/dist/masonry.pkgd.min.js" integrity="sha384-GNFwBvfVxBkLMJpYMOABq3c+d3KnQxudP/mGPkzpZSTYykLBNsZEnG2D9G/X/+7D" crossorigin="anonymous" async></script>
+    {% block javascripts %}{% endblock %}
+</body>
+</html>
