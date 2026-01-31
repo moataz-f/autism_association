@@ -8,9 +8,14 @@
         <h2>برنامج الحصص والجلسات</h2>
         <p>متابعة الجدولة الزمنية للحصص الفردية والجماعية</p>
     </div>
-    <a href="{{ path('admin_seance_new') }}" class="btn btn-primary">
-        <i class="bi bi-calendar-plus ms-2"></i> إضافة حصة جديدة
-    </a>
+    <div class="d-flex gap-2">
+        <a href="{{ path('admin_seance_planning') }}" class="btn btn-outline-primary">
+            <i class="bi bi-calendar-week ms-2"></i> الجدولة الزمنية
+        </a>
+        <a href="{{ path('admin_seance_new') }}" class="btn btn-primary">
+            <i class="bi bi-calendar-plus ms-2"></i> إضافة حصة جديدة
+        </a>
+    </div>
 </div>
 
 <div class="card border-0">

@@ -24,43 +24,99 @@ class SeanceController extends AbstractController
         ]);
     }
 
+    #[Route('/planning', name: 'admin_seance_planning', methods: ['GET'])]
+    public function planning(): Response
+    {
+        return $this->render('admin/seance/planning.html.twig');
+    }
+
+    #[Route('/api/events', name: 'admin_seance_api_events', methods: ['GET'])]
+    public function apiEvents(SeanceRepository $seanceRepository): Response
+    {
+        $seances = $seanceRepository->findAll();
+        $events = [];
+
+        foreach ($seances as $seance) {
+            $events[] = [
+                'id' => $seance->getId(),
+                'title' => $seance->getTitre() . ' (' . ($seance->getType() === 'Individuelle' ? 'فردية' : 'جماعية') . ')',
+                'start' => $seance->getDate()->format('Y-m-d') . 'T' . $seance->getHeureDebut()->format('H:i:s'),
+                'end' => $seance->getDate()->format('Y-m-d') . 'T' . $seance->getHeureFin()->format('H:i:s'),
+                'color' => $seance->getType() === 'Individuelle' ? '#8E97FD' : '#A78BFA',
+                'extendedProps' => [
+                    'specialiste' => $seance->getSpecialiste()->getPrenom() . ' ' . $seance->getSpecialiste()->getNom(),
+                    'beneficiaires' => count($seance->getBeneficiaires()),
+                    'statut' => $seance->getEtat()
+                ],
+                'url' => $this->generateUrl('admin_seance_show', ['id' => $seance->getId()])
+            ];
+        }
+
+        return $this->json($events);
+    }
+
     #[Route('/new', name: 'admin_seance_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    public function new(Request $request, EntityManagerInterface $entityManager, SeanceRepository $seanceRepository): Response
     {
         $seance = new Seance();
         $form = $this->createForm(SeanceType::class, $seance);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->persist($seance);
-            $entityManager->flush();
+            // Conflict Detection
+            $conflicts = $seanceRepository->findOverlappingSessions(
+                $seance->getSpecialiste(),
+                $seance->getDate(),
+                $seance->getHeureDebut(),
+                $seance->getHeureFin()
+            );
 
-            $this->addFlash('success', 'تمت إضافة الحصة بنجاح.');
-            return $this->redirectToRoute('admin_seance_index');
+            if (count($conflicts) > 0) {
+                $this->addFlash('error', 'هذا الأخصائي لديه حصة أخرى في نفس الوقت.');
+            } else {
+                $entityManager->persist($seance);
+                $entityManager->flush();
+
+                $this->addFlash('success', 'تمت إضافة الحصة بنجاح.');
+                return $this->redirectToRoute('admin_seance_index');
+            }
         }
 
         return $this->render('admin/seance/new.html.twig', [
             'seance' => $seance,
-            'form' => $form,
+            'form' => $form->createView(),
         ]);
     }
 
     #[Route('/{id}/edit', name: 'admin_seance_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Seance $seance, EntityManagerInterface $entityManager): Response
+    public function edit(Request $request, Seance $seance, EntityManagerInterface $entityManager, SeanceRepository $seanceRepository): Response
     {
         $form = $this->createForm(SeanceType::class, $seance);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->flush();
+            // Conflict Detection (excluding current ID)
+            $conflicts = $seanceRepository->findOverlappingSessions(
+                $seance->getSpecialiste(),
+                $seance->getDate(),
+                $seance->getHeureDebut(),
+                $seance->getHeureFin(),
+                $seance->getId()
+            );
 
-            $this->addFlash('success', 'تم تحديث الحصة بنجاح.');
-            return $this->redirectToRoute('admin_seance_index');
+            if (count($conflicts) > 0) {
+                $this->addFlash('error', 'هذا الأخصائي لديه حصة أخرى في نفس الوقت.');
+            } else {
+                $entityManager->flush();
+
+                $this->addFlash('success', 'تم تحديث الحصة بنجاح.');
+                return $this->redirectToRoute('admin_seance_index');
+            }
         }
 
         return $this->render('admin/seance/edit.html.twig', [
             'seance' => $seance,
-            'form' => $form,
+            'form' => $form->createView(),
         ]);
     }
 

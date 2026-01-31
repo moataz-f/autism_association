@@ -8,7 +8,11 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
+use Symfony\Component\Validator\Constraints as Assert;
+
 #[ORM\Entity(repositoryClass: SeanceRepository::class)]
+#[Assert\Callback([Seance::class, 'validateBeneficiaires'])]
 class Seance
 {
     #[ORM\Id]
@@ -163,5 +167,20 @@ class Seance
     {
         $this->etat = $etat;
         return $this;
+    }
+
+    public static function validateBeneficiaires($object, ExecutionContextInterface $context): void
+    {
+        if ($object->getType() === 'Individuelle' && count($object->getBeneficiaires()) > 1) {
+            $context->buildViolation('لا يمكن للحصة الفردية أن تحتوي على أكثر من طفل واحد.')
+                ->atPath('beneficiaires')
+                ->addViolation();
+        }
+
+        if ($object->getType() === 'Collective' && count($object->getBeneficiaires()) === 0) {
+            $context->buildViolation('الحصة الجماعية يجب أن تحتوي على طفل واحد على الأقل.')
+                ->atPath('beneficiaires')
+                ->addViolation();
+        }
     }
 }
