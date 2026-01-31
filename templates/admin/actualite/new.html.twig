@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}إضافة خبر جديد{% endblock %}
+
+{% block body %}
+<div class="mb-4">
+    <a href="{{ path('admin_actualite_index') }}" class="text-decoration-none text-muted fw-800">
+        <i class="bi bi-arrow-right ms-1"></i> العودة للأخبار
+    </a>
+    <h2 class="fw-800 text-navy mt-2">إضافة خبر جديد</h2>
+</div>
+
+{{ include('admin/actualite/_form.html.twig') }}
+{% endblock %}

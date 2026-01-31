@@ -1,0 +1,52 @@
+{{ form_start(form) }}
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card card-2026 mb-4">
+                <div class="card-body">
+                    <div class="mb-4">
+                        {{ form_label(form.titre, 'العنوان الأساسي', {'label_attr': {'class': 'form-label fw-800 text-navy'}}) }}
+                        {{ form_widget(form.titre, {'attr': {'class': 'form-control-2026', 'placeholder': 'أدخل عنوان الخبر...'}}) }}
+                    </div>
+                    
+                    <div class="mb-4">
+                        {{ form_label(form.description, 'وصف مختصر (يظهر في القائمة)', {'label_attr': {'class': 'form-label fw-800 text-navy'}}) }}
+                        {{ form_widget(form.description, {'attr': {'class': 'form-control-2026', 'rows': '3'}}) }}
+                    </div>
+
+                    <div class="mb-0">
+                        {{ form_label(form.contenu, 'محتوى الخبر المكتمل', {'label_attr': {'class': 'form-label fw-800 text-navy'}}) }}
+                        {{ form_widget(form.contenu, {'attr': {'class': 'form-control-2026', 'rows': '15'}}) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-4">
+            <div class="card card-2026 mb-4">
+                <div class="card-body">
+                    <h5 class="fw-800 text-navy mb-4">إعدادات النشر</h5>
+                    
+                    <div class="mb-4">
+                        {{ form_label(form.imageFile, 'الصورة البارزة', {'label_attr': {'class': 'form-label fw-800 text-navy'}}) }}
+                        {{ form_widget(form.imageFile, {'attr': {'class': 'form-control-2026'}}) }}
+                    </div>
+
+                    <div class="mb-4 d-flex align-items-center gap-2">
+                        {{ form_widget(form.actif) }}
+                        {{ form_label(form.actif, 'نشر الخبر فوراً', {'label_attr': {'class': 'form-check-label fw-800 text-navy'}}) }}
+                    </div>
+
+                    <hr class="my-4 opacity-5">
+
+                    <button type="submit" class="btn btn-2026-primary w-100 py-3 rounded-pill fw-bold">
+                        <i class="bi bi-save ms-2"></i> حفظ التغييرات
+                    </button>
+                    
+                    <a href="{{ path('admin_actualite_index') }}" class="btn btn-light w-100 py-3 rounded-pill fw-bold mt-2">
+                        إلغاء الرجوع
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+{{ form_end(form) }}

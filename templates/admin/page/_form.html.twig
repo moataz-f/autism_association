@@ -1,0 +1,48 @@
+{{ form_start(form) }}
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card card-2026 mb-4">
+                <div class="card-body">
+                    <div class="mb-4">
+                        {{ form_label(form.titre, 'عنوان الصفحة', {'label_attr': {'class': 'form-label fw-800 text-navy'}}) }}
+                        {{ form_widget(form.titre, {'attr': {'class': 'form-control-2026', 'placeholder': 'مثال: سياسة الخصوصية'}}) }}
+                    </div>
+
+                    <div class="mb-0">
+                        {{ form_label(form.contenu, 'محتوى الصفحة (يدعم HTML)', {'label_attr': {'class': 'form-label fw-800 text-navy'}}) }}
+                        {{ form_widget(form.contenu, {'attr': {'class': 'form-control-2026', 'rows': '20'}}) }}
+                        <small class="text-muted mt-2 d-block">نصيحة: يمكنك استخدام وسوم HTML لتنسيق المحتوى.</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-4">
+            <div class="card card-2026 mb-4">
+                <div class="card-body">
+                    <h5 class="fw-800 text-navy mb-4">بيانات إضافية</h5>
+                    
+                    <div class="mb-4">
+                        {{ form_label(form.imageFile, 'صورة الهيدر', {'label_attr': {'class': 'form-label fw-800 text-navy'}}) }}
+                        {{ form_widget(form.imageFile, {'attr': {'class': 'form-control-2026'}}) }}
+                    </div>
+
+                    <div class="mb-4 d-flex align-items-center gap-2">
+                        {{ form_widget(form.actif) }}
+                        {{ form_label(form.actif, 'جعل الصفحة عامة', {'label_attr': {'class': 'form-check-label fw-800 text-navy'}}) }}
+                    </div>
+
+                    <hr class="my-4 opacity-5">
+
+                    <button type="submit" class="btn btn-2026-primary w-100 py-3 rounded-pill fw-bold">
+                        <i class="bi bi-save ms-2"></i> حفظ الصفحة
+                    </button>
+                    
+                    <a href="{{ path('admin_page_index') }}" class="btn btn-light w-100 py-3 rounded-pill fw-bold mt-2">
+                        إلغاء الرجوع
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+{{ form_end(form) }}

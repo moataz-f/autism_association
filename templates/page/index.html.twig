@@ -1,0 +1,50 @@
+{% extends 'base_public.html.twig' %}
+
+{% block title %}صفحات الجمعية - جمعية حلم البراءة{% endblock %}
+
+{% block body %}
+<div class="py-5 bg-white border-bottom">
+    <div class="container py-4 text-center">
+        <h1 class="fw-900 text-navy mb-3" style="font-size: 3.5rem;">عن الجمعية</h1>
+        <p class="text-muted lead fw-500">اكتشف المزيد حول برامجنا، سياساتنا، والفرق التي تعمل معنا</p>
+    </div>
+</div>
+
+<div class="container py-5">
+    <div class="row g-4 justify-content-center">
+        {% for page in pages %}
+            <div class="col-lg-4">
+                <a href="{{ path('app_page_show', {slug: page.slug}) }}" class="text-decoration-none">
+                    <div class="card-2026 p-4 h-100 text-center transition-up">
+                        <div class="mb-4">
+                            {% if page.imagePath %}
+                                <img src="{{ vich_uploader_asset(page, 'imageFile') }}" class="rounded-pill" style="width: 80px; height: 80px; object-fit: cover;">
+                            {% else %}
+                                <div class="bg-primary bg-opacity-10 text-primary rounded-pill d-flex align-items-center justify-content-center mx-auto" style="width: 80px; height: 80px;">
+                                    <i class="bi bi-file-earmark-text fs-2"></i>
+                                </div>
+                            {% endif %}
+                        </div>
+                        <h4 class="fw-800 text-navy mb-0">{{ page.titre }}</h4>
+                        <div class="mt-4">
+                            <span class="text-primary fw-800">تصفح الصفحة <i class="bi bi-arrow-left ms-2"></i></span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        {% else %}
+            <div class="col-12 text-center py-5">
+                <i class="bi bi-file-earmark-x text-muted opacity-10" style="font-size: 6rem;"></i>
+                <h3 class="text-muted mt-4">لا توجد صفحات منشورة بعد</h3>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .transition-up { transition: var(--transition-smooth); }
+    .transition-up:hover { transform: translateY(-10px); box-shadow: 0 15px 30px rgba(0,0,0,0.08); }
+</style>
+{% endblock %}

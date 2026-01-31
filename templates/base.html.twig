@@ -446,6 +446,20 @@
                             <span class="sub">تحديث ألبوم الجمعية</span>
                         </div>
                     </a>
+                    <a class="nav-link complex {{ app.request.get('_route') starts with 'admin_actualite' ? 'active' : '' }}" href="{{ path('admin_actualite_index') }}">
+                        <i class="bi bi-newspaper"></i>
+                        <div class="link-info">
+                            <span>الأخبار</span>
+                            <span class="sub">نشر المستجدات</span>
+                        </div>
+                    </a>
+                    <a class="nav-link complex {{ app.request.get('_route') starts with 'admin_page' ? 'active' : '' }}" href="{{ path('admin_page_index') }}">
+                        <i class="bi bi-file-earmark-text"></i>
+                        <div class="link-info">
+                            <span>الصفحات الثابتة</span>
+                            <span class="sub">إدارة محتوى الصفحات</span>
+                        </div>
+                    </a>
 
                     {% if is_granted('ROLE_ADMIN') %}
                     <div class="nav-section-label">النظام</div>

@@ -1,0 +1,37 @@
+{% extends 'base_public.html.twig' %}
+
+{% block title %}{{ page.titre }} - جمعية حلم البراءة{% endblock %}
+
+{% block body %}
+<div class="page-header py-5 text-center bg-white border-bottom position-relative overflow-hidden">
+    {% if page.imagePath %}
+        <div class="header-bg" style="background-image: url('{{ vich_uploader_asset(page, 'imageFile') }}')"></div>
+    {% endif %}
+    <div class="container position-relative py-5">
+        <h1 class="fw-900 text-navy mb-0" style="font-size: 4rem;">{{ page.titre }}</h1>
+    </div>
+</div>
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <div class="page-content bg-white p-5 rounded-40 border shadow-neo lh-lg text-navy fw-500" style="font-size: 1.2rem;">
+                {{ page.contenu|raw }}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .page-header { min-height: 300px; display: flex; align-items: center; justify-content: center; }
+    .header-bg {
+        position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+        background-size: cover; background-position: center;
+        opacity: 0.1; filter: blur(10px);
+    }
+    .rounded-40 { border-radius: 40px; }
+    .page-content { margin-top: -80px; position: relative; z-index: 2; }
+</style>
+{% endblock %}

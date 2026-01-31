@@ -264,7 +264,9 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto align-items-center">
                     <li class="nav-item"><a class="nav-link" href="{{ path('app_home') }}">الرئيسية</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ path('app_page_index') }}">عن الجمعية</a></li>
                     <li class="nav-item"><a class="nav-link" href="{{ path('app_gallery_index') }}">معرض الصور</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ path('app_actualite_index') }}">الأخبار</a></li>
                     <li class="nav-item"><a class="nav-link" href="{{ path('app_donation_index') }}">التبرعات</a></li>
                     <li class="nav-item ms-lg-4">
                         <a class="btn-2026 py-2 px-4" style="font-size: 0.85rem;" href="{{ path('app_login') }}">
@@ -325,6 +327,49 @@
                     <i class="bi bi-images text-muted opacity-25" style="font-size: 4rem;"></i>
                     <p class="text-muted mt-3">سيتم إضافة الصور قريباً</p>
                 </div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+
+    <section id="news" class="py-5 bg-light-2026">
+        <div class="container">
+            <div class="row align-items-center mb-5">
+                <div class="col-lg-6">
+                    <h2 class="fw-900 text-navy" style="font-size: 2.5rem;">آخر الأخبار</h2>
+                    <p class="text-muted fw-500">تابعوا مستجدات وفعاليات جمعية حلم البراءة</p>
+                </div>
+                <div class="col-lg-6 text-lg-start">
+                    <a href="{{ path('app_actualite_index') }}" class="text-primary fw-800 text-decoration-none">مشاهدة جميع الأخبار <i class="bi bi-arrow-left"></i></a>
+                </div>
+            </div>
+
+            <div class="row g-4">
+                {% for item in news %}
+                    <div class="col-lg-4">
+                        <div class="bento-card p-0 overflow-hidden border-0">
+                            {% if item.imagePath %}
+                                <img src="{{ vich_uploader_asset(item, 'imageFile') }}" class="w-100" style="height: 240px; object-fit: cover;">
+                            {% else %}
+                                <div class="bg-light-2026 d-flex align-items-center justify-content-center" style="height: 240px;">
+                                    <i class="bi bi-newspaper text-muted opacity-25" style="font-size: 3rem;"></i>
+                                </div>
+                            {% endif %}
+                            <div class="p-4">
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <span class="badge bg-primary bg-opacity-10 text-primary rounded-pill fw-800 px-3 py-2 small">مستجدات</span>
+                                    <small class="text-muted fw-700">{{ item.createdAt|date('Y/m/d') }}</small>
+                                </div>
+                                <h5 class="fw-800 text-navy mb-3">{{ item.titre }}</h5>
+                                <p class="text-muted small lh-lg mb-4">{{ item.description|length > 100 ? item.description|slice(0, 100) ~ '...' : item.description }}</p>
+                                <a href="{{ path('app_actualite_show', {slug: item.slug}) }}" class="btn-2026 btn-2026-light border w-100 justify-content-center py-2">اقرأ المزيد</a>
+                            </div>
+                        </div>
+                    </div>
+                {% else %}
+                    <div class="col-12 text-center py-5">
+                        <p class="text-muted fw-800">لا توجد أخبار منشورة حالياً.</p>
+                    </div>
                 {% endfor %}
             </div>
         </div>
