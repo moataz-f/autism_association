@@ -3,7 +3,7 @@
 namespace App\Controller\Admin;
 
 use App\Entity\PageContent;
-use App\Form\PageContentType;
+use App\Forms\PageContentType;
 use App\Repository\PageContentRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;

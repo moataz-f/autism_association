@@ -3,7 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Seance;
-use App\Form\SeanceType;
+use App\Forms\SeanceType;
 use App\Repository\SeanceRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;

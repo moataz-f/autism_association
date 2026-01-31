@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-use App\Form\UserProfileType;
+use App\Forms\UserProfileType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;

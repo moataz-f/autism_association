@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Form;
+namespace App\Formss;
 
 use App\Entity\Beneficiaire;
 use App\Entity\Seance;

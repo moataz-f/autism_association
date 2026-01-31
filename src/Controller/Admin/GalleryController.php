@@ -2,7 +2,7 @@
 namespace App\Controller\Admin;
 
 use App\Entity\GalleryImage;
-use App\Form\GalleryImageType;
+use App\Forms\GalleryImageType;
 use App\Repository\GalleryImageRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;

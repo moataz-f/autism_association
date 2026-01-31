@@ -1,0 +1,74 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}طلبات التبرع{% endblock %}
+
+{% block body %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2><i class="bi bi-heart-fill text-danger"></i> طلبات التبرع الإلكترونية</h2>
+    <a href="{{ path('admin_donation_request_manual') }}" class="btn btn-success">
+        <i class="bi bi-plus-circle"></i> إضافة تبرع يدوي
+    </a>
+</div>
+
+<div class="card shadow-sm border-0">
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle">
+                <thead class="table-light">
+                    <tr>
+                        <th>التاريخ</th>
+                        <th>المتبرع</th>
+                        <th>الهاتف</th>
+                        <th>الموقع</th>
+                        <th>المبلغ</th>
+                        <th>الحملة</th>
+                        <th>الحالة</th>
+                        <th>الإجراءات</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for request in requests %}
+                    <tr>
+                        <td class="small">{{ request.createdAt|date('Y-m-d H:i') }}</td>
+                        <td class="fw-bold">{{ request.nom }}</td>
+                        <td>{{ request.telephone }}</td>
+                        <td>{{ request.localisation }}</td>
+                        <td class="text-primary fw-bold">{{ request.montant }} د.ت</td>
+                        <td>{{ request.campaign ? request.campaign.titre : '-' }}</td>
+                        <td>
+                            {% if request.statut == 'pending' %}
+                                <span class="badge bg-warning text-dark">قيد الانتظار</span>
+                            {% elseif request.statut == 'confirmed' %}
+                                <span class="badge bg-success">تم التأكيد</span>
+                            {% else %}
+                                <span class="badge bg-danger">مرفوض</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if request.statut == 'pending' %}
+                                <div class="d-flex gap-2">
+                                    <form method="post" action="{{ path('admin_donation_request_confirm', {id: request.id}) }}" onsubmit="return confirm('هل تريد تأكيد تسلم هذا المبلغ؟');">
+                                        <button class="btn btn-sm btn-success">
+                                            <i class="bi bi-check-lg"></i> تأكيد
+                                        </button>
+                                    </form>
+                                    <form method="post" action="{{ path('admin_donation_request_reject', {id: request.id}) }}" onsubmit="return confirm('هل تريد رفض هذا الطلب؟');">
+                                        <button class="btn btn-sm btn-outline-danger">
+                                            <i class="bi bi-x-lg"></i> رفض
+                                        </button>
+                                    </form>
+                                </div>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="8" class="text-center py-4 text-muted">لا توجد طلبات تبرع حالياً</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

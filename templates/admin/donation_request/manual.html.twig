@@ -1,0 +1,46 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}إضافة تبرع يدوي{% endblock %}
+
+{% block body %}
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow-sm border-0 rounded-4">
+                <div class="card-header bg-success text-white p-4">
+                    <h3 class="mb-0"><i class="bi bi-plus-circle-fill me-2"></i> تسجيل تبرع يدوي</h3>
+                    <p class="small opacity-75 mb-0 mt-2">استخدم هذا النموذج لتسجيل التبرعات التي تتم مباشرة في مقر الجمعية.</p>
+                </div>
+                <div class="card-body p-4">
+                    {{ form_start(form) }}
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                {{ form_row(form.nom) }}
+                            </div>
+                            <div class="col-md-6">
+                                {{ form_row(form.telephone) }}
+                            </div>
+                            <div class="col-12">
+                                {{ form_row(form.localisation) }}
+                            </div>
+                            <div class="col-md-6">
+                                {{ form_row(form.montant) }}
+                            </div>
+                            <div class="col-md-6">
+                                {{ form_row(form.campaign) }}
+                            </div>
+                        </div>
+
+                        <div class="mt-4 pt-3 border-top text-center text-lg-start">
+                            <button type="submit" class="btn btn-success px-4 py-2 fw-bold">
+                                <i class="bi bi-check-lg me-1"></i> حفظ التبرع وتعديل الرصيد
+                            </button>
+                            <a href="{{ path('admin_donation_request_index') }}" class="btn btn-outline-secondary px-4 py-2 ms-2">إلغاء</a>
+                        </div>
+                    {{ form_end(form) }}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

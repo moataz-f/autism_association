@@ -1,0 +1,72 @@
+{% extends 'base_public.html.twig' %}
+
+{% block title %}طلب تبرع إلكتروني{% endblock %}
+
+{% block body %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-lg rounded-4 overflow-hidden">
+                <div class="bg-primary p-5 text-white text-center">
+                    <i class="bi bi-heart-fill mb-3" style="font-size: 3rem;"></i>
+                    <h2 class="fw-900 mb-2">تبرع إلكتروني</h2>
+                    <p class="opacity-75 mb-0">شكراً لمساهمتك في دعم أطفال التوحد. يرجى ملء النموذج التالي وسنقوم بالتواصل معك لتنسيق عملية التبرع.</p>
+                </div>
+                <div class="card-body p-5">
+                    {{ form_start(form, {'attr': {'class': 'needs-validation', 'novalidate': 'novalidate'}}) }}
+                        <div class="row g-4">
+                            <div class="col-md-6">
+                                {{ form_label(form.nom) }}
+                                {{ form_widget(form.nom, {'attr': {'class': 'form-control form-control-lg rounded-3', 'placeholder': 'الأسم الثلاثي'}}) }}
+                                {{ form_errors(form.nom) }}
+                            </div>
+                            <div class="col-md-6">
+                                {{ form_label(form.telephone) }}
+                                {{ form_widget(form.telephone, {'attr': {'class': 'form-control form-control-lg rounded-3', 'placeholder': '+216 -- --- ---'}}) }}
+                                {{ form_errors(form.telephone) }}
+                            </div>
+                            <div class="col-12">
+                                {{ form_label(form.localisation) }}
+                                {{ form_widget(form.localisation, {'attr': {'class': 'form-control form-control-lg rounded-3', 'placeholder': 'المدينة، الحي...'}}) }}
+                                {{ form_errors(form.localisation) }}
+                            </div>
+                            <div class="col-md-6">
+                                {{ form_label(form.montant) }}
+                                <div class="input-group">
+                                    {{ form_widget(form.montant, {'attr': {'class': 'form-control form-control-lg rounded-start-3', 'placeholder': '0.00'}}) }}
+                                    <span class="input-group-text bg-light border-start-0 rounded-end-3">د.ت</span>
+                                </div>
+                                {{ form_errors(form.montant) }}
+                            </div>
+                            <div class="col-md-6">
+                                {{ form_label(form.campaign) }}
+                                {{ form_widget(form.campaign, {'attr': {'class': 'form-select form-select-lg rounded-3'}}) }}
+                                {{ form_errors(form.campaign) }}
+                            </div>
+                        </div>
+
+                        <div class="mt-5 text-center">
+                            <button type="submit" class="btn btn-primary btn-lg px-5 py-3 rounded-pill fw-bold shadow-sm">
+                                إرسال طلب التبرع <i class="bi bi-send ms-2"></i>
+                            </button>
+                            <a href="{{ path('app_donation_index') }}" class="btn btn-link text-muted mt-3 d-block">إلغاء والعودة</a>
+                        </div>
+                    {{ form_end(form) }}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .form-control:focus, .form-select:focus {
+        border-color: var(--primary);
+        box-shadow: 0 0 0 0.25rem rgba(142, 151, 253, 0.25);
+    }
+    label {
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+        color: var(--navy);
+    }
+</style>
+{% endblock %}

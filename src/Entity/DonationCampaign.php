@@ -3,6 +3,8 @@ namespace App\Entity;
 
 use App\Repository\DonationCampaignRepository;
 use Doctrine\DBAL\Types\Types;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: DonationCampaignRepository::class)]
@@ -36,6 +38,14 @@ class DonationCampaign
 
     #[ORM\Column]
     private ?bool $principale = false;
+
+    #[ORM\OneToMany(mappedBy: 'campaign', targetEntity: DonationRequest::class)]
+    private Collection $donationRequests;
+
+    public function __construct()
+    {
+        $this->donationRequests = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -94,6 +104,16 @@ class DonationCampaign
         return 0;
     }
 
+    public function isFilled(): bool
+    {
+        return (float) $this->montantCollecte >= (float) $this->montantObjectif;
+    }
+
+    public function isOverfilled(float $additionalAmount): bool
+    {
+        return ((float) $this->montantCollecte + $additionalAmount) > (float) $this->montantObjectif;
+    }
+
     public function getDateDebut(): ?\DateTimeInterface
     {
         return $this->dateDebut;
@@ -135,6 +155,36 @@ class DonationCampaign
     public function setPrincipale(bool $principale): self
     {
         $this->principale = $principale;
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, DonationRequest>
+     */
+    public function getDonationRequests(): Collection
+    {
+        return $this->donationRequests;
+    }
+
+    public function addDonationRequest(DonationRequest $donationRequest): self
+    {
+        if (!$this->donationRequests->contains($donationRequest)) {
+            $this->donationRequests->add($donationRequest);
+            $donationRequest->setCampaign($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDonationRequest(DonationRequest $donationRequest): self
+    {
+        if ($this->donationRequests->removeElement($donationRequest)) {
+            // set the owning side to null (unless already changed)
+            if ($donationRequest->getCampaign() === $this) {
+                $donationRequest->setCampaign(null);
+            }
+        }
+
         return $this;
     }
 }

@@ -2,7 +2,7 @@
 namespace App\Controller;
 
 use App\Entity\Famille;
-use App\Form\FamilleType;
+use App\Forms\FamilleType;
 use App\Repository\FamilleRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;

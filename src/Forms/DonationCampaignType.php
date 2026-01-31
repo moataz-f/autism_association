@@ -1,6 +1,6 @@
 <?php
 // src/Form/DonationCampaignType.php
-namespace App\Form;
+namespace App\Formss;
 
 use App\Entity\DonationCampaign;
 use Symfony\Component\Form\AbstractType;

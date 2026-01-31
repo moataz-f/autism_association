@@ -4,7 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Personnel;
 use App\Entity\User;
-use App\Form\PersonnelType;
+use App\Forms\PersonnelType;
 use App\Repository\PersonnelRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;

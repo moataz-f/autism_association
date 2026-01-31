@@ -421,8 +421,11 @@
                     <a class="nav-link {{ app.request.get('_route') starts with 'app_famille' ? 'active' : '' }}" href="{{ path('app_famille_index') }}">
                         <i class="bi bi-house-fill"></i> العائلات
                     </a>
-                    <a class="nav-link {{ app.request.get('_route') starts with 'admin_donation' ? 'active' : '' }}" href="{{ path('admin_donation_index') }}">
+                    <a class="nav-link {{ app.request.get('_route') starts with 'admin_donation_index' ? 'active' : '' }}" href="{{ path('admin_donation_index') }}">
                         <i class="bi bi-gift-fill"></i> حملات التبرع
+                    </a>
+                    <a class="nav-link {{ app.request.get('_route') starts with 'admin_donation_request' ? 'active' : '' }}" href="{{ path('admin_donation_request_index') }}">
+                        <i class="bi bi-heart-fill"></i> طلبات التبرع
                     </a>
                     <a class="nav-link {{ app.request.get('_route') starts with 'admin_seance' ? 'active' : '' }}" href="{{ path('admin_seance_index') }}">
                         <i class="bi bi-clock-fill"></i> الجدولة

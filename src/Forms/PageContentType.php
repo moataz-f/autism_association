@@ -1,6 +1,6 @@
 <?php
 // src/Form/PageContentType.php
-namespace App\Form;
+namespace App\Formss;
 
 use App\Entity\PageContent;
 use Symfony\Component\Form\AbstractType;

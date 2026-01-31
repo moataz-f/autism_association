@@ -358,7 +358,13 @@
                         <span class="opacity-50">عدد المتبرعين: 124+</span>
                     </div>
 
-                    <a href="#" class="btn-2026 py-3 px-5">تبرع الآن <i class="bi bi-credit-card ms-2"></i></a>
+                    {% if mainCampaign.isFilled %}
+                        <div class="alert alert-success rounded-4 fw-bold text-center py-3">
+                            <i class="bi bi-patch-check-fill me-2"></i> لقد حققت هذه الحملة هدفها بنجاح! شكراً لكل المتبرعين.
+                        </div>
+                    {% else %}
+                        <a href="{{ path('app_donation_request', {'campaign': mainCampaign.id}) }}" class="btn-2026 py-3 px-5">تبرع الآن <i class="bi bi-credit-card ms-2"></i></a>
+                    {% endif %}
                 </div>
                 <div class="col-lg-5 d-none d-lg-block">
                     <div class="bento-card border-0 bg-opacity-10 bg-white p-5 text-center">
@@ -391,7 +397,7 @@
                 <div class="col-lg-4">
                     <h5 class="text-white fw-800 mb-4">تواصل معنا</h5>
                     <p class="footer-link mb-3"><i class="bi bi-geo-alt ms-2"></i> قبلي، تونس</p>
-                    <p class="footer-link mb-3"><i class="bi bi-telephone ms-2"></i> +216 12 345 678</p>
+                    <a href="tel:+21612345678" class="footer-link mb-3"><i class="bi bi-telephone ms-2"></i> +216 12 345 678</a>
                     <p class="footer-link mb-3"><i class="bi bi-envelope ms-2"></i> contact@autism-kebili.tn</p>
                 </div>
             </div>

@@ -2,7 +2,7 @@
 namespace App\Controller\Admin;
 
 use App\Entity\DonationCampaign;
-use App\Form\DonationCampaignType;
+use App\Forms\DonationCampaignType;
 use App\Repository\DonationCampaignRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;

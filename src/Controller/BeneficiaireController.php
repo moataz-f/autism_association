@@ -3,7 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Beneficiaire;
-use App\Form\BeneficiaireType;
+use App\Forms\BeneficiaireType;
 use App\Repository\BeneficiaireRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
