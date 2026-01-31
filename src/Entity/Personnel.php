@@ -10,12 +10,16 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: PersonnelRepository::class)]
+#[ORM\HasLifecycleCallbacks]
 class Personnel
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
+
+    #[ORM\Column(length: 255, unique: true, nullable: true)]
+    private ?string $qrToken = null;
 
     #[ORM\Column(length: 100)]
     #[Assert\NotBlank]
@@ -42,6 +46,9 @@ class Personnel
     #[ORM\OneToMany(mappedBy: 'personnel', targetEntity: Activite::class)]
     private Collection $activites;
 
+    #[ORM\OneToMany(mappedBy: 'personnel', targetEntity: Pointage::class, orphanRemoval: true)]
+    private Collection $pointages;
+
     #[ORM\Column(type: 'boolean')]
     private ?bool $actif = true;
 
@@ -55,6 +62,7 @@ class Personnel
     public function __construct()
     {
         $this->activites = new ArrayCollection();
+        $this->pointages = new ArrayCollection();
         $this->dateEmbauche = new \DateTime();
     }
 
@@ -168,6 +176,25 @@ class Personnel
         return $this;
     }
 
+    public function getQrToken(): ?string
+    {
+        return $this->qrToken;
+    }
+
+    public function setQrToken(?string $qrToken): self
+    {
+        $this->qrToken = $qrToken;
+        return $this;
+    }
+
+    #[ORM\PrePersist]
+    public function onPrePersist(): void
+    {
+        if (null === $this->qrToken) {
+            $this->qrToken = bin2hex(random_bytes(16));
+        }
+    }
+
     public function __toString(): string
     {
         return $this->nom . ' ' . $this->prenom . ' (' . $this->role . ')';
@@ -189,6 +216,36 @@ class Personnel
             // set the owning side to null (unless already changed)
             if ($activite->getPersonnel() === $this) {
                 $activite->setPersonnel(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Pointage>
+     */
+    public function getPointages(): Collection
+    {
+        return $this->pointages;
+    }
+
+    public function addPointage(Pointage $pointage): self
+    {
+        if (!$this->pointages->contains($pointage)) {
+            $this->pointages->add($pointage);
+            $pointage->setPersonnel($this);
+        }
+
+        return $this;
+    }
+
+    public function removePointage(Pointage $pointage): self
+    {
+        if ($this->pointages->removeElement($pointage)) {
+            // set the owning side to null (unless already changed)
+            if ($pointage->getPersonnel() === $this) {
+                $pointage->setPersonnel(null);
             }
         }
 

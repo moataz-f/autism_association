@@ -57,6 +57,24 @@
     </div>
 </div>
 
+{# New: Employee Personal Attendance Block #}
+{% if is_granted('ROLE_PERSONNEL') or is_granted('ROLE_EDUCATEUR') %}
+<div class="card card-2026 border-0 shadow-sm mb-4 p-4 overflow-hidden position-relative" style="background: linear-gradient(135deg, #6366F1 0%, #8B5CF6 100%);">
+    <div class="row align-items-center position-relative" style="z-index: 2;">
+        <div class="col-md-8 text-white">
+            <h4 class="fw-900 mb-2">تسجيل الحضور اليومي</h4>
+            <p class="opacity-75 mb-0 fw-600">يمكنك تسجيل دخولك أو خروجك بمسح الرمز اليومي الخاص بالجمعية.</p>
+        </div>
+        <div class="col-md-4 text-md-end mt-3 mt-md-0">
+            <a href="{{ path('app_pointage_scan') }}" class="btn btn-white px-4 py-2 fw-800 rounded-pill shadow-sm">
+                <i class="bi bi-camera ms-2"></i> تـسـجيل بـالـكاميرا
+            </a>
+        </div>
+    </div>
+    <i class="bi bi-clock-history position-absolute end-0 bottom-0 opacity-10" style="font-size: 8rem; transform: translate(20%, 20%); color: white;"></i>
+</div>
+{% endif %}
+
 <div class="row g-4">
     {# Big Bento Section: Quick Access #}
     <div class="col-lg-8">

@@ -1,0 +1,160 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Badge - {{ personnel.nom }} {{ personnel.prenom }}{% endblock %}
+
+{% block body %}
+<div class="container py-5">
+    <div class="d-flex justify-content-between align-items-center mb-5 no-print">
+        <h2 class="fw-800 text-navy mb-0"><i class="bi bi-person-badge ms-2"></i>بطاقة التعريف المهنية</h2>
+        <button onclick="window.print()" class="btn btn-2026-primary">
+            <i class="bi bi-printer ms-1"></i> طباعة البطاقة
+        </button>
+    </div>
+
+    <div class="d-flex justify-content-center">
+        <div class="badge-card shadow-lg">
+            <div class="badge-header">
+                <img src="{{ asset('assets/images/logo-v2.jpg') }}" alt="Logo" class="badge-logo">
+                <div class="assoc-name">جمعية حلم البراءة</div>
+            </div>
+            
+            <div class="badge-body text-center">
+                <div class="photo-placeholder mx-auto mb-3">
+                    <i class="bi bi-person-fill"></i>
+                </div>
+                
+                <h3 class="employee-name mb-1">{{ personnel.prenom }} {{ personnel.nom }}</h3>
+                <div class="employee-role mb-4">{{ personnel.role }}</div>
+                
+                <div class="row g-2 justify-content-center">
+                    <div class="col-6">
+                        <div id="qrcode-in" class="qr-box"></div>
+                        <div class="qr-label">تسجيل الدخول</div>
+                    </div>
+                    <div class="col-6">
+                        <div id="qrcode-out" class="qr-box"></div>
+                        <div class="qr-label">تسجيل الخروج</div>
+                    </div>
+                </div>
+                
+                <div class="qr-token small text-muted mt-3">{{ personnel.qrToken }}</div>
+            </div>
+            
+            <div class="badge-footer">
+                بطاقة الدخول والخروج - نظام البصمة الرقمي
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .badge-card {
+        width: 350px;
+        background: white;
+        border-radius: 24px;
+        overflow: hidden;
+        border: 1px solid #E2E8F0;
+        font-family: 'Tajawal', sans-serif;
+    }
+    .badge-header {
+        background: var(--navy);
+        padding: 20px;
+        color: white;
+        text-align: center;
+    }
+    .badge-logo {
+        height: 40px;
+        margin-bottom: 8px;
+        border-radius: 8px;
+    }
+    .assoc-name {
+        font-weight: 900;
+        font-size: 1.1rem;
+    }
+    .badge-body {
+        padding: 30px 20px;
+    }
+    .photo-placeholder {
+        width: 100px;
+        height: 100px;
+        background: #F1F4FF;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 3rem;
+        color: #8E97FD;
+        border: 4px solid white;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    }
+    .employee-name {
+        font-weight: 900;
+        color: var(--navy);
+    }
+    .employee-role {
+        font-weight: 700;
+        color: #8E97FD;
+        text-transform: uppercase;
+        font-size: 0.9rem;
+    }
+    .qr-box img {
+        margin: 0 auto;
+        padding: 8px;
+        background: white;
+        border: 1px solid #EDF2F7;
+        border-radius: 12px;
+        width: 110px !important;
+        height: 110px !important;
+    }
+    .qr-label {
+        font-weight: 800;
+        font-size: 0.75rem;
+        color: var(--navy);
+        margin-top: 8px;
+    }
+    .badge-footer {
+        background: #F8FAFC;
+        padding: 12px;
+        text-align: center;
+        font-size: 0.75rem;
+        font-weight: 700;
+        color: #94A3B8;
+        border-top: 1px dashed #E2E8F0;
+    }
+    .qr-token {
+        font-family: monospace;
+        letter-spacing: 1px;
+        opacity: 0.5;
+    }
+
+    @media print {
+        .no-print { display: none !important; }
+        body { background: white !important; }
+        .container { padding: 0 !important; margin: 0 !important; max-width: none !important; }
+        .badge-card { box-shadow: none !important; border: 1px solid #000; }
+    }
+</style>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script>
+    // QR Code Entry
+    new QRCode(document.getElementById("qrcode-in"), {
+        text: "{{ personnel.qrToken }}:IN",
+        width: 128,
+        height: 128,
+        colorDark : "#10B981",
+        colorLight : "#ffffff",
+        correctLevel : QRCode.CorrectLevel.H
+    });
+
+    // QR Code Exit
+    new QRCode(document.getElementById("qrcode-out"), {
+        text: "{{ personnel.qrToken }}:OUT",
+        width: 128,
+        height: 128,
+        colorDark : "#F59E0B",
+        colorLight : "#ffffff",
+        correctLevel : QRCode.CorrectLevel.H
+    });
+</script>
+{% endblock %}

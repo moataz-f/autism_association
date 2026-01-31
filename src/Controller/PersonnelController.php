@@ -50,29 +50,40 @@ class PersonnelController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            // Create associated User
-            $user = new User();
-            $user->setEmail($personnel->getEmail());
-            $user->setNom($personnel->getNom());
-            $user->setPrenom($personnel->getPrenom());
-            $user->setNumtlf($personnel->getTelephone());
+            // Check if user already exists
+            $userRepo = $entityManager->getRepository(User::class);
+            $existingUser = $userRepo->findOneBy(['email' => $personnel->getEmail()]);
             
-            // Set default password
-            $user->setPassword(
-                $userPasswordHasher->hashPassword(
-                    $user,
-                    'pass123'
-                )
-            );
+            if ($existingUser) {
+                $user = $existingUser;
+                $this->addFlash('info', 'Un compte utilisateur existant a été lié à ce membre du personnel.');
+            } else {
+                // Create associated User
+                $user = new User();
+                $user->setEmail($personnel->getEmail());
+                $user->setNom($personnel->getNom());
+                $user->setPrenom($personnel->getPrenom());
+                $user->setNumtlf($personnel->getTelephone());
+                
+                // Set default password
+                $user->setPassword(
+                    $userPasswordHasher->hashPassword(
+                        $user,
+                        '123456789'
+                    )
+                );
+                $this->addFlash('success', 'Nouveau compte utilisateur créé (Mdp: 123456789).');
+            }
 
-            // Determine role
-            $roles = ['ROLE_PERSONNEL'];
+            // Determine/Update roles
+            $roles = $user->getRoles();
+            $roles[] = 'ROLE_PERSONNEL';
             if ($personnel->getRole() === 'Administrateur') {
                 $roles[] = 'ROLE_ADMIN';
             } elseif ($personnel->getRole() === 'Éducateur') {
                 $roles[] = 'ROLE_EDUCATEUR';
             }
-            $user->setRoles($roles);
+            $user->setRoles(array_unique($roles));
 
             // Link them
             $personnel->setUser($user);
@@ -81,7 +92,6 @@ class PersonnelController extends AbstractController
             $entityManager->persist($personnel);
             $entityManager->flush();
 
-            $this->addFlash('success', 'Personnel ajouté avec succès! Un compte utilisateur a été créé (Mdp: pass123).');
             return $this->redirectToRoute('app_personnel_index');
         }
 
@@ -138,6 +148,14 @@ class PersonnelController extends AbstractController
         return $this->render('personnel/edit.html.twig', [
             'personnel' => $personnel,
             'form' => $form,
+        ]);
+    }
+
+    #[Route('/{id}/badge', name: 'app_personnel_badge', methods: ['GET'])]
+    public function badge(Personnel $personnel): Response
+    {
+        return $this->render('personnel/badge.html.twig', [
+            'personnel' => $personnel,
         ]);
     }
 

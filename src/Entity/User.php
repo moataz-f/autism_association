@@ -34,6 +34,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 20, nullable: true)]
     private ?string $numtlf = null;
 
+    #[ORM\OneToOne(mappedBy: 'user', targetEntity: Personnel::class)]
+    private ?Personnel $personnel = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -113,6 +116,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setNumtlf(?string $numtlf): self
     {
         $this->numtlf = $numtlf;
+        return $this;
+    }
+
+    public function getPersonnel(): ?Personnel
+    {
+        return $this->personnel;
+    }
+
+    public function setPersonnel(?Personnel $personnel): self
+    {
+        $this->personnel = $personnel;
         return $this;
     }
 }

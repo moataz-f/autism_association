@@ -413,6 +413,12 @@
                     <a class="nav-link {{ app.request.get('_route') == 'app_dashboard' ? 'active' : '' }}" href="{{ path('app_dashboard') }}">
                         <i class="bi bi-grid-fill"></i> لوحة القيادة
                     </a>
+
+                    {% if app.user and not is_granted('ROLE_PARENT') %}
+                    <a class="nav-link {{ app.request.get('_route') == 'app_pointage_scan' ? 'active' : '' }}" href="{{ path('app_pointage_scan') }}">
+                        <i class="bi bi-camera-fill"></i> تسجيل الحضور
+                    </a>
+                    {% endif %}
                     
                     <div class="nav-section-label">الإدارة</div>
                     <a class="nav-link {{ app.request.get('_route') starts with 'app_beneficiaire' ? 'active' : '' }}" href="{{ path('app_beneficiaire_index') }}">
@@ -428,8 +434,25 @@
                         <i class="bi bi-heart-fill"></i> طلبات التبرع
                     </a>
                     <a class="nav-link {{ app.request.get('_route') starts with 'admin_seance' ? 'active' : '' }}" href="{{ path('admin_seance_index') }}">
-                        <i class="bi bi-clock-fill"></i> الجدولة
+                        <i class="bi bi-calendar-event"></i> الجدولة
                     </a>
+
+                    {% if is_granted('ROLE_ADMIN') %}
+                    <a class="nav-link complex {{ app.request.get('_route') starts with 'admin_pointage' ? 'active' : '' }}" href="{{ path('admin_pointage_index') }}">
+                        <i class="bi bi-clock-history"></i>
+                        <div class="link-info">
+                            <span>سجل الحضور</span>
+                            <span class="sub">متابعة الغياب والتأخير</span>
+                        </div>
+                    </a>
+                    <a class="nav-link complex" href="{{ path('admin_pointage_print_daily') }}" target="_blank">
+                        <i class="bi bi-qr-code-scan"></i>
+                        <div class="link-info">
+                            <span>طباعة رموز اليوم</span>
+                            <span class="sub">فتح واجهة الرموز اليومية</span>
+                        </div>
+                    </a>
+                    {% endif %}
 
                     <div class="nav-section-label">النشر الرقمي</div>
                     <a class="nav-link complex {{ app.request.get('_route') starts with 'admin_content' ? 'active' : '' }}" href="{{ path('admin_content_index') }}">

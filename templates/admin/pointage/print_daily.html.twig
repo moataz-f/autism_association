@@ -1,0 +1,85 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}رموز حضور الجمعية - {{ "now"|date('Y-m-d') }}{% endblock %}
+
+{% block body %}
+<div class="container py-5 text-center">
+    <div class="no-print mb-5">
+        <button onclick="window.print()" class="btn btn-2026-primary btn-lg">
+            <i class="bi bi-printer ms-2"></i> طباعة الرموز للمدخل
+        </button>
+    </div>
+
+    <div class="qr-print-container shadow-lg mx-auto bg-white p-5 rounded-4" style="max-width: 800px; border: 2px solid #EEE;">
+        <div class="mb-5">
+            <img src="{{ asset('assets/images/logo-v2.jpg') }}" height="80" class="mb-3">
+            <h1 class="fw-900 text-navy mb-1">جمعية حلم البراءة</h1>
+            <h4 class="text-muted fw-700">نظام تسجيل الحضور اليومي - {{ "now"|date('d F Y') }}</h4>
+        </div>
+
+        <div class="row g-5">
+            <div class="col-6">
+                <div class="p-4 rounded-4 border border-2 border-success border-opacity-25 h-100">
+                    <h3 class="fw-900 text-success mb-4">تـسـجـيـل الـدخول</h3>
+                    <div id="print-qr-in" class="mx-auto mb-4"></div>
+                    <div class="fw-800 text-success">Check-In</div>
+                    <p class="small text-muted mt-3">استعمل هاتفك لمسح هذا الكود عند الوصول</p>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="p-4 rounded-4 border border-2 border-warning border-opacity-25 h-100">
+                    <h3 class="fw-900 text-warning mb-4">تـسـجـيـل الـخروج</h3>
+                    <div id="print-qr-out" class="mx-auto mb-4"></div>
+                    <div class="fw-800 text-warning">Check-Out</div>
+                    <p class="small text-muted mt-3">استعمل هاتفك لمسح هذا الكود عند المغادرة</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-5 pt-4 border-top">
+            <p class="fw-700 text-navy small">ملاحظة: هذا الرمز يتغير يومياً وتلقائياً لضمان سلامة تسجيل الحضور.</p>
+        </div>
+    </div>
+</div>
+
+<style>
+    #print-qr-in img, #print-qr-out img {
+        width: 280px !important;
+        height: 280px !important;
+        margin: 0 auto;
+        padding: 15px;
+        background: white;
+        border: 1px solid #EEE;
+        border-radius: 20px;
+    }
+    @media print {
+        .no-print { display: none !important; }
+        body { background: white !important; }
+        .container { padding: 0 !important; margin: 0 !important; max-width: none !important; }
+        .qr-print-container { border: none !important; box-shadow: none !important; }
+    }
+</style>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script>
+    {% set dailySecret = "now"|date('Y-m-d') %}
+    
+    new QRCode(document.getElementById("print-qr-in"), {
+        text: "DAILY:IN:{{ dailySecret }}",
+        width: 300,
+        height: 300,
+        colorDark : "#10B981",
+        colorLight : "#ffffff",
+        correctLevel : QRCode.CorrectLevel.H
+    });
+
+    new QRCode(document.getElementById("print-qr-out"), {
+        text: "DAILY:OUT:{{ dailySecret }}",
+        width: 300,
+        height: 300,
+        colorDark : "#F59E0B",
+        colorLight : "#ffffff",
+        correctLevel : QRCode.CorrectLevel.H
+    });
+</script>
+{% endblock %}
