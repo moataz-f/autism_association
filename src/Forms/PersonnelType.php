@@ -1,6 +1,6 @@
 <?php
 // src/Form/PersonnelType.php
-namespace App\Formss;
+namespace App\Forms;
 
 use App\Entity\Personnel;
 use Symfony\Component\Form\AbstractType;

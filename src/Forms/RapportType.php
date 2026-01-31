@@ -1,6 +1,6 @@
 <?php
 // src/Form/RapportType.php
-namespace App\Formss;
+namespace App\Forms;
 
 use App\Entity\Beneficiaire;
 use App\Entity\Rapport;

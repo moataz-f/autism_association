@@ -23,8 +23,17 @@ class DonationRequest
     #[ORM\Column(length: 255)]
     private ?string $localisation = null;
 
-    #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2)]
+    #[ORM\Column(length: 20)]
+    private ?string $type = 'financier'; // financier, materiel
+
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $descriptionMateriel = null;
+
+    #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2, nullable: true)]
     private ?string $montant = null;
+
+    #[ORM\Column(length: 50, unique: true, nullable: true)]
+    private ?string $receiptNumber = null;
 
     #[ORM\Column(length: 20)]
     private ?string $statut = 'pending';
@@ -32,7 +41,7 @@ class DonationRequest
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $createdAt = null;
 
-    #[ORM\ManyToOne(inversedBy: 'donationRequests')]
+    #[ORM\ManyToOne(targetEntity: DonationCampaign::class, inversedBy: 'donationRequests')]
     #[ORM\JoinColumn(nullable: true)]
     private ?DonationCampaign $campaign = null;
 
@@ -79,14 +88,47 @@ class DonationRequest
         return $this;
     }
 
+    public function getType(): ?string
+    {
+        return $this->type;
+    }
+
+    public function setType(string $type): self
+    {
+        $this->type = $type;
+        return $this;
+    }
+
+    public function getDescriptionMateriel(): ?string
+    {
+        return $this->descriptionMateriel;
+    }
+
+    public function setDescriptionMateriel(?string $descriptionMateriel): self
+    {
+        $this->descriptionMateriel = $descriptionMateriel;
+        return $this;
+    }
+
     public function getMontant(): ?string
     {
         return $this->montant;
     }
 
-    public function setMontant(string $montant): self
+    public function setMontant(?string $montant): self
     {
         $this->montant = $montant;
+        return $this;
+    }
+
+    public function getReceiptNumber(): ?string
+    {
+        return $this->receiptNumber;
+    }
+
+    public function setReceiptNumber(?string $receiptNumber): self
+    {
+        $this->receiptNumber = $receiptNumber;
         return $this;
     }
 

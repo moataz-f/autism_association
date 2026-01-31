@@ -1,46 +1,245 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}إضافة تبرع يدوي{% endblock %}
+{% block title %}تسجيل تبرع يدوي{% endblock %}
 
 {% block body %}
-<div class="container py-4">
-    <div class="row justify-content-center">
-        <div class="col-lg-8">
-            <div class="card shadow-sm border-0 rounded-4">
-                <div class="card-header bg-success text-white p-4">
-                    <h3 class="mb-0"><i class="bi bi-plus-circle-fill me-2"></i> تسجيل تبرع يدوي</h3>
-                    <p class="small opacity-75 mb-0 mt-2">استخدم هذا النموذج لتسجيل التبرعات التي تتم مباشرة في مقر الجمعية.</p>
-                </div>
-                <div class="card-body p-4">
-                    {{ form_start(form) }}
-                        <div class="row g-3">
-                            <div class="col-md-6">
-                                {{ form_row(form.nom) }}
+<div class="hero-mini-admin py-5">
+    <div class="container py-4">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <div class="glass-card bento-card border-0 animate__animated animate__fadeInUp">
+                    <div class="glass-header text-white text-center p-5 position-relative overflow-hidden">
+                        <div class="liquid-bg"></div>
+                        <div class="position-relative z-1">
+                            <div class="icon-blob mb-4">
+                                <i class="bi bi-plus-circle-fill"></i>
                             </div>
-                            <div class="col-md-6">
-                                {{ form_row(form.telephone) }}
-                            </div>
-                            <div class="col-12">
-                                {{ form_row(form.localisation) }}
-                            </div>
-                            <div class="col-md-6">
-                                {{ form_row(form.montant) }}
-                            </div>
-                            <div class="col-md-6">
-                                {{ form_row(form.campaign) }}
-                            </div>
+                            <h2 class="fw-800 mb-2">تسجيل تبرع يدوي</h2>
+                            <p class="opacity-75 mb-0 px-lg-5">استخدم هذا النموذج لتسجيل التبرعات التي تتم مباشرة في مقر الجمعية. سيتم تحديث رصيد الحملة فوراً.</p>
                         </div>
+                    </div>
+                    
+                    <div class="card-body p-4 p-lg-5">
+                        {{ form_start(form, {'attr': {'class': 'needs-validation custom-forms', 'novalidate': 'novalidate'}}) }}
+                            <div class="row g-4">
+                                <div class="col-12">
+                                    <label class="form-label-2026 mb-3">نوع التبرع المسجل</label>
+                                    <div class="donation-type-toggle p-2 bg-light rounded-pill d-flex gap-2 mb-2">
+                                        {% for child in form.type %}
+                                            <div class="flex-grow-1">
+                                                {{ form_widget(child, {'attr': {'class': 'btn-check donation-type-input'}}) }}
+                                                <label class="btn btn-2026-toggle w-100 rounded-pill py-2 fw-bold" for="{{ child.vars.id }}">
+                                                    {% if child.vars.value == 'financier' %}
+                                                        <i class="bi bi-cash-stack me-2"></i> تبرع مالي
+                                                    {% else %}
+                                                        <i class="bi bi-box-seam me-2"></i> تبرع عيني
+                                                    {% endif %}
+                                                </label>
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
 
-                        <div class="mt-4 pt-3 border-top text-center text-lg-start">
-                            <button type="submit" class="btn btn-success px-4 py-2 fw-bold">
-                                <i class="bi bi-check-lg me-1"></i> حفظ التبرع وتعديل الرصيد
-                            </button>
-                            <a href="{{ path('admin_donation_request_index') }}" class="btn btn-outline-secondary px-4 py-2 ms-2">إلغاء</a>
-                        </div>
-                    {{ form_end(form) }}
+                                <div class="col-md-6">
+                                    <div class="form-floating-custom mb-3">
+                                        {{ form_widget(form.nom, {'attr': {'class': 'form-control-2026', 'placeholder': 'اسم المتبرع'}}) }}
+                                        {{ form_label(form.nom, 'الأسم واللقب') }}
+                                        <div class="focus-border"></div>
+                                    </div>
+                                    {{ form_errors(form.nom) }}
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-floating-custom mb-3">
+                                        {{ form_widget(form.telephone, {'attr': {'class': 'form-control-2026', 'placeholder': '8 أرقام'}}) }}
+                                        {{ form_label(form.telephone, 'رقم الهاتف') }}
+                                        <div class="focus-border"></div>
+                                    </div>
+                                    {{ form_errors(form.telephone) }}
+                                </div>
+                                <div class="col-12">
+                                    <div class="form-floating-custom mb-3">
+                                        {{ form_widget(form.localisation, {'attr': {'class': 'form-control-2026', 'placeholder': 'العنوان'}}) }}
+                                        {{ form_label(form.localisation, 'الموقع / العنوان') }}
+                                        <div class="focus-border"></div>
+                                    </div>
+                                    {{ form_errors(form.localisation) }}
+                                </div>
+
+                                <div class="col-12" id="material-section" style="display: none;">
+                                    <label class="form-label-2026 mb-2">وصف التبرع العيني</label>
+                                    {{ form_widget(form.descriptionMateriel, {'attr': {'class': 'form-control-2026', 'placeholder': 'مثال: كراسي، ألعاب، أدوات مدرسية...'}}) }}
+                                    {{ form_errors(form.descriptionMateriel) }}
+                                </div>
+
+                                <div class="col-md-6" id="amount-section">
+                                    <label class="form-label-2026 mb-2">المبلغ (د.ت)</label>
+                                    <div class="input-modern-group">
+                                        {{ form_widget(form.montant, {'attr': {'class': 'form-control-2026 text-center fw-bold fs-4'}}) }}
+                                        <div class="input-badge">د.ت</div>
+                                    </div>
+                                    {{ form_errors(form.montant) }}
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label-2026 mb-2">الحملة المرتبطة</label>
+                                    {{ form_widget(form.campaign, {'attr': {'class': 'form-select-2026'}}) }}
+                                    {{ form_errors(form.campaign) }}
+                                </div>
+                            </div>
+
+                            <div class="mt-5 text-center d-flex gap-3">
+                                <button type="submit" class="btn-2026-submit flex-grow-1 py-3">
+                                    <span>حفظ التبرع وتحديث الرصيد</span>
+                                    <i class="bi bi-check-circle ms-2"></i>
+                                </button>
+                                <a href="{{ path('admin_donation_request_index') }}" class="btn btn-outline-light text-muted border-0 fw-bold px-4 d-flex align-items-center">
+                                    <i class="bi bi-x-lg me-1"></i> إلغاء
+                                </a>
+                            </div>
+                            <script>
+                                document.addEventListener('DOMContentLoaded', function() {
+                                    const typeInputs = document.querySelectorAll('.donation-type-input');
+                                    const amountSection = document.getElementById('amount-section');
+                                    const materialSection = document.getElementById('material-section');
+
+                                    function toggleFields() {
+                                        const selectedType = document.querySelector('.donation-type-input:checked').value;
+                                        if (selectedType === 'financier') {
+                                            amountSection.style.display = 'block';
+                                            materialSection.style.display = 'none';
+                                        } else {
+                                            amountSection.style.display = 'none';
+                                            materialSection.style.display = 'block';
+                                        }
+                                    }
+
+                                    typeInputs.forEach(input => {
+                                        input.addEventListener('change', toggleFields);
+                                    });
+
+                                    toggleFields(); // Initial call
+                                });
+                            </script>
+                        {{ form_end(form) }}
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+<style>
+    :root {
+        --primary: #8E97FD;
+        --navy: #3D4451;
+        --periwinkle: #E0E3FF;
+        --shadow-premium: 0 10px 30px rgba(0,0,0,0.03);
+    }
+
+    .hero-mini-admin {
+        background: radial-gradient(circle at top left, #FDFBFA 0%, #F1F4FF 100%);
+        min-height: calc(100vh - 100px);
+    }
+
+    .glass-card {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.4);
+        box-shadow: var(--shadow-premium);
+    }
+
+    .glass-header {
+        border-bottom: 1px solid rgba(142, 151, 253, 0.1);
+        border-radius: 32px 32px 0 0;
+    }
+
+    .liquid-bg {
+        position: absolute;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background: linear-gradient(135deg, #A8E6CF 0%, var(--primary) 100%);
+        opacity: 0.9;
+    }
+
+    .icon-blob {
+        width: 80px;
+        height: 80px;
+        background: rgba(255, 255, 255, 0.2);
+        backdrop-filter: blur(10px);
+        border-radius: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto;
+        font-size: 2.5rem;
+        transform: rotate(-10deg);
+        animation: blobFloat 6s ease-in-out infinite;
+    }
+
+    @keyframes blobFloat {
+        0%, 100% { transform: translateY(0) rotate(-10deg); }
+        50% { transform: translateY(-10px) rotate(5deg); }
+    }
+
+    .form-control-2026, .form-select-2026 {
+        border: 2px solid #F1F4FF;
+        background: #F8FAFF;
+        border-radius: 16px;
+        padding: 1rem 1.25rem;
+        color: var(--navy);
+        font-weight: 600;
+        transition: all 0.3s ease;
+        width: 100%;
+    }
+
+    .form-control-2026:focus {
+        background: #FFF;
+        border-color: var(--primary);
+        outline: none;
+        box-shadow: 0 8px 16px rgba(142, 151, 253, 0.1);
+    }
+
+    .form-label-2026 {
+        color: var(--navy);
+        font-weight: 800;
+        font-size: 0.9rem;
+        display: block;
+    }
+
+    .input-modern-group {
+        position: relative;
+    }
+
+    .input-badge {
+        position: absolute;
+        left: 1rem;
+        top: 50%;
+        transform: translateY(-50%);
+        background: var(--primary-light);
+        color: var(--primary);
+        padding: 0.25rem 0.75rem;
+        border-radius: 10px;
+        font-weight: 900;
+        font-size: 0.8rem;
+    }
+
+    .btn-2026-submit {
+        background: var(--primary);
+        color: white;
+        border: none;
+        border-radius: 20px;
+        font-weight: 800;
+        font-size: 1.1rem;
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 10px 25px rgba(142, 151, 253, 0.3);
+    }
+
+    .btn-2026-submit:hover {
+        transform: translateY(-5px) scale(1.02);
+        box-shadow: 0 15px 30px rgba(142, 151, 253, 0.4);
+        background: #7b84e8;
+    }
+</style>
 {% endblock %}
+

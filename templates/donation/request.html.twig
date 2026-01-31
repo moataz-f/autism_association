@@ -3,55 +3,125 @@
 {% block title %}طلب تبرع إلكتروني{% endblock %}
 
 {% block body %}
-<div class="container py-5">
-    <div class="row justify-content-center">
-        <div class="col-lg-8">
-            <div class="card border-0 shadow-lg rounded-4 overflow-hidden">
-                <div class="bg-primary p-5 text-white text-center">
-                    <i class="bi bi-heart-fill mb-3" style="font-size: 3rem;"></i>
-                    <h2 class="fw-900 mb-2">تبرع إلكتروني</h2>
-                    <p class="opacity-75 mb-0">شكراً لمساهمتك في دعم أطفال التوحد. يرجى ملء النموذج التالي وسنقوم بالتواصل معك لتنسيق عملية التبرع.</p>
-                </div>
-                <div class="card-body p-5">
-                    {{ form_start(form, {'attr': {'class': 'needs-validation', 'novalidate': 'novalidate'}}) }}
-                        <div class="row g-4">
-                            <div class="col-md-6">
-                                {{ form_label(form.nom) }}
-                                {{ form_widget(form.nom, {'attr': {'class': 'form-control form-control-lg rounded-3', 'placeholder': 'الأسم الثلاثي'}}) }}
-                                {{ form_errors(form.nom) }}
+<div class="hero-mini py-5">
+    <div class="container py-4">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="glass-card bento-card border-0 animate__animated animate__fadeInUp">
+                    <div class="glass-header text-white text-center p-5 position-relative overflow-hidden">
+                        <div class="liquid-bg"></div>
+                        <div class="position-relative z-1">
+                            <div class="icon-blob mb-4">
+                                <i class="bi bi-heart-fill"></i>
                             </div>
-                            <div class="col-md-6">
-                                {{ form_label(form.telephone) }}
-                                {{ form_widget(form.telephone, {'attr': {'class': 'form-control form-control-lg rounded-3', 'placeholder': '+216 -- --- ---'}}) }}
-                                {{ form_errors(form.telephone) }}
-                            </div>
-                            <div class="col-12">
-                                {{ form_label(form.localisation) }}
-                                {{ form_widget(form.localisation, {'attr': {'class': 'form-control form-control-lg rounded-3', 'placeholder': 'المدينة، الحي...'}}) }}
-                                {{ form_errors(form.localisation) }}
-                            </div>
-                            <div class="col-md-6">
-                                {{ form_label(form.montant) }}
-                                <div class="input-group">
-                                    {{ form_widget(form.montant, {'attr': {'class': 'form-control form-control-lg rounded-start-3', 'placeholder': '0.00'}}) }}
-                                    <span class="input-group-text bg-light border-start-0 rounded-end-3">د.ت</span>
+                            <h2 class="fw-800 mb-2">تبرع إلكتروني</h2>
+                            <p class="opacity-75 mb-0 px-lg-5">شكراً لمساهمتك في دعم أطفال التوحد. يرجى ملء النموذج التالي وسنقوم بالتواصل معك لتنسيق عملية التبرع.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="card-body p-4 p-lg-5">
+                        {{ form_start(form, {'attr': {'class': 'needs-validation custom-forms', 'novalidate': 'novalidate'}}) }}
+                            <div class="row g-4">
+                                <div class="col-12">
+                                    <label class="form-label-2026 mb-3">نوع المساهمة</label>
+                                    <div class="donation-type-toggle p-2 bg-light rounded-pill d-flex gap-2">
+                                        {% for child in form.type %}
+                                            <div class="flex-grow-1">
+                                                {{ form_widget(child, {'attr': {'class': 'btn-check donation-type-input'}}) }}
+                                                <label class="btn btn-2026-toggle w-100 rounded-pill py-2 fw-bold" for="{{ child.vars.id }}">
+                                                    {% if child.vars.value == 'financier' %}
+                                                        <i class="bi bi-cash-stack me-2"></i> تبرع مالي
+                                                    {% else %}
+                                                        <i class="bi bi-box-seam me-2"></i> تبرع عيني
+                                                    {% endif %}
+                                                </label>
+                                            </div>
+                                        {% endfor %}
+                                    </div>
                                 </div>
-                                {{ form_errors(form.montant) }}
-                            </div>
-                            <div class="col-md-6">
-                                {{ form_label(form.campaign) }}
-                                {{ form_widget(form.campaign, {'attr': {'class': 'form-select form-select-lg rounded-3'}}) }}
-                                {{ form_errors(form.campaign) }}
-                            </div>
-                        </div>
 
-                        <div class="mt-5 text-center">
-                            <button type="submit" class="btn btn-primary btn-lg px-5 py-3 rounded-pill fw-bold shadow-sm">
-                                إرسال طلب التبرع <i class="bi bi-send ms-2"></i>
-                            </button>
-                            <a href="{{ path('app_donation_index') }}" class="btn btn-link text-muted mt-3 d-block">إلغاء والعودة</a>
-                        </div>
-                    {{ form_end(form) }}
+                                <div class="col-md-6">
+                                    <div class="form-floating-custom mb-3">
+                                        {{ form_widget(form.nom, {'attr': {'class': 'form-control-2026', 'placeholder': 'الأسم الثلاثي'}}) }}
+                                        {{ form_label(form.nom) }}
+                                        <div class="focus-border"></div>
+                                    </div>
+                                    {{ form_errors(form.nom) }}
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-floating-custom mb-3">
+                                        {{ form_widget(form.telephone, {'attr': {'class': 'form-control-2026', 'placeholder': '+216 -- --- ---'}}) }}
+                                        {{ form_label(form.telephone) }}
+                                        <div class="focus-border"></div>
+                                    </div>
+                                    {{ form_errors(form.telephone) }}
+                                </div>
+                                <div class="col-12">
+                                    <div class="form-floating-custom mb-3">
+                                        {{ form_widget(form.localisation, {'attr': {'class': 'form-control-2026', 'placeholder': 'المدينة، الحي...'}}) }}
+                                        {{ form_label(form.localisation) }}
+                                        <div class="focus-border"></div>
+                                    </div>
+                                    {{ form_errors(form.localisation) }}
+                                </div>
+
+                                <div class="col-12" id="material-section" style="display: none;">
+                                    <label class="form-label-2026 mb-2">وصف التبرع العيني</label>
+                                    {{ form_widget(form.descriptionMateriel, {'attr': {'class': 'form-control-2026', 'placeholder': 'مثال: كراسي، ألعاب، أدوات مدرسية...'}}) }}
+                                    {{ form_errors(form.descriptionMateriel) }}
+                                </div>
+
+                                <div class="col-md-6" id="amount-section">
+                                    <label class="form-label-2026 mb-2">المبلغ (د.ت)</label>
+                                    <div class="input-modern-group">
+                                        {{ form_widget(form.montant, {'attr': {'class': 'form-control-2026 text-center fw-bold fs-4', 'placeholder': '0.00'}}) }}
+                                        <div class="input-badge">د.ت</div>
+                                    </div>
+                                    {{ form_errors(form.montant) }}
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label-2026 mb-2">الحملة</label>
+                                    {{ form_widget(form.campaign, {'attr': {'class': 'form-select-2026'}}) }}
+                                    {{ form_errors(form.campaign) }}
+                                </div>
+                            </div>
+
+                            <div class="mt-5 text-center">
+                                <button type="submit" class="btn-2026-submit w-100 py-3 mb-3">
+                                    <span>إرسال طلب التبرع</span>
+                                    <i class="bi bi-arrow-left ms-2"></i>
+                                </button>
+                                <a href="{{ path('app_donation_index') }}" class="text-muted text-decoration-none small transition-all">
+                                    <i class="bi bi-chevron-right me-1"></i> العودة لقائمة الحملات
+                                </a>
+                            </div>
+
+                            <script>
+                                document.addEventListener('DOMContentLoaded', function() {
+                                    const typeInputs = document.querySelectorAll('.donation-type-input');
+                                    const amountSection = document.getElementById('amount-section');
+                                    const materialSection = document.getElementById('material-section');
+
+                                    function toggleFields() {
+                                        const selectedType = document.querySelector('.donation-type-input:checked').value;
+                                        if (selectedType === 'financier') {
+                                            amountSection.style.display = 'block';
+                                            materialSection.style.display = 'none';
+                                        } else {
+                                            amountSection.style.display = 'none';
+                                            materialSection.style.display = 'block';
+                                        }
+                                    }
+
+                                    typeInputs.forEach(input => {
+                                        input.addEventListener('change', toggleFields);
+                                    });
+
+                                    toggleFields(); // Initial call
+                                });
+                            </script>
+                        {{ form_end(form) }}
+                    </div>
                 </div>
             </div>
         </div>
@@ -59,14 +129,143 @@
 </div>
 
 <style>
-    .form-control:focus, .form-select:focus {
-        border-color: var(--primary);
-        box-shadow: 0 0 0 0.25rem rgba(142, 151, 253, 0.25);
+    :root {
+        --primary: #8E97FD;
+        --primary-light: #C2C9FF;
+        --navy: #3D4451;
+        --shadow-premium: 0 20px 40px rgba(142, 151, 253, 0.1);
     }
-    label {
-        font-weight: 700;
-        margin-bottom: 0.5rem;
+
+    .hero-mini {
+        background: radial-gradient(circle at top left, #FDFBFA 0%, #F1F4FF 100%);
+        min-height: 100vh;
+    }
+
+    .glass-card {
+        background: rgba(255, 255, 255, 0.9);
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.4);
+        border-radius: 32px;
+        box-shadow: var(--shadow-premium);
+    }
+
+    .glass-header {
+        border-bottom: 1px solid rgba(142, 151, 253, 0.1);
+        border-radius: 32px 32px 0 0;
+    }
+
+    .liquid-bg {
+        position: absolute;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background: linear-gradient(135deg, var(--primary) 0%, #6C757D 100%);
+        opacity: 0.9;
+    }
+
+    .icon-blob {
+        width: 80px;
+        height: 80px;
+        background: rgba(255, 255, 255, 0.2);
+        backdrop-filter: blur(10px);
+        border-radius: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto;
+        font-size: 2.5rem;
+        transform: rotate(-10deg);
+        animation: blobFloat 6s ease-in-out infinite;
+    }
+
+    @keyframes blobFloat {
+        0%, 100% { transform: translateY(0) rotate(-10deg); }
+        50% { transform: translateY(-10px) rotate(5deg); }
+    }
+
+    .form-control-2026, .form-select-2026 {
+        border: 2px solid #F1F4FF;
+        background: #F8FAFF;
+        border-radius: 16px;
+        padding: 1rem 1.25rem;
         color: var(--navy);
+        font-weight: 600;
+        transition: all 0.3s ease;
+        width: 100%;
     }
+
+    .form-control-2026:focus {
+        background: #FFF;
+        border-color: var(--primary);
+        outline: none;
+        box-shadow: 0 8px 16px rgba(142, 151, 253, 0.1);
+    }
+
+    .form-label-2026 {
+        color: var(--navy);
+        font-weight: 800;
+        font-size: 0.9rem;
+        display: block;
+    }
+
+    .input-modern-group {
+        position: relative;
+    }
+
+    .input-badge {
+        position: absolute;
+        left: 1rem;
+        top: 50%;
+        transform: translateY(-50%);
+        background: var(--primary-light);
+        color: var(--primary);
+        padding: 0.25rem 0.75rem;
+        border-radius: 10px;
+        font-weight: 900;
+        font-size: 0.8rem;
+    }
+
+    .btn-2026-submit {
+        background: var(--primary);
+        color: white;
+        border: none;
+        border-radius: 20px;
+        font-weight: 800;
+        font-size: 1.1rem;
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 10px 25px rgba(142, 151, 253, 0.3);
+    }
+
+    .btn-2026-submit:hover {
+        transform: translateY(-5px) scale(1.02);
+        box-shadow: 0 15px 30px rgba(142, 151, 253, 0.4);
+        background: #7b84e8;
+    }
+
+    .btn-2026-toggle {
+        background: transparent;
+        color: var(--navy);
+        border: none;
+        transition: all 0.3s ease;
+        opacity: 0.6;
+    }
+
+    .btn-check:checked + .btn-2026-toggle {
+        background: white;
+        color: var(--primary);
+        box-shadow: 0 4px 12px rgba(142, 151, 253, 0.15);
+        opacity: 1;
+    }
+
+    .btn-2026-toggle:hover {
+        opacity: 0.8;
+    }
+
+    .transition-all { transition: all 0.3s ease; }
+    .transition-all:hover { color: var(--primary) !important; transform: translateX(-5px); }
+
+    /* RTL specific adjustments */
+    body[dir="rtl"] .btn-2026-submit i { margin-right: 10px; margin-left: 0; }
 </style>
 {% endblock %}

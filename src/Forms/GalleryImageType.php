@@ -1,6 +1,6 @@
 <?php
 // src/Form/GalleryImageType.php
-namespace App\Formss;
+namespace App\Forms;
 
 use App\Entity\GalleryImage;
 use Symfony\Component\Form\AbstractType;

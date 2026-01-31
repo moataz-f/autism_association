@@ -4,7 +4,7 @@ namespace App\Controller\Admin;
 
 use App\Entity\DonationCampaign;
 use App\Entity\DonationRequest;
-use App\Formss\DonationRequestType;
+use App\Forms\DonationRequestType;
 use App\Repository\DonationRequestRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -20,6 +20,17 @@ class DonationRequestController extends AbstractController
     {
         return $this->render('admin/donation_request/index.html.twig', [
             'requests' => $repository->findBy([], ['createdAt' => 'DESC']),
+            'stats' => [
+                'pending' => $repository->count(['statut' => 'pending']),
+                'confirmed' => $repository->count(['statut' => 'confirmed']),
+                'count_materiel' => $repository->count(['type' => 'materiel', 'statut' => 'confirmed']),
+                'total_amount' => $repository->createQueryBuilder('r')
+                    ->select('SUM(r.montant)')
+                    ->where('r.statut = :status')
+                    ->setParameter('status', 'confirmed')
+                    ->getQuery()
+                    ->getSingleScalarResult() ?? 0,
+            ]
         ]);
     }
 
@@ -29,34 +40,48 @@ class DonationRequestController extends AbstractController
         if ($donationRequest->getStatut() === 'pending') {
             $donationRequest->setStatut('confirmed');
             
-            $campaign = $donationRequest->getCampaign();
-            if ($campaign) {
+            // Generate receipt number if not exists
+            if (!$donationRequest->getReceiptNumber()) {
+                $donationRequest->setReceiptNumber('REC-' . date('Ymd') . '-' . sprintf('%04d', $donationRequest->getId()));
+            }
+
+            if ($donationRequest->getType() === 'financier' && $donationRequest->getCampaign()) {
+                $campaign = $donationRequest->getCampaign();
                 $newTotal = (float) $campaign->getMontantCollecte() + (float) $donationRequest->getMontant();
                 $campaign->setMontantCollecte((string) $newTotal);
 
-                // Auto-switch logic: if campaign is filled
+                // Auto-switch logic
                 if ($campaign->isFilled()) {
                     $campaign->setPrincipale(false);
-                    $campaign->setActif(false); // Optionally deactivate filled campaign or just remove principal status
-
-                    // Find next available campaign to set as principal
+                    $campaign->setActif(false);
                     $nextCampaign = $em->getRepository(DonationCampaign::class)->findOneBy(
                         ['actif' => true, 'principale' => false],
                         ['id' => 'ASC']
                     );
-                    
                     if ($nextCampaign) {
                         $nextCampaign->setPrincipale(true);
-                        $this->addFlash('info', 'الحملة اكتملت! تم تحويل الحملة الرئيسية تلقائياً إلى : ' . $nextCampaign->getTitre());
                     }
                 }
             }
             
             $em->flush();
-            $this->addFlash('success', 'تم تأكيد التبرع وإضافته للحملة بنجاح.');
+            $this->addFlash('success', 'تم تأكيد التبرع وإصدار رقم الوصل: ' . $donationRequest->getReceiptNumber());
         }
 
         return $this->redirectToRoute('admin_donation_request_index');
+    }
+
+    #[Route('/{id}/receipt', name: 'admin_donation_request_receipt', methods: ['GET'])]
+    public function receipt(DonationRequest $request): Response
+    {
+        if ($request->getStatut() !== 'confirmed') {
+            $this->addFlash('error', 'لا يمكن إصدار وصل لتبرع غير مؤكد.');
+            return $this->redirectToRoute('admin_donation_request_index');
+        }
+
+        return $this->render('admin/donation_request/receipt.html.twig', [
+            'donation' => $request
+        ]);
     }
 
     #[Route('/{id}/reject', name: 'admin_donation_request_reject', methods: ['POST'])]
@@ -82,7 +107,7 @@ class DonationRequestController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $campaign = $donationRequest->getCampaign();
-            if ($campaign) {
+            if ($donationRequest->getType() === 'financier' && $campaign) {
                 $newTotal = (float) $campaign->getMontantCollecte() + (float) $donationRequest->getMontant();
                 $campaign->setMontantCollecte((string) $newTotal);
 
@@ -101,9 +126,14 @@ class DonationRequestController extends AbstractController
             }
 
             $em->persist($donationRequest);
-            $em->flush();
+            $em->flush(); // flush once to get ID for receipt number
 
-            $this->addFlash('success', 'تم إضافة التبرع اليدوي بنجاح وتحديث الحملة.');
+            if (!$donationRequest->getReceiptNumber()) {
+                $donationRequest->setReceiptNumber('REC-' . date('Ymd') . '-' . sprintf('%04d', $donationRequest->getId()));
+                $em->flush();
+            }
+
+            $this->addFlash('success', 'تم إضافة التبرع اليدوي بنجاح. رقم الوصل: ' . $donationRequest->getReceiptNumber());
             return $this->redirectToRoute('admin_donation_request_index');
         }
 

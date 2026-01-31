@@ -1,6 +1,6 @@
 <?php
 // src/Form/BeneficiaireType.php
-namespace App\Formss;
+namespace App\Forms;
 
 use App\Entity\Beneficiaire;
 use App\Entity\Famille;

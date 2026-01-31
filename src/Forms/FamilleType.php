@@ -1,6 +1,6 @@
 <?php
 // src/Form/FamilleType.php
-namespace App\Formss;
+namespace App\Forms;
 
 use App\Entity\Famille;
 use Symfony\Component\Form\AbstractType;

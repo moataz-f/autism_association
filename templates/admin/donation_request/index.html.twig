@@ -10,65 +10,202 @@
     </a>
 </div>
 
-<div class="card shadow-sm border-0">
-    <div class="card-body">
-        <div class="table-responsive">
-            <table class="table table-hover align-middle">
-                <thead class="table-light">
-                    <tr>
-                        <th>التاريخ</th>
-                        <th>المتبرع</th>
-                        <th>الهاتف</th>
-                        <th>الموقع</th>
-                        <th>المبلغ</th>
-                        <th>الحملة</th>
-                        <th>الحالة</th>
-                        <th>الإجراءات</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for request in requests %}
-                    <tr>
-                        <td class="small">{{ request.createdAt|date('Y-m-d H:i') }}</td>
-                        <td class="fw-bold">{{ request.nom }}</td>
-                        <td>{{ request.telephone }}</td>
-                        <td>{{ request.localisation }}</td>
-                        <td class="text-primary fw-bold">{{ request.montant }} د.ت</td>
-                        <td>{{ request.campaign ? request.campaign.titre : '-' }}</td>
-                        <td>
-                            {% if request.statut == 'pending' %}
-                                <span class="badge bg-warning text-dark">قيد الانتظار</span>
-                            {% elseif request.statut == 'confirmed' %}
-                                <span class="badge bg-success">تم التأكيد</span>
-                            {% else %}
-                                <span class="badge bg-danger">مرفوض</span>
-                            {% endif %}
-                        </td>
-                        <td>
-                            {% if request.statut == 'pending' %}
-                                <div class="d-flex gap-2">
-                                    <form method="post" action="{{ path('admin_donation_request_confirm', {id: request.id}) }}" onsubmit="return confirm('هل تريد تأكيد تسلم هذا المبلغ؟');">
-                                        <button class="btn btn-sm btn-success">
-                                            <i class="bi bi-check-lg"></i> تأكيد
-                                        </button>
-                                    </form>
-                                    <form method="post" action="{{ path('admin_donation_request_reject', {id: request.id}) }}" onsubmit="return confirm('هل تريد رفض هذا الطلب؟');">
-                                        <button class="btn btn-sm btn-outline-danger">
-                                            <i class="bi bi-x-lg"></i> رفض
-                                        </button>
-                                    </form>
-                                </div>
-                            {% endif %}
-                        </td>
-                    </tr>
-                    {% else %}
-                    <tr>
-                        <td colspan="8" class="text-center py-4 text-muted">لا توجد طلبات تبرع حالياً</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+<div class="row g-4 mb-5">
+    <div class="col-md-3">
+        <div class="stat-card p-4 rounded-32 bg-white shadow-premium animate__animated animate__fadeIn">
+            <div class="p-3 bg-primary-light rounded-20 mb-3 d-inline-block">
+                <i class="bi bi-hourglass-split text-primary fs-4"></i>
+            </div>
+            <div class="stat-label text-muted small fw-bold mb-1">قيد الانتظار</div>
+            <div class="stat-value fw-900 fs-3">{{ stats.pending }}</div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="stat-card p-4 rounded-32 bg-white shadow-premium animate__animated animate__fadeIn" style="animation-delay: 0.1s">
+            <div class="p-3 bg-success-light rounded-20 mb-3 d-inline-block">
+                <i class="bi bi-check-circle-fill text-success fs-4"></i>
+            </div>
+            <div class="stat-label text-muted small fw-bold mb-1">تبرعات مؤكدة</div>
+            <div class="stat-value fw-900 fs-3">{{ stats.confirmed }}</div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="stat-card p-4 rounded-32 bg-white shadow-premium animate__animated animate__fadeIn" style="animation-delay: 0.2s">
+            <div class="p-3 bg-info-light rounded-20 mb-3 d-inline-block">
+                <i class="bi bi-box-seam-fill text-info fs-4"></i>
+            </div>
+            <div class="stat-label text-muted small fw-bold mb-1">تبرعات عينية</div>
+            <div class="stat-value fw-900 fs-3">{{ stats.count_materiel }}</div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="stat-card p-4 rounded-32 bg-white shadow-premium animate__animated animate__fadeIn" style="animation-delay: 0.3s">
+            <div class="p-3 bg-warning-light rounded-20 mb-3 d-inline-block">
+                <i class="bi bi-cash-stack text-warning fs-4"></i>
+            </div>
+            <div class="stat-label text-muted small fw-bold mb-1">إجمالي المبالغ</div>
+            <div class="stat-value fw-900 fs-3 text-primary">{{ stats.total_amount|number_format(0) }} <small class="fs-6">د.ت</small></div>
         </div>
     </div>
 </div>
+
+<div class="glass-card p-0 overflow-hidden border-0 shadow-premium">
+    <div class="card-header bg-white py-3 border-0 d-flex justify-content-between align-items-center">
+        <h4 class="mb-0 text-navy fw-800">قائمة العمليات</h4>
+        <div class="input-group w-auto">
+            <span class="input-group-text bg-light border-0"><i class="bi bi-search"></i></span>
+            <input type="text" id="donationSearch" class="form-control bg-light border-0" placeholder="بحث باسم المتبرع...">
+        </div>
+    </div>
+    <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0" id="donationsTable">
+            <thead>
+                <tr>
+                    <th class="ps-4">المتبرع</th>
+                    <th>النوع</th>
+                    <th>التفاصيل / المبلغ</th>
+                    <th>الحملة</th>
+                    <th>التاريخ</th>
+                    <th>الحالة</th>
+                    <th class="text-center pe-4">الإجراءات</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for request in requests %}
+                    <tr class="animate__animated animate__fadeIn searchable-row" data-name="{{ request.nom|lower }}">
+                        <td class="ps-4">
+                            <div class="fw-bold">{{ request.nom }}</div>
+                            <div class="small text-muted"><i class="bi bi-telephone me-1"></i> {{ request.telephone }}</div>
+                        </td>
+                        <td>
+                            {% if request.type == 'financier' %}
+                                <span class="badge bg-light text-navy rounded-pill px-3">
+                                    <i class="bi bi-cash-stack me-1"></i> مالي
+                                </span>
+                            {% else %}
+                                <span class="badge bg-light text-info rounded-pill px-3">
+                                    <i class="bi bi-box-seam me-1"></i> عيني
+                                </span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if request.type == 'financier' %}
+                                <div class="fw-900 text-navy">{{ request.montant|number_format(3) }} د.ت</div>
+                            {% else %}
+                                <div class="small text-muted text-truncate" style="max-width: 200px;" title="{{ request.descriptionMateriel }}">
+                                    {{ request.descriptionMateriel }}
+                                </div>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if request.campaign %}
+                                <span class="small fw-bold opacity-75">{{ request.campaign.titre }}</span>
+                            {% else %}
+                                <span class="text-muted small">تبرع عام</span>
+                            {% endif %}
+                        </td>
+                        <td>{{ request.createdAt|date('Y/m/d H:i') }}</td>
+                        <td>
+                            {% if request.statut == 'pending' %}
+                                <span class="status-badge status-pending">
+                                    <i class="bi bi-clock-history me-1"></i> معلق
+                                </span>
+                            {% elseif request.statut == 'confirmed' %}
+                                <span class="status-badge status-confirmed">
+                                    <i class="bi bi-check-circle-fill me-1"></i> مؤكد
+                                </span>
+                            {% else %}
+                                <span class="status-badge status-rejected">
+                                    <i class="bi bi-x-circle-fill me-1"></i> مرفوض
+                                </span>
+                            {% endif %}
+                        </td>
+                        <td class="text-center pe-4">
+                            <div class="d-flex justify-content-center gap-2">
+                                {% if request.statut == 'pending' %}
+                                    <form action="{{ path('admin_donation_request_confirm', {'id': request.id}) }}" method="post" class="d-inline" onsubmit="return confirm('تأكيد استلام هذا التبرع؟');">
+                                        <button type="submit" class="btn btn-sm btn-success-soft rounded-pill px-3 fw-bold" title="تأكيد">
+                                            <i class="bi bi-check-lg"></i>
+                                        </button>
+                                    </form>
+                                    <form action="{{ path('admin_donation_request_reject', {'id': request.id}) }}" method="post" class="d-inline" onsubmit="return confirm('رفض هذا الطلب؟');">
+                                        <button type="submit" class="btn btn-sm btn-danger-soft rounded-pill px-3 fw-bold" title="رفض">
+                                            <i class="bi bi-x-lg"></i>
+                                        </button>
+                                    </form>
+                                {% elseif request.statut == 'confirmed' %}
+                                    <a href="{{ path('admin_donation_request_receipt', {'id': request.id}) }}" target="_blank" class="btn btn-sm btn-primary-soft rounded-pill px-3 fw-bold">
+                                        <i class="bi bi-printer me-1"></i> الوصل
+                                    </a>
+                                {% endif %}
+                            </div>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<style>
+    :root {
+        --primary: #8E97FD;
+        --navy: #3D4451;
+        --shadow-premium: 0 10px 30px rgba(0,0,0,0.03);
+    }
+    
+    .rounded-32 { border-radius: 32px !important; }
+    .rounded-20 { border-radius: 20px !important; }
+    .bg-primary-light { background-color: #F1F4FF; }
+    .bg-success-light { background-color: #ECFDF5; }
+    .bg-info-light { background-color: #F0F9FF; }
+    .bg-warning-light { background-color: #FFFBEB; }
+    
+    .stat-card {
+        border-radius: 32px;
+        transition: transform 0.3s ease;
+    }
+    .stat-card:hover { transform: translateY(-5px); }
+    
+    .btn-success-soft { background: #ECFDF5; color: #059669; }
+    .btn-success-soft:hover { background: #059669; color: white; }
+    
+    .btn-danger-soft { background: #FEF2F2; color: #DC2626; }
+    .btn-danger-soft:hover { background: #DC2626; color: white; }
+    
+    .btn-primary-soft { background: #F1F4FF; color: var(--primary); }
+    .btn-primary-soft:hover { background: var(--primary); color: white; }
+    
+    .status-badge {
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        font-weight: 800;
+        font-size: 0.75rem;
+    }
+    .status-pending { background: #FFF7ED; color: #EA580C; }
+    .status-confirmed { background: #ECFDF5; color: #059669; }
+    .status-rejected { background: #FEF2F2; color: #DC2626; }
+
+    #donationSearch:focus {
+        box-shadow: none;
+        background: #FFF !important;
+        border: 1px solid var(--primary) !important;
+    }
+</style>
+
+<script>
+document.getElementById('donationSearch').addEventListener('keyup', function() {
+    let filter = this.value.toLowerCase();
+    let rows = document.querySelectorAll('.searchable-row');
+    
+    rows.forEach(row => {
+        let name = row.getAttribute('data-name');
+        if(name.indexOf(filter) > -1) {
+            row.style.display = "";
+        } else {
+            row.style.display = "none";
+        }
+    });
+});
+</script>
 {% endblock %}

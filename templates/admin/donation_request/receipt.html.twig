@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>وصل تبرع - {{ donation.receiptNumber }}</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&display=swap');
+        body { font-family: 'Amiri', serif; padding: 40px; color: #333; line-height: 1.6; }
+        .receipt-container { 
+            max-width: 800px; margin: 0 auto; border: 2px solid #eee; padding: 40px;
+            position: relative; overflow: hidden;
+        }
+        .header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #8E97FD; padding-bottom: 20px; margin-bottom: 30px; }
+        .logo-area { text-align: right; }
+        .logo-area h1 { margin: 0; color: #3D4451; font-size: 24px; }
+        .logo-area p { margin: 5px 0 0; font-size: 14px; color: #666; }
+        .receipt-title { text-align: center; margin-bottom: 40px; }
+        .receipt-title h2 { display: inline-block; border-bottom: 2px solid #333; padding-bottom: 5px; }
+        .details-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 40px; }
+        .detail-item { border-bottom: 1px dotted #ccc; padding-bottom: 5px; }
+        .label { font-weight: bold; color: #666; margin-left: 10px; }
+        .value { color: #333; }
+        .description-box { border: 1px solid #eee; background: #fafafa; padding: 20px; border-radius: 8px; margin-bottom: 40px; }
+        .footer { display: flex; justify-content: space-between; margin-top: 60px; }
+        .signature { text-align: center; width: 200px; }
+        .signature-line { border-top: 1px solid #333; margin-top: 50px; }
+        .stamp { position: absolute; bottom: 40px; left: 50%; transform: translateX(-50%); opacity: 0.1; font-size: 100px; font-weight: bold; color: #8E97FD; }
+        @media print {
+            .no-print { display: none; }
+            body { padding: 0; }
+            .receipt-container { border: none; }
+        }
+        .print-btn { background: #8E97FD; color: white; border: none; padding: 10px 25px; border-radius: 20px; font-weight: bold; cursor: pointer; float: left; }
+    </style>
+</head>
+<body>
+    <button class="print-btn no-print" onclick="window.print()">طباعة الوصل <i class="bi bi-printer"></i></button>
+
+    <div class="receipt-container">
+        <div class="stamp">جمعية التوحد</div>
+        
+        <div class="header">
+            <div class="logo-area">
+                <h1>جمعية العمل من أجل التوحد</h1>
+                <p>تونس - تبرعكم يصنع مستقبلاً أفضل</p>
+            </div>
+            <div class="receipt-info" style="text-align: left;">
+                <div style="font-weight: bold; color: #8E97FD;">رقم الوصل: {{ donation.receiptNumber }}</div>
+                <div style="font-size: 14px; color: #666;">التاريخ: {{ donation.createdAt|date('Y/m/d') }}</div>
+            </div>
+        </div>
+
+        <div class="receipt-title">
+            <h2>وصل استلام تبرع</h2>
+        </div>
+
+        <div class="details-grid">
+            <div class="detail-item">
+                <span class="label">اسم المتبرع:</span>
+                <span class="value">{{ donation.nom }}</span>
+            </div>
+            <div class="detail-item">
+                <span class="label">رقم الهاتف:</span>
+                <span class="value">{{ donation.telephone }}</span>
+            </div>
+            <div class="detail-item">
+                <span class="label">نوع التبرع:</span>
+                <span class="value">{{ donation.type == 'financier' ? 'مالي (نقدي)' : 'عيني (مستلزمات)' }}</span>
+            </div>
+            <div class="detail-item">
+                <span class="label">الحملة:</span>
+                <span class="value">{{ donation.campaign ? donation.campaign.titre : 'تبرع عام للمركز' }}</span>
+            </div>
+        </div>
+
+        {% if donation.type == 'financier' %}
+            <div class="amount-area" style="text-align: center; padding: 20px; background: #F1F4FF; border-radius: 12px; margin-bottom: 40px;">
+                <div style="font-size: 18px; color: #666; margin-bottom: 10px;">المبلغ المستلم</div>
+                <div style="font-size: 32px; font-weight: bold; color: #8E97FD;">{{ donation.montant|number_format(3) }} د.ت</div>
+            </div>
+        {% else %}
+            <div class="description-box">
+                <div class="label" style="margin-bottom: 10px; display: block;">وصف التبرع العيني:</div>
+                <div class="value">{{ donation.descriptionMateriel }}</div>
+            </div>
+        {% endif %}
+
+        <div class="footer">
+            <div class="signature">
+                <p>توقيع المتبرع</p>
+                <div class="signature-line"></div>
+            </div>
+            <div class="signature">
+                <p>ختم الجمعية</p>
+                <div class="signature-line"></div>
+            </div>
+        </div>
+
+        <div style="margin-top: 40px; font-size: 12px; color: #999; text-align: center;">
+            شكراً جزيلاً لمساهمتكم الكريمة. هذا الوصل رسمي ومعتمد من قبل الجمعية.
+        </div>
+    </div>
+</body>
+</html>

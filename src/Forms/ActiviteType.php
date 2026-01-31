@@ -1,6 +1,6 @@
 <?php
 // src/Form/ActiviteType.php
-namespace App\Formss;
+namespace App\Forms;
 
 use App\Entity\Activite;
 use App\Entity\Beneficiaire;
