@@ -21,7 +21,8 @@
                     <thead class="bg-light">
                         <tr>
                             <th class="ps-4">الموظف</th>
-                            <th>الدور</th>
+                            <th>الدور والقسم</th>
+                            <th>الجدول الزمني</th>
                             <th>معلومات الاتصال</th>
                             <th>حساب المستخدم</th>
                             <th>الحالة</th>
@@ -43,19 +44,29 @@
                                 </div>
                             </td>
                             <td>
-                                <span class="badge bg-light text-dark border">{{ personnel.role }}</span>
-                                {% if personnel.specialisation %}
-                                    <div class="small text-muted mt-1">{{ personnel.specialisation|slice(0, 30) }}...</div>
+                                <div class="fw-800 text-dark">{{ personnel.role }}</div>
+                                {% if personnel.service %}
+                                    <span class="badge bg-light text-muted border-0 p-0 fw-600">{{ personnel.service }}</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if personnel.horaireDebut and personnel.horaireFin %}
+                                    <div class="small fw-800 text-navy">
+                                        <i class="bi bi-clock me-1"></i>
+                                        {{ personnel.horaireDebut|date('H:i') }} - {{ personnel.horaireFin|date('H:i') }}
+                                    </div>
+                                {% else %}
+                                    <span class="text-muted small">غير محدد</span>
                                 {% endif %}
                             </td>
                             <td>
                                 <div class="d-flex align-items-center mb-1">
                                     <i class="bi bi-envelope text-muted me-2 small"></i>
-                                    <span>{{ personnel.email }}</span>
+                                    <span class="small">{{ personnel.email }}</span>
                                 </div>
                                 <div class="d-flex align-items-center">
                                     <i class="bi bi-telephone text-muted me-2 small"></i>
-                                    <span>{{ personnel.telephone }}</span>
+                                    <span class="small">{{ personnel.telephone }}</span>
                                 </div>
                             </td>
                             <td>

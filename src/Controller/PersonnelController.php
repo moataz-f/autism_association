@@ -78,10 +78,14 @@ class PersonnelController extends AbstractController
             // Determine/Update roles
             $roles = $user->getRoles();
             $roles[] = 'ROLE_PERSONNEL';
-            if ($personnel->getRole() === 'Administrateur') {
+            
+            $pRole = $personnel->getRole();
+            if ($pRole === 'Administrateur' || $pRole === 'Directeur') {
                 $roles[] = 'ROLE_ADMIN';
-            } elseif ($personnel->getRole() === 'Éducateur') {
+            } elseif ($pRole === 'Éducateur' || $pRole === 'Enseignant') {
                 $roles[] = 'ROLE_EDUCATEUR';
+            } elseif (in_array($pRole, ['Psychologue', 'Orthophoniste', 'Kinésithérapeute'])) {
+                $roles[] = 'ROLE_SPECIALISTE';
             }
             $user->setRoles(array_unique($roles));
 

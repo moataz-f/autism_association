@@ -146,6 +146,14 @@
                     <i class="bi bi-shield-lock ms-3"></i>
                     <span>الصلاحيات والمستخدمين</span>
                 </a>
+                <a href="{{ path('admin_task_index') }}" class="sys-link-dark">
+                    <i class="bi bi-list-check ms-3"></i>
+                    <span>إدارة المهام</span>
+                </a>
+                <a href="{{ path('admin_event_index') }}" class="sys-link-dark">
+                    <i class="bi bi-calendar-event ms-3"></i>
+                    <span>إدارة الأحداث</span>
+                </a>
                 {% endif %}
                 <a href="{{ path('app_profile_edit') }}" class="sys-link-dark">
                     <i class="bi bi-person-circle ms-3"></i>
@@ -166,7 +174,111 @@
     </div>
 </div>
 
+{# New Row: My Tasks and My Events for Personnel #}
+{% if personnel %}
+<div class="row g-4 mt-2 mb-5">
+    <div class="col-lg-6">
+        <div class="card h-100 p-4 border-0 shadow-sm border-start border-primary border-4">
+            <h5 class="fw-900 mb-4 d-flex align-items-center">
+                <i class="bi bi-list-check ms-3 text-primary"></i>
+                مهامي الحالية
+            </h5>
+            {% if myTasks|length > 0 %}
+                <div class="list-group list-group-flush">
+                    {% for task in myTasks %}
+                        <div class="list-group-item px-0 py-3 bg-transparent border-0 d-flex align-items-center">
+                            <div class="me-3 cursor-pointer p-2 rounded-circle hover-bg-light toggle-task" data-id="{{ task.id }}" style="transition: all 0.2s;">
+                                {% if task.status == 'COMPLETED' %}
+                                    <i class="bi bi-check-circle-fill text-success fs-4"></i>
+                                {% else %}
+                                    <i class="bi bi-circle text-muted fs-4"></i>
+                                {% endif %}
+                            </div>
+                            <div class="flex-grow-1 ms-3 text-end">
+                                <h6 class="mb-1 fw-800 task-title-{{ task.id }} {% if task.status == 'COMPLETED' %}text-decoration-line-through text-muted{% endif %}">{{ task.title }}</h6>
+                                <small class="text-muted">{{ task.dueDate ? 'موعد التسليم: ' ~ task.dueDate|date('Y-m-d H:i') : '' }}</small>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="text-center py-4">
+                    <i class="bi bi-emoji-smile text-muted opacity-25" style="font-size: 3rem;"></i>
+                    <p class="text-muted fw-600 mt-2">لا توجد مهام معلقة لديك.</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="card h-100 p-4 border-0 shadow-sm border-start border-secondary border-4">
+            <h5 class="fw-900 mb-4 d-flex align-items-center">
+                <i class="bi bi-calendar-event ms-3 text-secondary"></i>
+                أحداثي ومواعيدي الخاصة
+            </h5>
+            {% if myEvents|length > 0 %}
+                <div class="list-group list-group-flush">
+                    {% for event in myEvents %}
+                        <div class="list-group-item px-0 py-3 bg-transparent border-0 d-flex align-items-center">
+                            <div class="event-date-box text-center me-3 p-2 rounded-3 bg-light shadow-sm" style="min-width: 60px;">
+                                <small class="d-block text-uppercase fw-bold text-primary">{{ event.startDate|date('M') }}</small>
+                                <span class="d-block fw-900 fs-5 text-main">{{ event.startDate|date('d') }}</span>
+                            </div>
+                            <div class="flex-grow-1 ms-3 text-end">
+                                <h6 class="mb-1 fw-800">{{ event.title }}</h6>
+                                <small class="text-muted">
+                                    <i class="bi bi-clock-history ms-1"></i>
+                                    {{ event.startDate|date('H:i') }} - {{ event.endDate|date('H:i') }}
+                                </small>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="text-center py-4">
+                    <i class="bi bi-calendar-x text-muted opacity-25" style="font-size: 3rem;"></i>
+                    <p class="text-muted fw-600 mt-2">لا توجد أحداث مخططة لك حالياً.</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<script>
+document.querySelectorAll('.toggle-task').forEach(btn => {
+    btn.addEventListener('click', async function() {
+        const taskId = this.dataset.id;
+        const icon = this.querySelector('i');
+        const title = document.querySelector('.task-title-' + taskId);
+        
+        try {
+            const response = await fetch('/personnel/task/' + taskId + '/toggle', {
+                method: 'POST',
+                headers: { 'X-Requested-With': 'XMLHttpRequest' }
+            });
+            const data = await response.json();
+            
+            if (data.success) {
+                if (data.newStatus === 'COMPLETED') {
+                    icon.className = 'bi bi-check-circle-fill text-success fs-4';
+                    title.classList.add('text-decoration-line-through', 'text-muted');
+                } else {
+                    icon.className = 'bi bi-circle text-muted fs-4';
+                    title.classList.remove('text-decoration-line-through', 'text-muted');
+                }
+            }
+        } catch (error) {
+            console.error('Error toggling task:', error);
+        }
+    });
+});
+</script>
+
+{% endif %}
+
 <style>
+    .cursor-pointer { cursor: pointer; }
+    .hover-bg-light:hover { background: rgba(0,0,0,0.05); }
+
     .stat-icon-2026 {
         width: 56px;
         height: 56px;

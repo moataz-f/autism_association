@@ -30,8 +30,21 @@ class Personnel
     private ?string $prenom = null;
 
     #[ORM\Column(length: 50)]
-    #[Assert\Choice(choices: ['Éducateur', 'Psychologue', 'Orthophoniste', 'Administrateur', 'Autre'])]
+    #[Assert\Choice(choices: [
+        'Directeur', 'Administratif', 'Enseignant', 'Éducateur', 'Psychologue', 
+        'Orthophoniste', 'Kinésithérapeute', 'Chauffeur', 'Ouvrier', 'Agent de sécurité', 'Autre'
+    ])]
     private ?string $role = null;
+
+    #[ORM\Column(length: 50, nullable: true)]
+    #[Assert\Choice(choices: ['Administratif', 'Éducatif', 'Médical', 'Technique', 'Services Généraux'])]
+    private ?string $service = null;
+
+    #[ORM\Column(type: 'time', nullable: true)]
+    private ?\DateTimeInterface $horaireDebut = null;
+
+    #[ORM\Column(type: 'time', nullable: true)]
+    private ?\DateTimeInterface $horaireFin = null;
 
     #[ORM\Column(length: 20)]
     private ?string $telephone = null;
@@ -59,10 +72,18 @@ class Personnel
     #[ORM\JoinColumn(nullable: true)]
     private ?User $user = null;
 
+    #[ORM\OneToMany(mappedBy: 'personnel', targetEntity: PersonnelTask::class, orphanRemoval: true)]
+    private Collection $tasks;
+
+    #[ORM\OneToMany(mappedBy: 'personnel', targetEntity: PersonnelEvent::class, orphanRemoval: true)]
+    private Collection $events;
+
     public function __construct()
     {
         $this->activites = new ArrayCollection();
         $this->pointages = new ArrayCollection();
+        $this->tasks = new ArrayCollection();
+        $this->events = new ArrayCollection();
         $this->dateEmbauche = new \DateTime();
     }
 
@@ -176,6 +197,39 @@ class Personnel
         return $this;
     }
 
+    public function getService(): ?string
+    {
+        return $this->service;
+    }
+
+    public function setService(?string $service): self
+    {
+        $this->service = $service;
+        return $this;
+    }
+
+    public function getHoraireDebut(): ?\DateTimeInterface
+    {
+        return $this->horaireDebut;
+    }
+
+    public function setHoraireDebut(?\DateTimeInterface $horaireDebut): self
+    {
+        $this->horaireDebut = $horaireDebut;
+        return $this;
+    }
+
+    public function getHoraireFin(): ?\DateTimeInterface
+    {
+        return $this->horaireFin;
+    }
+
+    public function setHoraireFin(?\DateTimeInterface $horaireFin): self
+    {
+        $this->horaireFin = $horaireFin;
+        return $this;
+    }
+
     public function getQrToken(): ?string
     {
         return $this->qrToken;
@@ -246,6 +300,66 @@ class Personnel
             // set the owning side to null (unless already changed)
             if ($pointage->getPersonnel() === $this) {
                 $pointage->setPersonnel(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, PersonnelTask>
+     */
+    public function getTasks(): Collection
+    {
+        return $this->tasks;
+    }
+
+    public function addTask(PersonnelTask $task): self
+    {
+        if (!$this->tasks->contains($task)) {
+            $this->tasks->add($task);
+            $task->setPersonnel($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTask(PersonnelTask $task): self
+    {
+        if ($this->tasks->removeElement($task)) {
+            // set the owning side to null (unless already changed)
+            if ($task->getPersonnel() === $this) {
+                $task->setPersonnel(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, PersonnelEvent>
+     */
+    public function getEvents(): Collection
+    {
+        return $this->events;
+    }
+
+    public function addEvent(PersonnelEvent $event): self
+    {
+        if (!$this->events->contains($event)) {
+            $this->events->add($event);
+            $event->setPersonnel($this);
+        }
+
+        return $this;
+    }
+
+    public function removeEvent(PersonnelEvent $event): self
+    {
+        if ($this->events->removeElement($event)) {
+            // set the owning side to null (unless already changed)
+            if ($event->getPersonnel() === $this) {
+                $event->setPersonnel(null);
             }
         }
 

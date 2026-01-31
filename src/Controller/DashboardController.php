@@ -47,6 +47,20 @@ class DashboardController extends AbstractController
             ->getQuery()
             ->getResult();
 
+        // New: Tasks and Events for logged in personnel
+        $user = $this->getUser();
+        $myTasks = [];
+        $myEvents = [];
+        $personnel = null;
+
+        if ($user && method_exists($user, 'getPersonnel')) {
+            $personnel = $user->getPersonnel();
+            if ($personnel) {
+                $myTasks = $personnel->getTasks();
+                $myEvents = $personnel->getEvents();
+            }
+        }
+
         return $this->render('dashboard/index.html.twig', [
             'totalBeneficiaires' => $totalBeneficiaires,
             'totalFamilles' => $totalFamilles,
@@ -55,6 +69,9 @@ class DashboardController extends AbstractController
             'beneficiairesRecents' => $beneficiairesRecents,
             'activitesProchaines' => $activitesProchaines,
             'statsParNiveau' => $statsParNiveau,
+            'myTasks' => $myTasks,
+            'myEvents' => $myEvents,
+            'personnel' => $personnel
         ]);
     }
 }

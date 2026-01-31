@@ -34,13 +34,33 @@
                 <div class="row mb-4">
                     <div class="col-md-6">
                         <label class="text-muted small fw-bold text-uppercase">الدور</label>
-                        <p class="fs-5 fw-bold">{{ personnel.role }}</p>
+                        <p class="fs-5 fw-bold text-primary">{{ personnel.role }}</p>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="text-muted small fw-bold text-uppercase">القسم / الخدمة</label>
+                        <p class="fs-5">{{ personnel.service|default('غير محدد') }}</p>
+                    </div>
+                </div>
+
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <label class="text-muted small fw-bold text-uppercase">الجدول الزمني</label>
+                        <p class="fs-5 fw-bold text-navy">
+                            <i class="bi bi-clock me-1"></i>
+                            {% if personnel.horaireDebut and personnel.horaireFin %}
+                                {{ personnel.horaireDebut|date('H:i') }} - {{ personnel.horaireFin|date('H:i') }}
+                            {% else %}
+                                غير محدد
+                            {% endif %}
+                        </p>
                     </div>
                     <div class="col-md-6">
                         <label class="text-muted small fw-bold text-uppercase">تاريخ التعيين</label>
                         <p class="fs-5">{{ personnel.dateEmbauche|date('Y-m-d') }}</p>
                     </div>
                 </div>
+                
+                <hr class="opacity-10 mb-4">
 
                 <div class="row mb-4">
                     <div class="col-md-6">

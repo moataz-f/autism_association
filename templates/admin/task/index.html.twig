@@ -1,0 +1,100 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Gestion des Tâches{% endblock %}
+
+{% block body %}
+<div class="page-header justify-content-between">
+    <div class="page-title">
+        <h2>Gestion des Tâches</h2>
+        <p>Assigner et suivre les missions du personnel</p>
+    </div>
+    <a href="{{ path('admin_task_new') }}" class="btn btn-primary">
+        <i class="bi bi-plus-circle ms-2"></i> Créer une tâche
+    </a>
+</div>
+
+<div class="card border-0">
+    <div class="card-body p-0">
+        {% if tasks|length > 0 %}
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="bg-light">
+                        <tr>
+                            <th class="ps-4">Tâche</th>
+                            <th>Assigné à</th>
+                            <th>Échéance</th>
+                            <th>Statut</th>
+                            <th class="text-end pe-4">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for task in tasks %}
+                        <tr>
+                            <td class="ps-4">
+                                <div class="fw-800 text-main">{{ task.title }}</div>
+                                <div class="d-flex flex-column">
+                                    <small class="text-muted">{{ task.description|slice(0, 50) }}...</small>
+                                    {% if task.event %}
+                                        <small class="text-info mt-1">
+                                            <i class="bi bi-calendar-event me-1"></i> {{ task.event.title }}
+                                        </small>
+                                    {% endif %}
+                                </div>
+                            </td>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <div class="avatar-circle-sm bg-primary-subtle text-primary me-2">
+                                        {{ task.personnel.nom|first }}{{ task.personnel.prenom|first }}
+                                    </div>
+                                    <span>{{ task.personnel.nom }} {{ task.personnel.prenom }}</span>
+                                </div>
+                            </td>
+                            <td>
+                                {% if task.dueDate %}
+                                    <span class="{% if task.dueDate < date() and task.status == 'PENDING' %}text-danger fw-bold{% else %}text-muted{% endif %}">
+                                        {{ task.dueDate|date('Y-m-d H:i') }}
+                                    </span>
+                                {% else %}
+                                    -
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if task.status == 'COMPLETED' %}
+                                    <span class="badge bg-success-subtle text-success">
+                                        <i class="bi bi-check-circle-fill me-1"></i> Terminé
+                                    </span>
+                                {% else %}
+                                    <span class="badge bg-warning-subtle text-warning">
+                                        <i class="bi bi-clock-history me-1"></i> En cours
+                                    </span>
+                                {% endif %}
+                            </td>
+                            <td class="text-end pe-4">
+                                <div class="d-flex gap-2 justify-content-end">
+                                    <a href="{{ path('admin_task_edit', {'id': task.id}) }}" class="btn btn-sm btn-light text-warning">
+                                        <i class="bi bi-pencil"></i>
+                                    </a>
+                                    <form method="post" action="{{ path('admin_task_delete', {'id': task.id}) }}" onsubmit="return confirm('Supprimer cette tâche ?');" class="d-inline">
+                                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ task.id) }}">
+                                        <button class="btn btn-sm btn-light text-danger">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <div class="empty-state text-center p-5">
+                <i class="bi bi-clipboard-check text-muted opacity-25" style="font-size: 5rem;"></i>
+                <h5 class="mt-3">Aucune tâche assignée</h5>
+                <p class="text-muted">Commencez par assigner des missions à votre équipe.</p>
+                <a href="{{ path('admin_task_new') }}" class="btn btn-primary mt-3">Créer une tâche</a>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

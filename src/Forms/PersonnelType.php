@@ -28,13 +28,42 @@ class PersonnelType extends AbstractType
             ->add('role', ChoiceType::class, [
                 'label' => 'Rôle',
                 'choices' => [
+                    'Directeur' => 'Directeur',
+                    'Administratif' => 'Administratif',
+                    'Enseignant' => 'Enseignant',
                     'Éducateur' => 'Éducateur',
                     'Psychologue' => 'Psychologue',
                     'Orthophoniste' => 'Orthophoniste',
-                    'Administrateur' => 'Administrateur',
+                    'Kinésithérapeute' => 'Kinésithérapeute',
+                    'Chauffeur' => 'Chauffeur',
+                    'Ouvrier' => 'Ouvrier',
+                    'Agent de sécurité' => 'Agent de sécurité',
                     'Autre' => 'Autre'
                 ],
                 'attr' => ['class' => 'form-select']
+            ])
+            ->add('service', ChoiceType::class, [
+                'label' => 'Service',
+                'choices' => [
+                    'Administratif' => 'Administratif',
+                    'Éducatif' => 'Éducatif',
+                    'Médical' => 'Médical',
+                    'Technique' => 'Technique',
+                    'Services Généraux' => 'Services Généraux'
+                ],
+                'required' => false,
+                'placeholder' => 'Sélectionnez un service',
+                'attr' => ['class' => 'form-select']
+            ])
+            ->add('horaireDebut', null, [
+                'label' => 'Début de travail',
+                'widget' => 'single_text',
+                'attr' => ['class' => 'form-control']
+            ])
+            ->add('horaireFin', null, [
+                'label' => 'Fin de travail',
+                'widget' => 'single_text',
+                'attr' => ['class' => 'form-control']
             ])
             ->add('telephone', TextType::class, [
                 'label' => 'Téléphone',
@@ -50,7 +79,7 @@ class PersonnelType extends AbstractType
                 'attr' => ['class' => 'form-control']
             ])
             ->add('specialisation', TextareaType::class, [
-                'label' => 'Spécialisation',
+                'label' => 'Spécialisation / Notes',
                 'required' => false,
                 'attr' => ['class' => 'form-control', 'rows' => 3]
             ])

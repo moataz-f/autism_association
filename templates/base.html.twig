@@ -436,6 +436,14 @@
                     <a class="nav-link {{ app.request.get('_route') starts with 'admin_seance' ? 'active' : '' }}" href="{{ path('admin_seance_index') }}">
                         <i class="bi bi-calendar-event"></i> الجدولة
                     </a>
+                    {% if is_granted('ROLE_ADMIN') %}
+                    <a class="nav-link {{ app.request.get('_route') starts with 'admin_task' ? 'active' : '' }}" href="{{ path('admin_task_index') }}">
+                        <i class="bi bi-list-check"></i> إدارة المهام
+                    </a>
+                    <a class="nav-link {{ app.request.get('_route') starts with 'admin_event' ? 'active' : '' }}" href="{{ path('admin_event_index') }}">
+                        <i class="bi bi-calendar-check"></i> إدارة الأحداث
+                    </a>
+                    {% endif %}
 
                     {% if is_granted('ROLE_ADMIN') %}
                     <a class="nav-link complex {{ app.request.get('_route') starts with 'admin_pointage' ? 'active' : '' }}" href="{{ path('admin_pointage_index') }}">
