@@ -1,0 +1,28 @@
+{% extends 'base_public.html.twig' %}
+
+{% block title %}طلب قيد المراجعة - حلم البراءة{% endblock %}
+
+{% block body %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-7 text-center">
+            <div class="card card-2026 p-5 border-0 shadow-lg">
+                <div class="mb-4">
+                    <i class="bi bi-hourglass-split text-primary animate__animated animate__pulse animate__infinite" style="font-size: 5rem;"></i>
+                </div>
+                <h2 class="fw-900 text-navy mb-3">شكراً لتسجيلك!</h2>
+                <div class="alert alert-info border-0 rounded-4 py-3 mb-4">
+                    <h5 class="fw-800 mb-2">طلبك قيد المراجعة حالياً</h5>
+                    <p class="mb-0">نقوم بمراجعة الحسابات الجديدة لضمان أمان مجتمعنا. ستتمكن من تسجيل الدخول بمجرد موافقة الإدارة على طلبك.</p>
+                </div>
+                
+                <p class="text-muted mb-5">قد تستغرق هذه العملية ما يصل إلى 24 ساعة. شكراً لتفهمك.</p>
+                
+                <a href="{{ path('app_home') }}" class="btn btn-light px-5 py-3 fw-800 rounded-pill">
+                    العودة للرئيسية
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

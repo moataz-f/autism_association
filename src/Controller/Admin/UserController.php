@@ -83,4 +83,35 @@ class UserController extends AbstractController
 
         return $this->redirectToRoute('admin_user_index');
     }
+
+    #[Route('/{id}/approve', name: 'admin_user_approve', methods: ['POST'])]
+    public function approve(User $user, EntityManagerInterface $entityManager): Response
+    {
+        $user->setIsApproved(true);
+        
+        // Assign roles based on registration choice
+        $role = $user->getRegistrationRole();
+        if ($role === 'PARENT') {
+            $user->setRoles(['ROLE_PARENT']);
+        } elseif ($role === 'DONOR') {
+            $user->setRoles(['ROLE_DONOR']);
+        } elseif ($role === 'VOLUNTEER') {
+            $user->setRoles(['ROLE_VOLUNTEER']);
+        }
+
+        $entityManager->flush();
+        $this->addFlash('success', 'تم تفعيل الحساب بنجاح.');
+
+        return $this->redirectToRoute('admin_user_index');
+    }
+
+    #[Route('/{id}/reject', name: 'admin_user_reject', methods: ['POST'])]
+    public function reject(User $user, EntityManagerInterface $entityManager): Response
+    {
+        $entityManager->remove($user);
+        $entityManager->flush();
+        $this->addFlash('warning', 'تم رفض وحذف الحساب.');
+
+        return $this->redirectToRoute('admin_user_index');
+    }
 }

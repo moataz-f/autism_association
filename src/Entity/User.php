@@ -37,6 +37,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToOne(mappedBy: 'user', targetEntity: Personnel::class)]
     private ?Personnel $personnel = null;
 
+    #[ORM\Column(options: ["default" => false])]
+    private ?bool $isApproved = false;
+
+    #[ORM\Column(length: 20, nullable: true)]
+    private ?string $registrationRole = null; // PARENT, DONOR, VOLUNTEER
+
     public function getId(): ?int
     {
         return $this->id;
@@ -127,6 +133,28 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setPersonnel(?Personnel $personnel): self
     {
         $this->personnel = $personnel;
+        return $this;
+    }
+
+    public function isApproved(): bool
+    {
+        return $this->isApproved ?? false;
+    }
+
+    public function setIsApproved(bool $isApproved): self
+    {
+        $this->isApproved = $isApproved;
+        return $this;
+    }
+
+    public function getRegistrationRole(): ?string
+    {
+        return $this->registrationRole;
+    }
+
+    public function setRegistrationRole(?string $registrationRole): self
+    {
+        $this->registrationRole = $registrationRole;
         return $this;
     }
 }

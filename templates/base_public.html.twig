@@ -94,11 +94,25 @@
                     <li class="nav-item"><a class="nav-link" href="{{ path('app_home') }}">الرئيسية</a></li>
                     <li class="nav-item"><a class="nav-link" href="{{ path('app_page_index') }}">عن الجمعية</a></li>
                     <li class="nav-item"><a class="nav-link" href="{{ path('app_gallery_index') }}">معرض الصور</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{{ path('app_actualite_index') }}">الأخبار</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ path('app_actualite_index') }}">الأخبار والأحداث</a></li>
                     <li class="nav-item"><a class="nav-link" href="{{ path('app_donation_index') }}">التبرعات</a></li>
-                    <li class="nav-item ms-lg-4">
-                        <a class="btn-2026" href="{{ path('app_login') }}">دخول النظام</a>
-                    </li>
+                    <li class="nav-item"><a class="nav-link" href="{{ path('app_contact') }}">اتصل بنا</a></li>
+                    
+                    {% if app.user %}
+                        <li class="nav-item ms-lg-4">
+                            <a class="btn-2026 bg-primary" href="{{ path('app_dashboard') }}">لوحة التحكم</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-danger" href="{{ path('app_logout') }}"><i class="bi bi-box-arrow-right"></i></a>
+                        </li>
+                    {% else %}
+                        <li class="nav-item ms-lg-4">
+                            <a class="nav-link fw-800" href="{{ path('app_register') }}">إنشاء حساب</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="btn-2026" href="{{ path('app_login') }}">دخول النظام</a>
+                        </li>
+                    {% endif %}
                 </ul>
             </div>
         </div>

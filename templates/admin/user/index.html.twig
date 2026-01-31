@@ -16,18 +16,34 @@
 <div class="card border-0">
     <div class="card-body p-0">
         <div class="table-responsive">
+            {# Tabs for filtering #}
+            <div class="px-4 py-3 bg-light border-bottom d-flex gap-3">
+                <a href="{{ path('admin_user_index') }}" class="btn btn-sm {{ app.request.query.get('filter') != 'pending' ? 'btn-navy' : 'btn-outline-navy' }} rounded-pill px-4">
+                    المستخدمون النشطون
+                </a>
+                <a href="{{ path('admin_user_index', {'filter': 'pending'}) }}" class="btn btn-sm {{ app.request.query.get('filter') == 'pending' ? 'btn-navy' : 'btn-outline-navy' }} rounded-pill px-4 position-relative">
+                    طلبات قيد المراجعة
+                    {% set pendingCount = users|filter(u => not u.approved)|length %}
+                    {% if pendingCount > 0 %}
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                            {{ pendingCount }}
+                        </span>
+                    {% endif %}
+                </a>
+            </div>
+
             <table class="table table-hover align-middle mb-0 text-center">
                 <thead>
                     <tr>
                         <th class="text-end ps-4" style="width: 30%;">المستخدم</th>
                         <th>البريد الإلكتروني</th>
-                        <th>الهاتف</th>
-                        <th>الصلاحيات</th>
+                        <th>الحالة / الدور</th>
                         <th class="text-start pe-4">الإجراءات</th>
                     </tr>
                 </thead>
                 <tbody>
                 {% for user in users %}
+                    {% if (app.request.query.get('filter') == 'pending' and not user.approved) or (app.request.query.get('filter') != 'pending' and user.approved) %}
                     <tr>
                         <td class="text-end ps-4">
                             <div class="d-flex align-items-center">
@@ -36,47 +52,65 @@
                                 </div>
                                 <div>
                                     <div class="fw-800 text-main">{{ user.prenom }} {{ user.nom }}</div>
-                                    <small class="text-muted fw-600">ID: #{{ user.id }}</small>
+                                    <small class="text-muted fw-600">{{ user.numtlf ?: 'بدون هاتف' }}</small>
                                 </div>
                             </div>
                         </td>
                         <td class="text-primary fw-600">{{ user.email }}</td>
-                        <td class="fw-600">{{ user.numtlf ?: '-' }}</td>
                         <td>
-                            <div class="d-flex flex-wrap justify-content-center gap-1">
-                            {% for role in user.roles %}
-                                {% set label = null %}
-                                {% set color = 'secondary' %}
-                                {% if role == 'ROLE_ADMIN' %}{% set label = 'مدير' %}{% set color = 'danger' %}
-                                {% elseif role == 'ROLE_SPECIALIST' %}{% set label = 'أخصائي' %}{% set color = 'primary' %}
-                                {% elseif role == 'ROLE_PARENT' %}{% set label = 'ولي أمر' %}{% set color = 'secondary' %}
-                                {% elseif role == 'ROLE_STAFF' %}{% set label = 'موظف' %}{% set color = 'secondary' %}
-                                {% elseif role == 'ROLE_VOLUNTEER' %}{% set label = 'متطوع' %}{% set color = 'warning' %}
-                                {% elseif role == 'ROLE_DONOR' %}{% set label = 'متبرع' %}{% set color = 'dark' %}
-                                {% endif %}
-                                {% if label %}
-                                    <span class="badge-2026" style="background: var(--{{ color == 'secondary' ? 'text-muted' : (color == 'primary' ? 'primary' : (color == 'danger' ? 'danger' : (color == 'warning' ? 'warning' : 'text-main'))) }})0D; color: var(--{{ color == 'secondary' ? 'text-muted' : (color == 'primary' ? 'primary' : (color == 'danger' ? 'danger' : (color == 'warning' ? 'warning' : 'text-main'))) }});">
-                                        {{ label }}
-                                    </span>
-                                {% endif %}
-                            {% endfor %}
-                            </div>
+                            {% if not user.approved %}
+                                <span class="badge-2026 bg-warning bg-opacity-10 text-warning">
+                                    <i class="bi bi-hourglass-split me-1"></i> طلب: {{ user.registrationRole }}
+                                </span>
+                            {% else %}
+                                <div class="d-flex flex-wrap justify-content-center gap-1">
+                                {% for role in user.roles %}
+                                    {% set label = null %}
+                                    {% if role == 'ROLE_ADMIN' %}{% set label = 'مدير' %}
+                                    {% elseif role == 'ROLE_SPECIALIST' %}{% set label = 'أخصائي' %}
+                                    {% elseif role == 'ROLE_PARENT' %}{% set label = 'ولي أمر' %}
+                                    {% elseif role == 'ROLE_STAFF' %}{% set label = 'موظف' %}
+                                    {% elseif role == 'ROLE_VOLUNTEER' %}{% set label = 'متطوع' %}
+                                    {% elseif role == 'ROLE_DONOR' %}{% set label = 'متبرع' %}
+                                    {% endif %}
+                                    {% if label %}
+                                        <span class="badge-2026 bg-primary bg-opacity-10 text-primary">
+                                            {{ label }}
+                                        </span>
+                                    {% endif %}
+                                {% endfor %}
+                                </div>
+                            {% endif %}
                         </td>
                         <td class="text-start pe-4">
                             <div class="d-flex gap-2 justify-content-start">
-                                <a href="{{ path('admin_user_edit', {'id': user.id}) }}" class="action-btn-2026" title="تعديل">
-                                    <i class="bi bi-pencil"></i>
-                                </a>
-                                {{ include('admin/user/_delete_form.html.twig') }}
+                                {% if not user.approved %}
+                                    <form method="post" action="{{ path('admin_user_approve', {'id': user.id}) }}" class="d-inline">
+                                        <button class="btn btn-sm btn-success rounded-3">
+                                            <i class="bi bi-check-lg"></i> تفعيل
+                                        </button>
+                                    </form>
+                                    <form method="post" action="{{ path('admin_user_reject', {'id': user.id}) }}" class="d-inline" onsubmit="return confirm('هل أنت متأكد من رفض هذا الطلب؟');">
+                                        <button class="btn btn-sm btn-outline-danger rounded-3">
+                                            <i class="bi bi-x-lg"></i> رفض
+                                        </button>
+                                    </form>
+                                {% else %}
+                                    <a href="{{ path('admin_user_edit', {'id': user.id}) }}" class="action-btn-2026" title="تعديل">
+                                        <i class="bi bi-pencil"></i>
+                                    </a>
+                                    {{ include('admin/user/_delete_form.html.twig') }}
+                                {% endif %}
                             </div>
                         </td>
                     </tr>
+                    {% endif %}
                 {% else %}
                     <tr>
-                        <td colspan="5" class="text-center py-5">
+                        <td colspan="4" class="text-center py-5">
                             <div class="empty-state">
                                 <i class="bi bi-shield-lock text-muted opacity-25" style="font-size: 4rem;"></i>
-                                <p class="text-muted mt-3 fw-600">لا يوجد مستخدمون مسجلون حالياً.</p>
+                                <p class="text-muted mt-3 fw-600">لا يوجد مستخدمون حالياً.</p>
                             </div>
                         </td>
                     </tr>

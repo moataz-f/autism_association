@@ -1,0 +1,65 @@
+{% extends 'base_public.html.twig' %}
+
+{% block title %}تسجيل حساب جديد - حلم البراءة{% endblock %}
+
+{% block body %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-6">
+            <div class="card card-2026 p-5 border-0 shadow-lg">
+                <div class="text-center mb-5">
+                    <h2 class="fw-900 text-navy mb-2">إنشاء حساب جديد</h2>
+                    <p class="text-muted">انضم إلينا كولي أمر، متبرع، أو متطوع</p>
+                </div>
+
+                {{ form_start(registrationForm) }}
+                    <div class="row g-3">
+                        <div class="col-md-6 mb-3">
+                            {{ form_label(registrationForm.nom) }}
+                            {{ form_widget(registrationForm.nom) }}
+                            {{ form_errors(registrationForm.nom) }}
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            {{ form_label(registrationForm.prenom) }}
+                            {{ form_widget(registrationForm.prenom) }}
+                            {{ form_errors(registrationForm.prenom) }}
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        {{ form_label(registrationForm.email) }}
+                        {{ form_widget(registrationForm.email) }}
+                        {{ form_errors(registrationForm.email) }}
+                    </div>
+
+                    <div class="mb-3">
+                        {{ form_label(registrationForm.numtlf) }}
+                        {{ form_widget(registrationForm.numtlf) }}
+                        {{ form_errors(registrationForm.numtlf) }}
+                    </div>
+
+                    <div class="mb-4">
+                        {{ form_label(registrationForm.registrationRole) }}
+                        {{ form_widget(registrationForm.registrationRole) }}
+                        {{ form_errors(registrationForm.registrationRole) }}
+                    </div>
+
+                    <div class="mb-4">
+                        {{ form_label(registrationForm.plainPassword) }}
+                        {{ form_widget(registrationForm.plainPassword) }}
+                        {{ form_errors(registrationForm.plainPassword) }}
+                    </div>
+
+                    <button type="submit" class="btn btn-primary w-100 py-3 fw-800 rounded-4">
+                        تسجيل الحساب
+                    </button>
+                {{ form_end(registrationForm) }}
+
+                <div class="mt-4 text-center">
+                    <p class="text-muted small">لديك حساب بالفعل؟ <a href="{{ path('app_login') }}" class="text-primary fw-700">دخول النظام</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
