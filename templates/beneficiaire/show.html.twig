@@ -1,124 +1,268 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}تفاصيل المنتفع{% endblock %}
+{% block title %}ملف المنتفع - {{ beneficiaire.prenom }} {{ beneficiaire.nom }}{% endblock %}
 
 {% block body %}
-<div class="page-header d-flex justify-content-between align-items-center">
+<div class="page-header d-flex justify-content-between align-items-center mb-4">
     <div>
-        <h2 class="mb-0">ملف المنتفع: {{ beneficiaire.prenom }} {{ beneficiaire.nom }}</h2>
+        <h2 class="mb-0 fw-800 text-navy">ملف المنتفع: {{ beneficiaire.prenom }} {{ beneficiaire.nom }}</h2>
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{{ path('app_dashboard') }}">لوحة القيادة</a></li>
                 <li class="breadcrumb-item"><a href="{{ path('app_beneficiaire_index') }}">المنتفعون</a></li>
-                <li class="breadcrumb-item active">تفاصيل</li>
+                <li class="breadcrumb-item active">الملف الشخصي</li>
             </ol>
         </nav>
     </div>
     <div class="d-flex gap-2">
-        <a href="{{ path('app_beneficiaire_edit', {'id': beneficiaire.id}) }}" class="btn btn-primary">
-            <i class="bi bi-pencil"></i> تعديل البيانات
+        <a href="{{ path('app_beneficiaire_edit', {'id': beneficiaire.id}) }}" class="btn btn-2026-secondary">
+            <i class="bi bi-pencil me-1"></i> تعديل البيانات
         </a>
-        <a href="{{ path('app_beneficiaire_index') }}" class="btn btn-light">
-            <i class="bi bi-arrow-right"></i> العودة للقائمة
+        <a href="{{ path('app_beneficiaire_index') }}" class="btn btn-light-2026">
+            <i class="bi bi-arrow-right me-1"></i> العودة للقائمة
         </a>
     </div>
 </div>
 
-<div class="row">
-    <div class="col-md-4">
-        <div class="card shadow-sm border-0 mb-4 text-center">
-            <div class="card-body py-5">
-                <div class="avatar-huge bg-primary mx-auto mb-3">
+<div class="row g-4">
+    <!-- Sidebar / Identity -->
+    <div class="col-lg-3">
+        <div class="card card-2026 text-center">
+            <div class="card-body py-4">
+                <div class="avatar-huge-2026 mx-auto mb-3">
                     {{ beneficiaire.prenom|first|upper }}{{ beneficiaire.nom|first|upper }}
                 </div>
-                <h3>{{ beneficiaire.prenom }} {{ beneficiaire.nom }}</h3>
-                <span class="badge bg-{{ beneficiaire.actif ? 'success' : 'secondary' }} rounded-pill mb-3">
-                    {{ beneficiaire.actif ? 'حساب نشط' : 'حساب غير نشط' }}
-                </span>
-                <p class="text-muted">{{ beneficiaire.genre }} - {{ beneficiaire.age }} سنة</p>
-            </div>
-        </div>
+                <h4 class="fw-800 text-navy mb-1">{{ beneficiaire.prenom }} {{ beneficiaire.nom }}</h4>
+                <p class="text-muted small fw-600 mb-3">{{ beneficiaire.age }} سنة - {{ beneficiaire.genre }}</p>
+                
+                <div class="status-badge-2026 bg-{{ beneficiaire.actif ? 'success' : 'secondary' }} mx-auto">
+                    {{ beneficiaire.actif ? 'نشط' : 'غير نشط' }}
+                </div>
 
-        <div class="card shadow-sm border-0">
-            <div class="card-body">
-                <h5 class="mb-3 border-bottom pb-2">معلومات التواصل</h5>
-                <div class="mb-3">
-                    <label class="small text-muted d-block">العائلة</label>
-                    <span class="fw-bold">{{ beneficiaire.famille ?: 'غير محدد' }}</span>
-                </div>
-                <div class="mb-3">
-                    <label class="small text-muted d-block">رقم الهاتف</label>
-                    <span class="fw-bold">{{ beneficiaire.telephone ?: 'غير متوفر' }}</span>
-                </div>
-                <div class="mb-0">
-                    <label class="small text-muted d-block">العنوان</label>
-                    <span class="fw-bold">{{ beneficiaire.adresse ?: 'غير محدد' }}</span>
+                <hr class="my-4 opacity-10">
+
+                <div class="text-start px-2">
+                    <div class="mb-3">
+                        <small class="text-muted d-block fw-700">رقم الهاتف</small>
+                        <span class="text-navy fw-600">{{ beneficiaire.telephone ?: 'غير متوفر' }}</span>
+                    </div>
+                    <div class="mb-3">
+                        <small class="text-muted d-block fw-700">العائلة المسؤولة</small>
+                        <span class="text-navy fw-600">{{ beneficiaire.famille ?: 'غير محدد' }}</span>
+                    </div>
+                    <div class="mb-0">
+                        <small class="text-muted d-block fw-700">تاريخ التسجيل</small>
+                        <span class="text-navy fw-600">{{ beneficiaire.dateInscription|date('Y/m/d') }}</span>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="col-md-8">
-        <div class="card shadow-sm border-0 mb-4">
-            <div class="card-body">
-                <h5 class="mb-4 border-bottom pb-2">الحالة الصحية والتشخيص</h5>
-                <div class="row g-4">
-                    <div class="col-md-6">
-                        <div class="p-3 bg-light rounded-3">
-                            <label class="small text-muted d-block">مستوى التوحد</label>
-                            <span class="fw-bold fs-5 text-primary">{{ beneficiaire.niveauAutisme }}</span>
+    <!-- Main Content / Tabs -->
+    <div class="col-lg-9">
+        <div class="card card-2026 overflow-hidden">
+            <div class="card-header bg-white border-0 p-0">
+                <ul class="nav nav-tabs-2026" id="childTabs" role="tablist">
+                    <li class="nav-item flex-fill" role="presentation">
+                        <button class="nav-link active" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button" role="tab">
+                            <i class="bi bi-person-fill ms-2"></i> البيانات العامة
+                        </button>
+                    </li>
+                    <li class="nav-item flex-fill" role="presentation">
+                        <button class="nav-link" id="history-tab" data-bs-toggle="tab" data-bs-target="#history" type="button" role="tab">
+                            <i class="bi bi-journal-text ms-2"></i> التاريخ والتقارير
+                        </button>
+                    </li>
+                    <li class="nav-item flex-fill" role="presentation">
+                        <button class="nav-link" id="documents-tab" data-bs-toggle="tab" data-bs-target="#documents" type="button" role="tab">
+                            <i class="bi bi-folder-fill ms-2"></i> الملفات والوثائق
+                        </button>
+                    </li>
+                </ul>
+            </div>
+            <div class="card-body p-4 p-md-5">
+                <div class="tab-content" id="childTabsContent">
+                    <!-- Tab: Profile -->
+                    <div class="tab-pane fade show active" id="profile" role="tabpanel">
+                        <div class="row g-4">
+                            <div class="col-md-6">
+                                <div class="info-box-2026">
+                                    <small class="text-muted fw-700 mb-2 d-block">مستوى التوحد</small>
+                                    <span class="h4 fw-800 text-primary mb-0">{{ beneficiaire.niveauAutisme }}</span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="info-box-2026">
+                                    <small class="text-muted fw-700 mb-2 d-block">تاريخ الميلاد</small>
+                                    <span class="h4 fw-800 text-navy mb-0">{{ beneficiaire.dateNaissance|date('Y/m/d') }}</span>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="info-box-2026">
+                                    <small class="text-muted fw-700 mb-3 d-block">التشخيص الطبي الأولي</small>
+                                    <p class="mb-0 text-navy fw-600 line-height-lg">
+                                        {{ beneficiaire.diagnostic ?: 'لا توجد ملاحظات طبية مفصلة مسجلة حالياً.' }}
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <h5 class="fw-800 text-navy mt-3 mb-4"><i class="bi bi-star-fill text-warning ms-2"></i>الأنشطة المسجل فيها حالياً</h5>
+                                <div class="row g-3">
+                                    {% for activite in beneficiaire.activites %}
+                                        <div class="col-md-4">
+                                            <div class="card border-0 bg-light-2026 p-3">
+                                                <h6 class="fw-800 text-navy mb-1">{{ activite.titre }}</h6>
+                                                <small class="text-muted fw-600">{{ activite.type }}</small>
+                                            </div>
+                                        </div>
+                                    {% else %}
+                                        <div class="col-12">
+                                            <p class="text-muted italic fw-600">هذا الطفل غير مسجل في أي نشاط نشط حالياً.</p>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <div class="col-md-6">
-                        <div class="p-3 bg-light rounded-3">
-                            <label class="small text-muted d-block">تاريخ الميلاد</label>
-                            <span class="fw-bold fs-5">{{ beneficiaire.dateNaissance|date('Y-m-d') }}</span>
+
+                    <!-- Tab: History & Reports -->
+                    <div class="tab-pane fade" id="history" role="tabpanel">
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <h5 class="fw-800 text-navy mb-0">سجل المتابعة والتقارير</h5>
+                        </div>
+                        
+                        <div class="timeline-2026">
+                            {% for rapport in rapports %}
+                                <div class="timeline-item">
+                                    <div class="timeline-marker bg-primary"></div>
+                                    <div class="timeline-content card border-0 shadow-none bg-light-2026 p-3 mb-4">
+                                        <div class="d-flex justify-content-between align-items-center mb-2">
+                                            <span class="badge bg-white text-primary rounded-pill fw-700">{{ rapport.type }}</span>
+                                            <small class="text-muted fw-600">{{ rapport.date|date('Y/m/d H:i') }}</small>
+                                        </div>
+                                        <p class="text-navy fw-600 mb-2">{{ rapport.contenu|nl2br }}</p>
+                                        <div class="d-flex align-items-center">
+                                            <i class="bi bi-person-circle text-muted ms-2"></i>
+                                            <small class="text-muted fw-700">بواسطة: {{ rapport.createdBy.prenom }} {{ rapport.createdBy.nom }}</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% else %}
+                                <div class="text-center py-5">
+                                    <i class="bi bi-journal-x text-muted opacity-25" style="font-size: 4rem;"></i>
+                                    <p class="text-muted mt-3 fw-600">لا توجد تقارير في السجل حالياً.</p>
+                                </div>
+                            {% endfor %}
                         </div>
                     </div>
-                    <div class="col-12">
-                        <div class="p-3 bg-light rounded-3">
-                            <label class="small text-muted d-block">التشخيص الطبي</label>
-                            <p class="mb-0 mt-2">{{ beneficiaire.diagnostic ?: 'لا توجد ملاحظات طبية حالياً.' }}</p>
+
+                    <!-- Tab: Documents -->
+                    <div class="tab-pane fade" id="documents" role="tabpanel">
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <h5 class="fw-800 text-navy mb-0">مركز الوثائق</h5>
+                            <button class="btn btn-2026-primary btn-sm rounded-pill" data-bs-toggle="modal" data-bs-target="#uploadModal">
+                                <i class="bi bi-upload ms-1"></i> رفع ملف جديد
+                            </button>
+                        </div>
+
+                        <div class="row g-3">
+                            {% for doc in documents %}
+                                <div class="col-md-6">
+                                    <div class="card border-light-2026 h-100">
+                                        <div class="card-body d-flex align-items-center gap-3">
+                                            <div class="p-3 bg-{{ doc.type == 'Medical' ? 'danger' : (doc.type == 'Scolaire' ? 'info' : 'secondary') }}-light rounded-20">
+                                                <i class="bi bi-file-earmark-{{ doc.filename|split('.')|last == 'pdf' ? 'pdf' : 'image' }} text-{{ doc.type == 'Medical' ? 'danger' : (doc.type == 'Scolaire' ? 'info' : 'secondary') }} fs-4"></i>
+                                            </div>
+                                            <div class="flex-grow-1 overflow-hidden">
+                                                <h6 class="fw-800 text-navy mb-1 text-truncate">{{ doc.originalName }}</h6>
+                                                <small class="text-muted fw-700">{{ doc.type }} • {{ doc.uploadedAt|date('Y/m/d') }}</small>
+                                            </div>
+                                            <a href="{{ asset('uploads/documents/beneficiaires/' ~ doc.filename) }}" target="_blank" class="action-btn-2026">
+                                                <i class="bi bi-download"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% else %}
+                                <div class="col-12 text-center py-5">
+                                    <i class="bi bi-folder-x text-muted opacity-25" style="font-size: 4rem;"></i>
+                                    <p class="text-muted mt-3 fw-600">لا توجد ملفات مرفوعة لهذا الطفل.</p>
+                                </div>
+                            {% endfor %}
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
+</div>
 
-        <div class="card shadow-sm border-0">
-            <div class="card-body">
-                <h5 class="mb-4 border-bottom pb-2">الأنشطة المسجل فيها</h5>
-                <div class="list-group list-group-flush">
-                {% for activite in beneficiaire.activites %}
-                    <div class="list-group-item px-0 border-light">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div>
-                                <h6 class="mb-1">{{ activite.titre }}</h6>
-                                <small class="text-muted">{{ activite.type }}</small>
-                            </div>
-                            <span class="badge bg-light text-primary">مسجل</span>
-                        </div>
-                    </div>
-                {% else %}
-                    <p class="text-muted mb-0">لا توجد أنشطة مسجلة لهذا الطفل حالياً.</p>
-                {% endfor %}
+<!-- Upload Modal -->
+<div class="modal fade" id="uploadModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content card-2026">
+            <div class="modal-header border-0 pb-0">
+                <h5 class="modal-title fw-800 text-navy">إضافة وثيقة جديدة</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            {{ form_start(form, {'attr': {'enctype': 'multipart/form-data'}}) }}
+            <div class="modal-body py-4">
+                <div class="mb-4">
+                    {{ form_label(form.type, 'نوع الوثيقة', {'label_attr': {'class': 'form-label fw-800 text-muted small px-2'}}) }}
+                    {{ form_widget(form.type, {'attr': {'class': 'form-select-2026'}}) }}
+                </div>
+                <div class="mb-0">
+                    {{ form_label(form.file, 'الملف (PDF أو صور - أقصى 5 ميقا)', {'label_attr': {'class': 'form-label fw-800 text-muted small px-2'}}) }}
+                    {{ form_widget(form.file, {'attr': {'class': 'form-control-2026'}}) }}
                 </div>
             </div>
+            <div class="modal-footer border-0 pt-0">
+                <button type="submit" class="btn btn-2026-primary w-100 py-2 rounded-pill fw-bold">تأكيد الرفع</button>
+            </div>
+            {{ form_end(form) }}
         </div>
     </div>
 </div>
 
 <style>
-    .avatar-huge {
-        width: 80px;
-        height: 80px;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 2rem;
-        font-weight: bold;
-        color: white;
+    :root {
+        --navy: #3D4451;
+        --primary: #8E97FD;
+        --primary-light: #F1F4FF;
+        --secondary-light: #F8F9FA;
+        --info-light: #E1F5FE;
+        --danger-light: #FFEBEE;
     }
+    
+    .card-2026 { border: none; border-radius: 32px; box-shadow: 0 10px 40px rgba(0,0,0,0.03); }
+    .avatar-huge-2026 { width: 100px; height: 100px; border-radius: 50%; background: linear-gradient(135deg, var(--primary), #B2B9FF); display: flex; align-items: center; justify-content: center; font-size: 2.5rem; color: white; font-weight: 800; box-shadow: 0 10px 20px rgba(142, 151, 253, 0.2); }
+    
+    .status-badge-2026 { padding: 4px 16px; border-radius: 20px; color: white; font-size: 0.8rem; font-weight: 800; width: fit-content; }
+    .bg-success { background-color: #4ADE80 !important; }
+    
+    .nav-tabs-2026 { background: #F8F9FA; border: none; display: flex; padding: 6px; }
+    .nav-tabs-2026 .nav-link { border: none; color: var(--navy); font-weight: 800; border-radius: 24px; padding: 12px 20px; transition: all 0.3s ease; opacity: 0.6; }
+    .nav-tabs-2026 .nav-link.active { background: white; color: var(--primary); opacity: 1; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+    
+    .info-box-2026 { background: #F9FAFB; border-radius: 24px; padding: 25px; border: 1px solid rgba(0,0,0,0.02); height: 100%; transition: transform 0.3s ease; }
+    .info-box-2026:hover { transform: translateY(-5px); }
+    .bg-light-2026 { background: #F8F9FA; border-radius: 16px; }
+    
+    .timeline-2026 { position: relative; padding-right: 30px; }
+    .timeline-2026::before { content: ''; position: absolute; right: 0; top: 0; height: 100%; width: 2px; background: rgba(142, 151, 253, 0.1); }
+    .timeline-item { position: relative; }
+    .timeline-marker { position: absolute; right: -34px; top: 10px; width: 10px; height: 10px; border-radius: 50%; border: 2px solid white; box-shadow: 0 0 0 4px rgba(142, 151, 253, 0.2); }
+    
+    .rounded-20 { border-radius: 20px; }
+    .action-btn-2026 { width: 40px; height: 40px; border-radius: 12px; border: 1px solid rgba(0,0,0,0.05); display: flex; align-items: center; justify-content: center; color: var(--navy); transition: all 0.3s ease; }
+    .action-btn-2026:hover { background: var(--primary); color: white; border-color: var(--primary); }
+    
+    .btn-2026-primary { background: var(--primary); color: white; border: none; box-shadow: 0 10px 20px rgba(142, 151, 253, 0.2); }
+    .btn-2026-secondary { background: white; color: var(--navy); border: 1px solid rgba(0,0,0,0.1); }
+    .light-2026 { background: rgba(0,0,0,0.02); color: var(--navy); }
+    
+    .form-select-2026, .form-control-2026 { border: 1px solid #eee; border-radius: 14px; padding: 12px 15px; background: #fafafa; transition: all 0.3s ease; }
+    .form-select-2026:focus, .form-control-2026:focus { background: white; border-color: var(--primary); box-shadow: 0 0 0 4px rgba(142, 151, 253, 0.1); outline: none; }
 </style>
 {% endblock %}

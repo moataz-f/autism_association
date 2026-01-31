@@ -11,6 +11,10 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Knp\Component\Pager\PaginatorInterface;
+use App\Entity\BeneficiaireDocument;
+use App\Forms\DocumentType;
+use Symfony\Component\String\Slugger\SluggerInterface;
+use Symfony\Component\Filesystem\Filesystem;
 
 #[Route('/beneficiaire')]
 class BeneficiaireController extends AbstractController
@@ -58,11 +62,60 @@ class BeneficiaireController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_beneficiaire_show', methods: ['GET'])]
-    public function show(Beneficiaire $beneficiaire): Response
-    {
+    #[Route('/{id}', name: 'app_beneficiaire_show', methods: ['GET', 'POST'])]
+    public function show(
+        Beneficiaire $beneficiaire, 
+        Request $request, 
+        EntityManagerInterface $entityManager,
+        SluggerInterface $slugger
+    ): Response {
+        $document = new BeneficiaireDocument();
+        $form = $this->createForm(DocumentType::class, $document);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted()) {
+            if ($form->isValid()) {
+                $file = $form->get('file')->getData();
+                if ($file) {
+                    $originalFilename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+                    $safeFilename = $slugger->slug($originalFilename);
+                    $newFilename = $safeFilename.'-'.uniqid().'.'.$file->guessExtension();
+
+                    try {
+                        $uploadDir = $this->getParameter('kernel.project_dir').'/public/uploads/documents/beneficiaires';
+                        if (!file_exists($uploadDir)) {
+                            mkdir($uploadDir, 0777, true);
+                        }
+
+                        $file->move($uploadDir, $newFilename);
+                        
+                        $document->setFilename($newFilename);
+                        $document->setOriginalName($file->getClientOriginalName());
+                        $document->setBeneficiaire($beneficiaire);
+                        
+                        $entityManager->persist($document);
+                        $entityManager->flush();
+
+                        $this->addFlash('success', 'تم تحميل الملف بنجاح: ' . $document->getOriginalName());
+                    } catch (\Exception $e) {
+                        $this->addFlash('error', 'خطأ أثناء الحفظ: ' . $e->getMessage());
+                    }
+                } else {
+                    $this->addFlash('error', 'يرجى اختيار ملف للرفع.');
+                }
+                return $this->redirectToRoute('app_beneficiaire_show', ['id' => $beneficiaire->getId()]);
+            } else {
+                foreach ($form->getErrors(true) as $error) {
+                    $this->addFlash('error', 'خطأ في النموذج: ' . $error->getMessage());
+                }
+            }
+        }
+
         return $this->render('beneficiaire/show.html.twig', [
             'beneficiaire' => $beneficiaire,
+            'form' => $form->createView(),
+            'documents' => $beneficiaire->getDocuments(),
+            'rapports' => $beneficiaire->getRapports()
         ]);
     }
 

@@ -59,6 +59,9 @@ class Beneficiaire
     #[ORM\OneToMany(mappedBy: 'beneficiaire', targetEntity: Rapport::class)]
     private Collection $rapports;
 
+    #[ORM\OneToMany(mappedBy: 'beneficiaire', targetEntity: BeneficiaireDocument::class, orphanRemoval: true)]
+    private Collection $documents;
+
     #[ORM\Column(type: 'boolean')]
     private ?bool $actif = true;
 
@@ -66,6 +69,7 @@ class Beneficiaire
     {
         $this->activites = new ArrayCollection();
         $this->rapports = new ArrayCollection();
+        $this->documents = new ArrayCollection();
         $this->dateInscription = new \DateTime();
     }
 
@@ -250,5 +254,13 @@ class Beneficiaire
         }
 
         return $this;
+    }
+
+    /**
+     * @return Collection<int, BeneficiaireDocument>
+     */
+    public function getDocuments(): Collection
+    {
+        return $this->documents;
     }
 }
