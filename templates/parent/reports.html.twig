@@ -1,0 +1,95 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}تقارير المتابعة - فضاء الأولياء{% endblock %}
+
+{% block body %}
+<div class="page-header">
+    <div class="page-title">
+        <h2>تقارير المتابعة</h2>
+        <p>التقارير الطبية والتقييمات الدورية</p>
+    </div>
+</div>
+
+<div class="card border-0">
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0 text-center">
+                <thead>
+                    <tr>
+                        <th class="text-end ps-4">الطفل</th>
+                        <th>نوع التقرير</th>
+                        <th>التاريخ</th>
+                        <th class="text-end">ملخص التقرير</th>
+                        <th class="text-start pe-4">الإجراءات</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for report in reports %}
+                    <tr>
+                        <td class="text-end ps-4">
+                            <div class="fw-800 text-main">{{ report.beneficiaire.prenom }} {{ report.beneficiaire.nom }}</div>
+                        </td>
+                        <td>
+                            <span class="badge-2026 bg-primary bg-opacity-10 text-primary">{{ report.type }}</span>
+                        </td>
+                        <td class="fw-600">{{ report.date|date('Y/m/d') }}</td>
+                        <td class="text-end">
+                            <div class="text-truncate" style="max-width: 300px;">
+                                {{ report.contenu|length > 100 ? report.contenu|slice(0, 100) ~ '...' : report.contenu }}
+                            </div>
+                        </td>
+                        <td class="text-start pe-4">
+                            <button type="button" class="action-btn-2026" data-bs-toggle="modal" data-bs-target="#reportModal{{ report.id }}">
+                                <i class="bi bi-eye"></i>
+                            </button>
+
+                            <!-- Modal -->
+                            <div class="modal fade" id="reportModal{{ report.id }}" tabindex="-1" aria-hidden="true">
+                                <div class="modal-dialog modal-lg modal-dialog-centered">
+                                    <div class="modal-content border-0 shadow-lg rounded-24">
+                                        <div class="modal-header border-0 pb-0">
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body p-5">
+                                            <div class="d-flex align-items-center mb-4">
+                                                <div class="stat-icon-2024 bg-primary bg-opacity-10 text-primary ms-3">
+                                                    <i class="bi bi-file-earmark-medical"></i>
+                                                </div>
+                                                <div>
+                                                    <h4 class="fw-900 mb-1">تفاصيل التقرير</h4>
+                                                    <p class="text-muted small mb-0">{{ report.beneficiaire.prenom }} {{ report.beneficiaire.nom }} - {{ report.date|date('Y/m/d') }}</p>
+                                                </div>
+                                            </div>
+                                            <div class="bg-light p-4 rounded-16">
+                                                <p class="mb-0 text-main fw-600 line-height-lg" style="white-space: pre-wrap; text-align: right;">{{ report.contenu }}</p>
+                                            </div>
+                                            <div class="mt-4 pt-4 border-top">
+                                                <p class="small text-muted mb-0">تم إنشاؤه بواسطة: <span class="fw-800 text-navy">{{ report.createdBy.prenom }} {{ report.createdBy.nom }}</span></p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="5" class="text-center py-5">
+                            <i class="bi bi-file-earmark-x text-muted opacity-25 d-block mb-3" style="font-size: 3rem;"></i>
+                            <p class="text-muted fw-600">لا توجد تقارير متاحة حالياً.</p>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<style>
+    .rounded-24 { border-radius: 24px !important; }
+    .rounded-16 { border-radius: 16px !important; }
+    .stat-icon-2024 { width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; }
+    .line-height-lg { line-height: 1.8; }
+</style>
+{% endblock %}

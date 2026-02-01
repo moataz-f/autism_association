@@ -420,86 +420,107 @@
                     </a>
                     {% endif %}
                     
-                    <div class="nav-section-label">الإدارة</div>
-                    <a class="nav-link {{ app.request.get('_route') starts with 'app_beneficiaire' ? 'active' : '' }}" href="{{ path('app_beneficiaire_index') }}">
-                        <i class="bi bi-person-fill"></i> المنتفعون
-                    </a>
-                    <a class="nav-link {{ app.request.get('_route') starts with 'app_famille' ? 'active' : '' }}" href="{{ path('app_famille_index') }}">
-                        <i class="bi bi-house-fill"></i> العائلات
-                    </a>
-                    <a class="nav-link {{ app.request.get('_route') starts with 'admin_donation_index' ? 'active' : '' }}" href="{{ path('admin_donation_index') }}">
-                        <i class="bi bi-gift-fill"></i> حملات التبرع
-                    </a>
-                    <a class="nav-link {{ app.request.get('_route') starts with 'admin_donation_request' ? 'active' : '' }}" href="{{ path('admin_donation_request_index') }}">
-                        <i class="bi bi-heart-fill"></i> طلبات التبرع
-                    </a>
-                    <a class="nav-link {{ app.request.get('_route') starts with 'admin_seance' ? 'active' : '' }}" href="{{ path('admin_seance_index') }}">
-                        <i class="bi bi-calendar-event"></i> الجدولة
-                    </a>
-                    {% if is_granted('ROLE_ADMIN') %}
-                    <a class="nav-link {{ app.request.get('_route') starts with 'admin_task' ? 'active' : '' }}" href="{{ path('admin_task_index') }}">
-                        <i class="bi bi-list-check"></i> إدارة المهام
-                    </a>
-                    <a class="nav-link {{ app.request.get('_route') starts with 'admin_event' ? 'active' : '' }}" href="{{ path('admin_event_index') }}">
-                        <i class="bi bi-calendar-check"></i> إدارة الأحداث
-                    </a>
+                    {% if is_granted('ROLE_PARENT') %}
+                        <div class="nav-section-label">فضاء الأولياء</div>
+                        <a class="nav-link {{ app.request.get('_route') starts with 'app_parent_children' ? 'active' : '' }}" href="{{ path('app_parent_children') }}">
+                            <i class="bi bi-people-fill"></i> ملفات الأطفال
+                        </a>
+                        <a class="nav-link {{ app.request.get('_route') starts with 'app_parent_registration' ? 'active' : '' }}" href="{{ path('app_parent_registration_new') }}">
+                            <i class="bi bi-person-plus-fill"></i> طلبات التسجيل
+                        </a>
+                        <a class="nav-link {{ app.request.get('_route') starts with 'app_parent_sessions' ? 'active' : '' }}" href="{{ path('app_parent_sessions') }}">
+                            <i class="bi bi-calendar-event"></i> جدول الحصص
+                        </a>
+                        <a class="nav-link {{ app.request.get('_route') starts with 'app_parent_reports' ? 'active' : '' }}" href="{{ path('app_parent_reports') }}">
+                            <i class="bi bi-file-earmark-medical"></i> تقارير المتابعة
+                        </a>
+                        <a class="nav-link {{ app.request.get('_route') starts with 'app_messaging' ? 'active' : '' }}" href="{{ path('app_messaging_index') }}">
+                            <i class="bi bi-chat-dots-fill"></i> Messagerie / المراسلة
+                        </a>
                     {% endif %}
 
-                    {% if is_granted('ROLE_ADMIN') %}
-                    <a class="nav-link complex {{ app.request.get('_route') starts with 'admin_pointage' ? 'active' : '' }}" href="{{ path('admin_pointage_index') }}">
-                        <i class="bi bi-clock-history"></i>
-                        <div class="link-info">
-                            <span>سجل الحضور</span>
-                            <span class="sub">متابعة الغياب والتأخير</span>
-                        </div>
-                    </a>
-                    <a class="nav-link complex" href="{{ path('admin_pointage_print_daily') }}" target="_blank">
-                        <i class="bi bi-qr-code-scan"></i>
-                        <div class="link-info">
-                            <span>طباعة رموز اليوم</span>
-                            <span class="sub">فتح واجهة الرموز اليومية</span>
-                        </div>
-                    </a>
-                    {% endif %}
+                    {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_SPECIALIST') or is_granted('ROLE_STAFF') %}
+                        <div class="nav-section-label">الإدارة</div>
+                        <a class="nav-link {{ app.request.get('_route') starts with 'app_beneficiaire' ? 'active' : '' }}" href="{{ path('app_beneficiaire_index') }}">
+                            <i class="bi bi-person-fill"></i> المنتفعون
+                        </a>
+                        <a class="nav-link {{ app.request.get('_route') starts with 'admin_donation_index' ? 'active' : '' }}" href="{{ path('admin_donation_index') }}">
+                            <i class="bi bi-gift-fill"></i> حملات التبرع
+                        </a>
+                        <a class="nav-link {{ app.request.get('_route') starts with 'admin_child_registration' ? 'active' : '' }}" href="{{ path('admin_child_registration_index') }}">
+                            <i class="bi bi-person-plus-fill"></i> طلبات تسجيل الأطفال
+                        </a>
+                        <a class="nav-link {{ app.request.get('_route') starts with 'admin_donation_request' ? 'active' : '' }}" href="{{ path('admin_donation_request_index') }}">
+                            <i class="bi bi-heart-fill"></i> طلبات التبرع
+                        </a>
+                        <a class="nav-link {{ app.request.get('_route') starts with 'admin_seance' ? 'active' : '' }}" href="{{ path('admin_seance_index') }}">
+                            <i class="bi bi-calendar-event"></i> الجدولة
+                        </a>
+                        {% if is_granted('ROLE_ADMIN') %}
+                            <a class="nav-link {{ app.request.get('_route') starts with 'admin_task' ? 'active' : '' }}" href="{{ path('admin_task_index') }}">
+                                <i class="bi bi-list-check"></i> إدارة المهام
+                            </a>
+                            <a class="nav-link {{ app.request.get('_route') starts with 'admin_event' ? 'active' : '' }}" href="{{ path('admin_event_index') }}">
+                                <i class="bi bi-calendar-check"></i> إدارة الأحداث
+                            </a>
+                        {% endif %}
 
-                    <div class="nav-section-label">النشر الرقمي</div>
-                    <a class="nav-link complex {{ app.request.get('_route') starts with 'admin_content' ? 'active' : '' }}" href="{{ path('admin_content_index') }}">
-                        <i class="bi bi-pencil-square"></i>
-                        <div class="link-info">
-                            <span>محتوى الصفحات</span>
-                            <span class="sub">إدارة النصوص والروابط</span>
-                        </div>
-                    </a>
-                    <a class="nav-link complex {{ app.request.get('_route') starts with 'admin_gallery' ? 'active' : '' }}" href="{{ path('admin_gallery_index') }}">
-                        <i class="bi bi-images"></i>
-                        <div class="link-info">
-                            <span>معرض الصور</span>
-                            <span class="sub">تحديث ألبوم الجمعية</span>
-                        </div>
-                    </a>
-                    <a class="nav-link complex {{ app.request.get('_route') starts with 'admin_actualite' ? 'active' : '' }}" href="{{ path('admin_actualite_index') }}">
-                        <i class="bi bi-newspaper"></i>
-                        <div class="link-info">
-                            <span>الأخبار</span>
-                            <span class="sub">نشر المستجدات</span>
-                        </div>
-                    </a>
-                    <a class="nav-link complex {{ app.request.get('_route') starts with 'admin_page' ? 'active' : '' }}" href="{{ path('admin_page_index') }}">
-                        <i class="bi bi-file-earmark-text"></i>
-                        <div class="link-info">
-                            <span>الصفحات الثابتة</span>
-                            <span class="sub">إدارة محتوى الصفحات</span>
-                        </div>
-                    </a>
+                        {% if is_granted('ROLE_ADMIN') %}
+                            <a class="nav-link complex {{ app.request.get('_route') starts with 'admin_pointage' ? 'active' : '' }}" href="{{ path('admin_pointage_index') }}">
+                                <i class="bi bi-clock-history"></i>
+                                <div class="link-info">
+                                    <span>سجل الحضور</span>
+                                    <span class="sub">متابعة الغياب والتأخير</span>
+                                </div>
+                            </a>
+                            <a class="nav-link complex" href="{{ path('admin_pointage_print_daily') }}" target="_blank">
+                                <i class="bi bi-qr-code-scan"></i>
+                                <div class="link-info">
+                                    <span>طباعة رموز اليوم</span>
+                                    <span class="sub">فتح واجهة الرموز اليومية</span>
+                                </div>
+                            </a>
+                        {% endif %}
 
-                    {% if is_granted('ROLE_ADMIN') %}
-                    <div class="nav-section-label">النظام</div>
-                    <a class="nav-link {{ app.request.get('_route') starts with 'app_personnel' ? 'active' : '' }}" href="{{ path('app_personnel_index') }}">
-                        <i class="bi bi-people-fill"></i> الفريق
-                    </a>
-                    <a class="nav-link {{ app.request.get('_route') starts with 'admin_user' ? 'active' : '' }}" href="{{ path('admin_user_index') }}">
-                        <i class="bi bi-shield-lock-fill"></i> الصلاحيات
-                    </a>
+                        <div class="nav-section-label">النشر الرقمي</div>
+                        <a class="nav-link complex {{ app.request.get('_route') starts with 'admin_content' ? 'active' : '' }}" href="{{ path('admin_content_index') }}">
+                            <i class="bi bi-pencil-square"></i>
+                            <div class="link-info">
+                                <span>محتوى الصفحات</span>
+                                <span class="sub">إدارة النصوص والروابط</span>
+                            </div>
+                        </a>
+                        <a class="nav-link complex {{ app.request.get('_route') starts with 'admin_gallery' ? 'active' : '' }}" href="{{ path('admin_gallery_index') }}">
+                            <i class="bi bi-images"></i>
+                            <div class="link-info">
+                                <span>معرض الصور</span>
+                                <span class="sub">تحديث ألبوم الجمعية</span>
+                            </div>
+                        </a>
+                        <a class="nav-link complex {{ app.request.get('_route') starts with 'admin_actualite' ? 'active' : '' }}" href="{{ path('admin_actualite_index') }}">
+                            <i class="bi bi-newspaper"></i>
+                            <div class="link-info">
+                                <span>الأخبار</span>
+                                <span class="sub">نشر المستجدات</span>
+                            </div>
+                        </a>
+                        <a class="nav-link complex {{ app.request.get('_route') starts with 'admin_page' ? 'active' : '' }}" href="{{ path('admin_page_index') }}">
+                            <i class="bi bi-file-earmark-text"></i>
+                            <div class="link-info">
+                                <span>الصفحات الثابتة</span>
+                                <span class="sub">إدارة محتوى الصفحات</span>
+                            </div>
+                        </a>
+
+                        {% if is_granted('ROLE_ADMIN') %}
+                            <div class="nav-section-label">النظام</div>
+                            <a class="nav-link {{ app.request.get('_route') starts with 'app_personnel' ? 'active' : '' }}" href="{{ path('app_personnel_index') }}">
+                                <i class="bi bi-people-fill"></i> الفريق
+                            </a>
+                            <a class="nav-link {{ app.request.get('_route') starts with 'admin_user' ? 'active' : '' }}" href="{{ path('admin_user_index') }}">
+                                <i class="bi bi-shield-lock-fill"></i> الصلاحيات
+                            </a>
+                        {% endif %}
                     {% endif %}
                 </nav>
             </div>

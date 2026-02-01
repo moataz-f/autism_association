@@ -12,6 +12,8 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
+use App\Entity\Beneficiaire;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
 class UserType extends AbstractType
 {
@@ -48,6 +50,15 @@ class UserType extends AbstractType
                 'multiple' => true,
                 'expanded' => true,
                 'attr' => ['class' => 'form-check']
+            ])
+            ->add('children', EntityType::class, [
+                'class' => Beneficiaire::class,
+                'label' => 'الأطفال المرتبطون',
+                'multiple' => true,
+                'expanded' => false,
+                'required' => false,
+                'attr' => ['class' => 'form-control select2'],
+                'help' => 'اختر الأطفال الذين يتبعون لهذا الحساب (خاص بأولياء الأمور)',
             ]);
 
         if ($options['is_new']) {

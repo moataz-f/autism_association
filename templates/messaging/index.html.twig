@@ -1,0 +1,133 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}المراسلة - فضاء المحادثة{% endblock %}
+
+{% block body %}
+<div class="page-header justify-content-between">
+    <div class="page-title">
+        <h2>مركز المراسلة</h2>
+        <p>تواصل مباشرة مع فريق الجمعية وأولياء الأمور</p>
+    </div>
+</div>
+
+<div class="row g-4">
+    <div class="col-lg-4">
+        <div class="card border-0 shadow-sm overflow-hidden" style="border-radius: 24px;">
+            <div class="p-4 bg-light border-bottom">
+                <form action="{{ path('app_messaging_index') }}" method="get">
+                    <div class="input-group">
+                        <input type="text" name="search" class="form-control border-0 bg-white" placeholder="ابحث عن اسم..." value="{{ searchQuery }}">
+                        <button class="btn btn-primary" type="submit">
+                            <i class="bi bi-search"></i>
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="messaging-sidebar-content" style="max-height: 600px; overflow-y: auto;">
+                {% if searchResults is not empty %}
+                    <div class="px-4 py-3 bg-warning bg-opacity-10">
+                        <h6 class="fw-800 mb-0 small text-warning text-uppercase">نتائج البحث</h6>
+                    </div>
+                    <div class="list-group list-group-flush">
+                        {% for result in searchResults %}
+                            <a href="{{ path('app_messaging_thread', {'id': result.id}) }}" class="list-group-item list-group-item-action py-3 border-0 border-bottom">
+                                <div class="d-flex align-items-center">
+                                    <div class="avatar-sq ms-3 bg-warning text-white">
+                                        {{ result.prenom|first|upper }}
+                                    </div>
+                                    <div>
+                                        <div class="fw-800 text-main small">{{ result.prenom }} {{ result.nom }}</div>
+                                        <span class="badge bg-light text-muted fw-600 x-small">{{ result.roles|join(', ')|replace({'ROLE_': ''}) }}</span>
+                                    </div>
+                                </div>
+                            </a>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
+                <div class="px-4 py-3 bg-light">
+                    <h6 class="fw-800 mb-0 small text-muted text-uppercase">المحادثات الأخيرة</h6>
+                </div>
+                <div class="list-group list-group-flush">
+                    {% for contact in contacts %}
+                        <a href="{{ path('app_messaging_thread', {'id': contact.id}) }}" class="list-group-item list-group-item-action py-3 border-0 border-bottom">
+                            <div class="d-flex align-items-center">
+                                <div class="avatar-sq ms-3 bg-primary bg-opacity-10 text-primary">
+                                    {{ contact.prenom|first|upper }}
+                                </div>
+                                <div class="flex-grow-1">
+                                    <div class="fw-800 text-main small">{{ contact.prenom }} {{ contact.nom }}</div>
+                                    <div class="text-muted x-small">انقر لمتابعة الحديث</div>
+                                </div>
+                            </div>
+                        </a>
+                    {% else %}
+                        <div class="text-center py-4 text-muted small">لا توجد محادثات سابقة</div>
+                    {% endfor %}
+                </div>
+
+                {% if parents is not empty %}
+                    <div class="px-4 py-3 bg-light mt-2">
+                        <h6 class="fw-800 mb-0 small text-muted text-uppercase">أولياء الأمور</h6>
+                    </div>
+                    <div class="list-group list-group-flush">
+                        {% for parent in parents %}
+                            <a href="{{ path('app_messaging_thread', {'id': parent.id}) }}" class="list-group-item list-group-item-action py-3 border-0 border-bottom">
+                                <div class="d-flex align-items-center">
+                                    <div class="avatar-sq ms-3 bg-info bg-opacity-10 text-info">
+                                        <i class="bi bi-person"></i>
+                                    </div>
+                                    <div>
+                                        <div class="fw-800 text-main small">{{ parent.prenom }} {{ parent.nom }}</div>
+                                        <small class="text-muted x-small">ولي أمر</small>
+                                    </div>
+                                </div>
+                            </a>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
+                <div class="px-4 py-3 bg-light mt-2">
+                    <h6 class="fw-800 mb-0 small text-muted text-uppercase">الإدارة</h6>
+                </div>
+                <div class="list-group list-group-flush">
+                    {% for admin in admins %}
+                        <a href="{{ path('app_messaging_thread', {'id': admin.id}) }}" class="list-group-item list-group-item-action py-3 border-0 border-bottom">
+                            <div class="d-flex align-items-center">
+                                <div class="avatar-sq ms-3 bg-navy text-white">
+                                    <i class="bi bi-shield-check"></i>
+                                </div>
+                                <div>
+                                    <div class="fw-800 text-main small">{{ admin.prenom }} {{ admin.nom }}</div>
+                                    <small class="text-muted x-small">مشرف النظام</small>
+                                </div>
+                            </div>
+                        </a>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-8">
+        <div class="card border-0 h-100 shadow-sm d-flex flex-column align-items-center justify-content-center py-5" style="border-radius: 24px;">
+            <div class="text-center">
+                <div class="mb-4">
+                    <i class="bi bi-chat-dots text-primary bg-primary bg-opacity-10 p-4 rounded-circle" style="font-size: 4rem;"></i>
+                </div>
+                <h5 class="fw-800 text-navy mt-4">يرجى اختيار جهة اتصال لبدء المحادثة</h5>
+                <p class="text-muted px-5">يمكنك البحث عن أي مستخدم بالاسم في شريط البحث الجانبي.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .bg-navy { background: #0F111A !important; }
+    .x-small { font-size: 0.75rem; }
+    .rounded-24 { border-radius: 24px; }
+    .list-group-item-action:hover { background-color: #f8f9fa; }
+    .avatar-sq { width: 40px; height: 40px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-weight: 800; }
+</style>
+{% endblock %}

@@ -6,6 +6,8 @@ use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
@@ -42,6 +44,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(length: 20, nullable: true)]
     private ?string $registrationRole = null; // PARENT, DONOR, VOLUNTEER
+
+    #[ORM\ManyToMany(targetEntity: Beneficiaire::class, mappedBy: 'parents')]
+    private Collection $children;
+
+    public function __construct()
+    {
+        $this->children = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -155,6 +165,31 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setRegistrationRole(?string $registrationRole): self
     {
         $this->registrationRole = $registrationRole;
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Beneficiaire>
+     */
+    public function getChildren(): Collection
+    {
+        return $this->children;
+    }
+
+    public function addChild(Beneficiaire $child): self
+    {
+        if (!$this->children->contains($child)) {
+            $this->children->add($child);
+            $child->addParent($this);
+        }
+        return $this;
+    }
+
+    public function removeChild(Beneficiaire $child): self
+    {
+        if ($this->children->removeElement($child)) {
+            $child->removeParent($this);
+        }
         return $this;
     }
 }

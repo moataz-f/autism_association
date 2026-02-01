@@ -22,7 +22,7 @@
                         <th class="text-end ps-4" style="width: 30%;">الطفل</th>
                         <th>تاريخ الميلاد</th>
                         <th>المستوى</th>
-                        <th>العائلة</th>
+                        <th>الأولياء</th>
                         <th>الحالة</th>
                         <th class="text-start pe-4">الإجراءات</th>
                     </tr>
@@ -51,7 +51,7 @@
                                 {{ beneficiaire.niveauAutisme }}
                             </span>
                         </td>
-                        <td class="fw-700 text-muted">{{ beneficiaire.famille ?: '-' }}</td>
+                        <td class="fw-700 text-muted">{{ beneficiaire.parents|length }} وليّ أمر</td>
                         <td>
                             <div class="d-flex align-items-center justify-content-center">
                                 <span class="dot-indicator bg-{{ beneficiaire.actif ? 'secondary' : 'muted' }} ms-2"></span>

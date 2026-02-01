@@ -29,19 +29,24 @@ class ExportController extends AbstractController
         $sheet->setCellValue('D1', 'Date Naissance');
         $sheet->setCellValue('E1', 'Genre');
         $sheet->setCellValue('F1', 'Niveau Autisme');
-        $sheet->setCellValue('G1', 'Famille');
+        $sheet->setCellValue('G1', 'Parents');
         $sheet->setCellValue('H1', 'Téléphone');
 
         // Données
         $row = 2;
         foreach ($beneficiaires as $beneficiaire) {
+            $parentsList = [];
+            foreach ($beneficiaire->getParents() as $parent) {
+                $parentsList[] = $parent->getNom() . ' ' . $parent->getPrenom();
+            }
+
             $sheet->setCellValue('A' . $row, $beneficiaire->getId());
             $sheet->setCellValue('B' . $row, $beneficiaire->getNom());
             $sheet->setCellValue('C' . $row, $beneficiaire->getPrenom());
             $sheet->setCellValue('D' . $row, $beneficiaire->getDateNaissance()->format('d/m/Y'));
             $sheet->setCellValue('E' . $row, $beneficiaire->getGenre());
             $sheet->setCellValue('F' . $row, $beneficiaire->getNiveauAutisme());
-            $sheet->setCellValue('G' . $row, $beneficiaire->getFamille());
+            $sheet->setCellValue('G' . $row, implode(', ', $parentsList));
             $sheet->setCellValue('H' . $row, $beneficiaire->getTelephone());
             $row++;
         }

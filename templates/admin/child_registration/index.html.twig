@@ -1,0 +1,81 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}إدارة طلبات تسجيل الأطفال - الإدارة{% endblock %}
+
+{% block body %}
+<div class="page-header justify-content-between">
+    <div class="page-title">
+        <h2>طلبات تسجيل الأطفال</h2>
+        <p>مراجعة وقبول أو رفض طلبات التسجيل المقدمة من الأولياء</p>
+    </div>
+</div>
+
+<div class="card border-0 shadow-sm">
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0 text-center">
+                <thead class="bg-light text-navy">
+                    <tr>
+                        <th class="text-end ps-4">الطفل</th>
+                        <th>تاريخ الولادة</th>
+                        <th>مستوى التوحد</th>
+                        <th>ولي الأمر</th>
+                        <th>تاريخ الطلب</th>
+                        <th>الحالة</th>
+                        <th class="text-start pe-4">الإجراءات</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for request in requests %}
+                    <tr>
+                        <td class="text-end ps-4">
+                            <div class="fw-800 text-main">{{ request.prenom }} {{ request.nom }}</div>
+                        </td>
+                        <td class="fw-600">{{ request.dateNaissance|date('Y/m/d') }}</td>
+                        <td>
+                            <span class="badge-2026 bg-primary bg-opacity-10 text-primary">{{ request.niveauAutisme }}</span>
+                        </td>
+                        <td class="text-navy fw-800">{{ request.parent.prenom }} {{ request.parent.nom }}</td>
+                        <td class="text-muted small">{{ request.createdAt|date('Y/m/d H:i') }}</td>
+                        <td>
+                            {% if request.status == 'PENDING' %}
+                                <span class="badge-2026 bg-warning bg-opacity-10 text-warning">قيد الانتظار</span>
+                            {% elseif request.status == 'APPROVED' %}
+                                <span class="badge-2026 bg-success bg-opacity-10 text-success">مقبول</span>
+                            {% else %}
+                                <span class="badge-2026 bg-danger bg-opacity-10 text-danger">مرفوض</span>
+                            {% endif %}
+                        </td>
+                        <td class="text-start pe-4">
+                            {% if request.status == 'PENDING' %}
+                                <div class="d-flex gap-2 justify-content-start">
+                                    <form method="post" action="{{ path('admin_child_registration_approve', {id: request.id}) }}" onsubmit="return confirm('هل أنت متأكد من قبول هذا الطلب؟ سيتم إنشاء ملف للطفل تلقائياً.');">
+                                        <button class="btn btn-sm btn-success rounded-pill px-3">
+                                            <i class="bi bi-check-lg ms-1"></i> قبول
+                                        </button>
+                                    </form>
+                                    <form method="post" action="{{ path('admin_child_registration_reject', {id: request.id}) }}" onsubmit="return confirm('هل أنت متأكد من رفض هذا الطلب؟');">
+                                        <button class="btn btn-sm btn-danger rounded-pill px-3">
+                                            <i class="bi bi-x-lg ms-1"></i> رفض
+                                        </button>
+                                    </form>
+                                </div>
+                            {% else %}
+                                <span class="text-muted small">لا توجد إجراءات</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="7" class="text-center py-5">
+                            <i class="bi bi-inbox text-muted opacity-25 d-block mb-3" style="font-size: 3rem;"></i>
+                            <p class="text-muted fw-600">لا توجد طلبات تسجيل حالياً.</p>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,58 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}محادثة مع {{ otherUser.prenom }} - فضاء الأولياء{% endblock %}
+
+{% block body %}
+<div class="page-header py-3">
+    <div class="d-flex align-items-center">
+        <a href="{{ path('app_messaging_index') }}" class="btn btn-sm btn-outline-secondary ms-3">
+            <i class="bi bi-arrow-right"></i>
+        </a>
+        <div class="avatar-sq ms-2 bg-primary bg-opacity-10 text-primary" style="width: 40px; height: 40px;">
+            {{ otherUser.prenom|first|upper }}
+        </div>
+        <div>
+            <h5 class="fw-800 mb-0">{{ otherUser.prenom }} {{ otherUser.nom }}</h5>
+            <small class="text-muted">محادثة نشطة</small>
+        </div>
+    </div>
+</div>
+
+<div class="card border-0 shadow-sm flex-grow-1" style="height: 60vh;">
+    <div class="card-body p-4 d-flex flex-column h-100">
+        <div class="chat-messages mb-4 flex-grow-1 overflow-auto pe-3">
+            {% for msg in messages %}
+                <div class="d-flex {{ msg.sender == app.user ? 'justify-content-start' : 'justify-content-end' }} mb-3">
+                    <div class="message-bubble p-3 rounded-20 shadow-sm {{ msg.sender == app.user ? 'bg-primary text-white ms-5' : 'bg-light text-main me-5' }}" style="max-width: 75%;">
+                        <div class="fw-600">{{ msg.content }}</div>
+                        <div class="text-end mt-1" style="font-size: 0.65rem; opacity: 0.7;">
+                            {{ msg.createdAt|date('H:i') }}
+                        </div>
+                    </div>
+                </div>
+            {% else %}
+                <div class="text-center text-muted py-5">
+                    <p>لا توجد رسائل سابقة. ابدأ المحادثة الآن!</p>
+                </div>
+            {% endfor %}
+        </div>
+
+        <form action="{{ path('app_messaging_send', {'id': otherUser.id}) }}" method="post" class="mt-auto pt-3 border-top">
+            <div class="input-group">
+                <input type="text" name="content" class="form-control rounded-pill-right border-0 bg-light px-4" placeholder="اكتب رسالتك هنا..." required>
+                <button class="btn btn-primary rounded-pill-left px-4" type="submit">
+                    <i class="bi bi-send-fill ms-2"></i> إرسال 
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<style>
+    .rounded-20 { border-radius: 20px; }
+    .rounded-pill-right { border-radius: 0 40px 40px 0 !important; }
+    .rounded-pill-left { border-radius: 40px 0 0 40px !important; }
+    .chat-messages::-webkit-scrollbar { width: 5px; }
+    .chat-messages::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.1); border-radius: 10px; }
+</style>
+{% endblock %}

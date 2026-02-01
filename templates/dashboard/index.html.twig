@@ -11,7 +11,7 @@
 </div>
 
 <div class="row g-4 mb-5">
-    <div class="col-lg-3">
+    <div class="col-lg-4">
         <div class="card h-100 p-4 border-0">
             <div class="d-flex flex-column h-100">
                 <div class="stat-icon-2026 mb-4" style="background: rgba(37, 99, 235, 0.08); color: var(--primary);">
@@ -22,18 +22,7 @@
             </div>
         </div>
     </div>
-    <div class="col-lg-3">
-        <div class="card h-100 p-4 border-0">
-            <div class="d-flex flex-column h-100">
-                <div class="stat-icon-2026 mb-4" style="background: rgba(16, 185, 129, 0.08); color: var(--secondary);">
-                    <i class="bi bi-house-door"></i>
-                </div>
-                <h3 class="fw-900 mb-1">{{ totalFamilles }}</h3>
-                <span class="text-muted fw-600 small">عائلة مسجلة حالياً</span>
-            </div>
-        </div>
-    </div>
-    <div class="col-lg-3">
+    <div class="col-lg-4">
         <div class="card h-100 p-4 border-0">
             <div class="d-flex flex-column h-100">
                 <div class="stat-icon-2026 mb-4" style="background: rgba(245, 158, 11, 0.08); color: var(--warning);">
@@ -44,7 +33,7 @@
             </div>
         </div>
     </div>
-    <div class="col-lg-3">
+    <div class="col-lg-4">
         <div class="card h-100 p-4 border-0">
             <div class="d-flex flex-column h-100">
                 <div class="stat-icon-2026 mb-4" style="background: rgba(239, 68, 68, 0.08); color: var(--danger);">
@@ -56,6 +45,57 @@
         </div>
     </div>
 </div>
+
+{% if is_granted('ROLE_PARENT') %}
+<div class="card border-0 shadow-sm mb-4 p-4 overflow-hidden position-relative" style="background: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%);">
+    <div class="row align-items-center position-relative" style="z-index: 2;">
+        <div class="col-md-8 text-white">
+            <h4 class="fw-900 mb-2">مرحباً بك في فضاء الأولياء</h4>
+            <p class="opacity-75 mb-0 fw-600">يمكنك هنا متابعة حصص أطفالك، قراءة تقاريرهم، والتواصل مع الجمعية.</p>
+        </div>
+        <div class="col-md-4 text-md-end mt-3 mt-md-0">
+            <a href="{{ path('app_parent_children') }}" class="btn btn-white px-4 py-2 fw-800 rounded-pill shadow-sm">
+                <i class="bi bi-people ms-2"></i> ملفات أطفالي
+            </a>
+        </div>
+    </div>
+    <i class="bi bi-house-heart position-absolute end-0 bottom-0 opacity-10" style="font-size: 8rem; transform: translate(20%, 20%); color: white;"></i>
+</div>
+
+<div class="row g-4 mb-4">
+    <div class="col-lg-6">
+        <div class="card h-100 p-4 border-0">
+            <h5 class="fw-900 mb-4 ms-2">أطفالي المسجلون</h5>
+            <div class="d-flex flex-wrap gap-3">
+                {% for child in myChildren %}
+                    <div class="p-3 rounded-24 bg-light text-center" style="min-width: 120px;">
+                        <div class="avatar-sq mx-auto mb-2 bg-primary text-white" style="width: 40px; height: 40px;">
+                            {{ child.prenom|first|upper }}
+                        </div>
+                        <div class="fw-800 small">{{ child.prenom }}</div>
+                        <div class="text-muted small">{{ child.niveauAutisme }}</div>
+                    </div>
+                {% else %}
+                    <p class="text-muted small ms-2">لا يوجد أطفال مرتبطون بحسابك حالياً. يرجى مراجعة الإدارة.</p>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="card h-100 p-4 border-0">
+            <h5 class="fw-900 mb-4 ms-2">خيوط التواصل</h5>
+            <div class="d-grid gap-2">
+                <a href="{{ path('app_messaging_index') }}" class="btn btn-outline-primary py-3 rounded-16 border-2 fw-800">
+                    <i class="bi bi-chat-left-dots-fill ms-2"></i> المحادثات والرسائل
+                </a>
+                <a href="{{ path('app_parent_registration_new') }}" class="btn btn-navy py-3 rounded-16 fw-800 text-white">
+                    <i class="bi bi-file-earmark-plus ms-2"></i> تقديم طلب تسجيل جديد
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
 
 {# New: Employee Personal Attendance Block #}
 {% if is_granted('ROLE_PERSONNEL') or is_granted('ROLE_EDUCATEUR') %}
@@ -75,6 +115,7 @@
 </div>
 {% endif %}
 
+{% if not is_granted('ROLE_PARENT') %}
 <div class="row g-4">
     {# Big Bento Section: Quick Access #}
     <div class="col-lg-8">
@@ -90,12 +131,7 @@
                         <span>المنتفعون</span>
                     </a>
                 </div>
-                <div class="col-md-3">
-                    <a href="{{ path('app_famille_index') }}" class="bento-link">
-                        <div class="b-icon"><i class="bi bi-house-heart-fill"></i></div>
-                        <span>العائلات</span>
-                    </a>
-                </div>
+
                 <div class="col-md-3">
                     <a href="{{ path('admin_donation_index') }}" class="bento-link">
                         <div class="b-icon"><i class="bi bi-gift-fill"></i></div>
@@ -173,6 +209,7 @@
         </div>
     </div>
 </div>
+{% endif %}
 
 {# New Row: My Tasks and My Events for Personnel #}
 {% if personnel %}

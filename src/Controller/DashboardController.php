@@ -4,7 +4,6 @@ namespace App\Controller;
 
 use App\Repository\BeneficiaireRepository;
 use App\Repository\ActiviteRepository;
-use App\Repository\FamilleRepository;
 use App\Repository\PersonnelRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -17,11 +16,9 @@ class DashboardController extends AbstractController
     public function index(
         BeneficiaireRepository $beneficiaireRepo,
         ActiviteRepository $activiteRepo,
-        FamilleRepository $familleRepo,
         PersonnelRepository $personnelRepo
     ): Response {
         $totalBeneficiaires = $beneficiaireRepo->count(['actif' => true]);
-        $totalFamilles = $familleRepo->count([]);
         $totalActivites = $activiteRepo->count(['actif' => true]);
         $totalPersonnel = $personnelRepo->count(['actif' => true]);
 
@@ -47,23 +44,26 @@ class DashboardController extends AbstractController
             ->getQuery()
             ->getResult();
 
-        // New: Tasks and Events for logged in personnel
+        // Tasks and Events for logged in user
         $user = $this->getUser();
         $myTasks = [];
         $myEvents = [];
         $personnel = null;
+        $myChildren = [];
 
-        if ($user && method_exists($user, 'getPersonnel')) {
-            $personnel = $user->getPersonnel();
-            if ($personnel) {
+        if ($user) {
+            if (method_exists($user, 'getPersonnel') && $personnel = $user->getPersonnel()) {
                 $myTasks = $personnel->getTasks();
                 $myEvents = $personnel->getEvents();
+            }
+
+            if ($this->isGranted('ROLE_PARENT')) {
+                $myChildren = $user->getChildren();
             }
         }
 
         return $this->render('dashboard/index.html.twig', [
             'totalBeneficiaires' => $totalBeneficiaires,
-            'totalFamilles' => $totalFamilles,
             'totalActivites' => $totalActivites,
             'totalPersonnel' => $totalPersonnel,
             'beneficiairesRecents' => $beneficiairesRecents,
@@ -71,7 +71,8 @@ class DashboardController extends AbstractController
             'statsParNiveau' => $statsParNiveau,
             'myTasks' => $myTasks,
             'myEvents' => $myEvents,
-            'personnel' => $personnel
+            'personnel' => $personnel,
+            'myChildren' => $myChildren
         ]);
     }
 }

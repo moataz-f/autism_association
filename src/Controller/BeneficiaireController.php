@@ -26,7 +26,8 @@ class BeneficiaireController extends AbstractController
         Request $request
     ): Response {
         $query = $beneficiaireRepository->createQueryBuilder('b')
-            ->leftJoin('b.famille', 'f')
+            ->leftJoin('b.parents', 'p')
+            ->addSelect('p')
             ->orderBy('b.dateInscription', 'DESC')
             ->getQuery();
 

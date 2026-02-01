@@ -49,10 +49,6 @@ class Beneficiaire
     #[ORM\Column(type: 'datetime')]
     private ?\DateTimeInterface $dateInscription = null;
 
-    #[ORM\ManyToOne(inversedBy: 'beneficiaires')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?Famille $famille = null;
-
     #[ORM\ManyToMany(targetEntity: Activite::class, inversedBy: 'beneficiaires')]
     private Collection $activites;
 
@@ -65,11 +61,16 @@ class Beneficiaire
     #[ORM\Column(type: 'boolean')]
     private ?bool $actif = true;
 
+    #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'children')]
+    #[ORM\JoinTable(name: 'beneficiaire_parents')]
+    private Collection $parents;
+
     public function __construct()
     {
         $this->activites = new ArrayCollection();
         $this->rapports = new ArrayCollection();
         $this->documents = new ArrayCollection();
+        $this->parents = new ArrayCollection();
         $this->dateInscription = new \DateTime();
     }
 
@@ -178,17 +179,6 @@ class Beneficiaire
         return $this;
     }
 
-    public function getFamille(): ?Famille
-    {
-        return $this->famille;
-    }
-
-    public function setFamille(?Famille $famille): self
-    {
-        $this->famille = $famille;
-        return $this;
-    }
-
     public function getActivites(): Collection
     {
         return $this->activites;
@@ -262,5 +252,27 @@ class Beneficiaire
     public function getDocuments(): Collection
     {
         return $this->documents;
+    }
+
+    /**
+     * @return Collection<int, User>
+     */
+    public function getParents(): Collection
+    {
+        return $this->parents;
+    }
+
+    public function addParent(User $parent): self
+    {
+        if (!$this->parents->contains($parent)) {
+            $this->parents->add($parent);
+        }
+        return $this;
+    }
+
+    public function removeParent(User $parent): self
+    {
+        $this->parents->removeElement($parent);
+        return $this;
     }
 }

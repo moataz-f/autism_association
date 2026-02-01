@@ -1,0 +1,50 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}تسجيل طفل جديد - فضاء الأولياء{% endblock %}
+
+{% block body %}
+<div class="page-header">
+    <div class="page-title">
+        <h2>طلب تسجيل جديد</h2>
+        <p>تقديم طلب لإضافة طفل جديد إلى الجمعية</p>
+    </div>
+</div>
+
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="card border-0 shadow-lg p-4">
+            {{ form_start(form) }}
+            <div class="row g-4">
+                <div class="col-md-6">
+                    {{ form_row(form.nom) }}
+                </div>
+                <div class="col-md-6">
+                    {{ form_row(form.prenom) }}
+                </div>
+                <div class="col-md-6">
+                    {{ form_row(form.dateNaissance) }}
+                </div>
+                <div class="col-md-6">
+                    {{ form_row(form.niveauAutisme) }}
+                </div>
+                
+                <div class="col-12 mt-5">
+                    <div class="alert alert-info border-0 rounded-16 shadow-none mb-4">
+                        <i class="bi bi-info-circle-fill me-2"></i>
+                        سيتم إخطاركم عبر البريد الإلكتروني بمجرد مراجعة طلبكم من قبل الإدارة.
+                    </div>
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-primary px-5 py-3 fw-800 rounded-16 flex-grow-1">
+                            تأكيد الطلب وإرسال
+                        </button>
+                        <a href="{{ path('app_parent_registration_index') }}" class="btn btn-light px-4 py-3 fw-700 rounded-16">
+                            إلغاء
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {{ form_end(form) }}
+        </div>
+    </div>
+</div>
+{% endblock %}

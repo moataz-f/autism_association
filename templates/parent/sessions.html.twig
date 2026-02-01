@@ -1,0 +1,71 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}جدول الحصص - فضاء الأولياء{% endblock %}
+
+{% block body %}
+<div class="page-header">
+    <div class="page-title">
+        <h2>جدول المتابعة</h2>
+        <p>مواعيد الحصص والأنشطة القادمة لأطفالك</p>
+    </div>
+</div>
+
+<div class="card border-0">
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0 text-center">
+                <thead>
+                    <tr>
+                        <th class="text-end ps-4">الطفل</th>
+                        <th>الحصة</th>
+                        <th>التاريخ</th>
+                        <th>الوقت</th>
+                        <th>الأخصائي</th>
+                        <th>الحالة</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for session in sessions %}
+                    <tr>
+                        <td class="text-end ps-4">
+                            {% for child in session.beneficiaires %}
+                                <div class="badge-2026 bg-primary bg-opacity-10 text-primary">{{ child.prenom }}</div>
+                            {% endfor %}
+                        </td>
+                        <td class="fw-800 text-main">{{ session.titre }}</td>
+                        <td class="fw-600">{{ session.date|date('Y/m/d') }}</td>
+                        <td dir="ltr" class="text-end fw-600">
+                            {{ session.heureDebut|date('H:i') }} - {{ session.heureFin|date('H:i') }}
+                        </td>
+                        <td>
+                            <div class="d-flex align-items-center justify-content-center">
+                                <div class="avatar-sq ms-2 bg-light text-muted" style="width: 28px; height: 28px; font-size: 0.7rem;">
+                                    {{ session.specialiste.prenom|first|upper }}
+                                </div>
+                                <span class="small fw-700">{{ session.specialiste.prenom }} {{ session.specialiste.nom }}</span>
+                            </div>
+                        </td>
+                        <td>
+                            {% if session.etat == 'Planned' %}
+                                <span class="badge-2026 bg-warning bg-opacity-10 text-warning">مجدولة</span>
+                            {% elseif session.etat == 'Completed' %}
+                                <span class="badge-2026 bg-success bg-opacity-10 text-success">تمت</span>
+                            {% else %}
+                                <span class="badge-2026 bg-danger bg-opacity-10 text-danger">ملغاة</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="6" class="text-center py-5">
+                            <i class="bi bi-calendar-x text-muted opacity-25 d-block mb-3" style="font-size: 3rem;"></i>
+                            <p class="text-muted fw-600">لا توجد حصص مجدولة حالياً.</p>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

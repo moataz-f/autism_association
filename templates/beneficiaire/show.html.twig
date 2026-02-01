@@ -47,8 +47,14 @@
                         <span class="text-navy fw-600">{{ beneficiaire.telephone ?: 'غير متوفر' }}</span>
                     </div>
                     <div class="mb-3">
-                        <small class="text-muted d-block fw-700">العائلة المسؤولة</small>
-                        <span class="text-navy fw-600">{{ beneficiaire.famille ?: 'غير محدد' }}</span>
+                        <small class="text-muted d-block fw-700">الأولياء المرتبطون</small>
+                        <div class="d-flex flex-wrap gap-1 mt-1">
+                        {% for parent in beneficiaire.parents %}
+                            <span class="badge bg-primary bg-opacity-10 text-primary fw-600">{{ parent.prenom }} {{ parent.nom }}</span>
+                        {% else %}
+                            <span class="text-muted small">غير محدد</span>
+                        {% endfor %}
+                        </div>
                     </div>
                     <div class="mb-0">
                         <small class="text-muted d-block fw-700">تاريخ التسجيل</small>
