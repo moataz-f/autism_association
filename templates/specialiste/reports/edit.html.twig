@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}تعديل التقرير{% endblock %}
+
+{% block body %}
+<div class="page-header">
+    <div class="page-title">
+        <h2>تعديل تقرير متابعة</h2>
+        <p>تحديث المعلومات في التقرير الخاص بـ {{ report.beneficiaire.nom }} {{ report.beneficiaire.prenom }}</p>
+    </div>
+</div>
+
+<div class="card border-0 shadow-sm p-4 rounded-24">
+    {% include 'specialiste/reports/_form.html.twig' %}
+</div>
+{% endblock %}

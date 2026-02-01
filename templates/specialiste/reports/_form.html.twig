@@ -1,0 +1,38 @@
+{{ form_start(form) }}
+<div class="row g-4">
+    <div class="col-md-6">
+        <div class="mb-3">
+            {{ form_label(form.beneficiaire, 'الطفل المستقيد', {'label_attr': {'class': 'form-label fw-800'}}) }}
+            {{ form_widget(form.beneficiaire, {'attr': {'class': 'form-select rounded-16 p-3 border-0 shadow-sm bg-light'}}) }}
+            {{ form_errors(form.beneficiaire) }}
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="mb-3">
+            {{ form_label(form.date, 'التاريخ', {'label_attr': {'class': 'form-label fw-800'}}) }}
+            {{ form_widget(form.date, {'attr': {'class': 'form-control rounded-16 p-3 border-0 shadow-sm bg-light'}}) }}
+            {{ form_errors(form.date) }}
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="mb-3">
+            {{ form_label(form.type, 'نوع التقرير', {'label_attr': {'class': 'form-label fw-800'}}) }}
+            {{ form_widget(form.type, {'attr': {'class': 'form-select rounded-16 p-3 border-0 shadow-sm bg-light'}}) }}
+            {{ form_errors(form.type) }}
+        </div>
+    </div>
+    <div class="col-12">
+        <div class="mb-3">
+            {{ form_label(form.contenu, 'محتوى التقرير', {'label_attr': {'class': 'form-label fw-800'}}) }}
+            {{ form_widget(form.contenu, {'attr': {'class': 'form-control rounded-16 p-3 border-0 shadow-sm bg-light', 'rows': '12', 'placeholder': 'اكتب ملاحظاتك وتقييمك هنا...'}}) }}
+            {{ form_errors(form.contenu) }}
+        </div>
+    </div>
+    <div class="col-12 text-end mt-4">
+        <button type="submit" class="btn btn-primary px-5 py-3 rounded-pill fw-800 shadow-lg">
+            <i class="bi bi-check2-circle ms-2"></i> حفظ التقرير
+        </button>
+        <a href="{{ path('app_specialiste_reports') }}" class="btn btn-light px-5 py-3 rounded-pill fw-800 ms-2">إلغاء</a>
+    </div>
+</div>
+{{ form_end(form) }}

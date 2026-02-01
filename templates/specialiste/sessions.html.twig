@@ -1,0 +1,73 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}إدارة الحصص{% endblock %}
+
+{% block body %}
+<div class="page-header">
+    <div class="page-title">
+        <h2>سجل الحصص</h2>
+        <p>مراجعة كافة الحصص السابقة والقادمة</p>
+    </div>
+</div>
+
+<div class="card border-0 shadow-sm overflow-hidden">
+    <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+            <thead class="bg-light">
+                <tr>
+                    <th class="ps-4">التاريخ والوقت</th>
+                    <th>العنوان</th>
+                    <th>النوع</th>
+                    <th>المستفيدون</th>
+                    <th>الحالة</th>
+                    <th class="text-center">إجراءات</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for session in sessions %}
+                    <tr>
+                        <td class="ps-4">
+                            <div class="fw-800">{{ session.date|date('Y-m-d') }}</div>
+                            <small class="text-muted">{{ session.heureDebut|date('H:i') }} - {{ session.heureFin|date('H:i') }}</small>
+                        </td>
+                        <td>
+                            <div class="fw-700">{{ session.titre }}</div>
+                        </td>
+                        <td>
+                            <span class="badge-2026 {{ session.type == 'Individuelle' ? 'bg-info text-white' : 'bg-warning text-dark' }}">
+                                {{ session.type }}
+                            </span>
+                        </td>
+                        <td>
+                            <div class="d-flex flex-wrap gap-1">
+                                {% for b in session.beneficiaires %}
+                                    <span class="badge bg-light text-dark border">{{ b.nom|first }}. {{ b.prenom }}</span>
+                                {% endfor %}
+                            </div>
+                        </td>
+                        <td>
+                            {% set statusClass = {
+                                'Planned': 'bg-primary',
+                                'Completed': 'bg-success',
+                                'Cancelled': 'bg-danger'
+                            } %}
+                            <span class="badge-2026 {{ statusClass[session.etat] ?? 'bg-secondary' }}">
+                                {{ session.etat }}
+                            </span>
+                        </td>
+                        <td class="text-center">
+                            <a href="{{ path('app_specialiste_report_new', {'beneficiaire': session.beneficiaires|first ? session.beneficiaires|first.id : null}) }}" class="action-btn-2026" title="إضافة تقرير">
+                                <i class="bi bi-file-earmark-plus"></i>
+                            </a>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="6" class="text-center py-5 text-muted">لا توجد حصص مسجلة</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

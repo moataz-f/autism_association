@@ -8,6 +8,7 @@ use App\Repository\PointageRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -105,5 +106,32 @@ class PointageController extends AbstractController
     ): JsonResponse {
         // Keep this for backward compatibility if ever needed, but redirect most logic to selfLog
         return $this->selfLog($scannedToken, $pointageRepo, $em, $this->container->get('security.helper'));
+    }
+
+    #[Route('/history', name: 'app_pointage_history')]
+    public function history(PointageRepository $pointageRepo, Request $request): Response
+    {
+        $user = $this->getUser();
+        if (!$user || !$personnel = $user->getPersonnel()) {
+            throw $this->createAccessDeniedException('Accès limité au personnel.');
+        }
+
+        $month = $request->query->get('month', date('m'));
+        $year = $request->query->get('year', date('Y'));
+
+        $pointages = $pointageRepo->createQueryBuilder('p')
+            ->where('p.personnel = :personnel')
+            ->andWhere('p.date LIKE :date')
+            ->setParameter('personnel', $personnel)
+            ->setParameter('date', "$year-$month-%")
+            ->orderBy('p.date', 'DESC')
+            ->getQuery()
+            ->getResult();
+
+        return $this->render('pointage/history.html.twig', [
+            'pointages' => $pointages,
+            'currentMonth' => $month,
+            'currentYear' => $year
+        ]);
     }
 }

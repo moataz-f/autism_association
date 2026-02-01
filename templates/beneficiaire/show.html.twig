@@ -136,6 +136,11 @@
                     <div class="tab-pane fade" id="history" role="tabpanel">
                         <div class="d-flex justify-content-between align-items-center mb-4">
                             <h5 class="fw-800 text-navy mb-0">سجل المتابعة والتقارير</h5>
+                            {% if is_granted('ROLE_PERSONNEL') %}
+                                <button class="btn btn-2026-primary btn-sm rounded-pill" data-bs-toggle="modal" data-bs-target="#rapportModal">
+                                    <i class="bi bi-plus-lg ms-1"></i> إضافة تقرير جديد
+                                </button>
+                            {% endif %}
                         </div>
                         
                         <div class="timeline-2026">
@@ -212,21 +217,62 @@
                 <h5 class="modal-title fw-800 text-navy">إضافة وثيقة جديدة</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
-            {{ form_start(form, {'attr': {'enctype': 'multipart/form-data'}}) }}
+            {{ form_start(docForm, {'attr': {'enctype': 'multipart/form-data'}}) }}
             <div class="modal-body py-4">
                 <div class="mb-4">
-                    {{ form_label(form.type, 'نوع الوثيقة', {'label_attr': {'class': 'form-label fw-800 text-muted small px-2'}}) }}
-                    {{ form_widget(form.type, {'attr': {'class': 'form-select-2026'}}) }}
+                    {{ form_label(docForm.type, 'نوع الوثيقة', {'label_attr': {'class': 'form-label fw-800 text-muted small px-2'}}) }}
+                    {{ form_widget(docForm.type, {'attr': {'class': 'form-select-2026'}}) }}
                 </div>
                 <div class="mb-0">
-                    {{ form_label(form.file, 'الملف (PDF أو صور - أقصى 5 ميقا)', {'label_attr': {'class': 'form-label fw-800 text-muted small px-2'}}) }}
-                    {{ form_widget(form.file, {'attr': {'class': 'form-control-2026'}}) }}
+                    {{ form_label(docForm.file, 'الملف (PDF أو صور - أقصى 5 ميقا)', {'label_attr': {'class': 'form-label fw-800 text-muted small px-2'}}) }}
+                    {{ form_widget(docForm.file, {'attr': {'class': 'form-control-2026'}}) }}
                 </div>
             </div>
             <div class="modal-footer border-0 pt-0">
                 <button type="submit" class="btn btn-2026-primary w-100 py-2 rounded-pill fw-bold">تأكيد الرفع</button>
             </div>
-            {{ form_end(form) }}
+            {{ form_end(docForm) }}
+        </div>
+    </div>
+</div>
+
+<!-- Rapport Modal -->
+<div class="modal fade" id="rapportModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content card-2026">
+            <div class="modal-header border-0 pb-0">
+                <h5 class="modal-title fw-800 text-navy">إضافة تقرير متابعة جديد</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            {{ form_start(rapportForm) }}
+            <div class="modal-body py-4">
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            {{ form_label(rapportForm.date, 'التاريخ', {'label_attr': {'class': 'form-label fw-800 text-muted small px-2'}}) }}
+                            {{ form_widget(rapportForm.date, {'attr': {'class': 'form-control-2026'}}) }}
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            {{ form_label(rapportForm.type, 'نوع التقرير', {'label_attr': {'class': 'form-label fw-800 text-muted small px-2'}}) }}
+                            {{ form_widget(rapportForm.type, {'attr': {'class': 'form-select-2026'}}) }}
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="mb-0">
+                            {{ form_label(rapportForm.contenu, 'المحتوى', {'label_attr': {'class': 'form-label fw-800 text-muted small px-2'}}) }}
+                            {{ form_widget(rapportForm.contenu, {'attr': {'class': 'form-control-2026', 'rows': '5', 'placeholder': 'اكتب ملاحظاتك هنا ليكتشفها الأولياء...'}}) }}
+                        </div>
+                        {# Hide the beneficiaire field as it is set in controller #}
+                        <div class="d-none">{{ form_row(rapportForm.beneficiaire) }}</div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer border-0 pt-0">
+                <button type="submit" class="btn btn-2026-primary w-100 py-2 rounded-pill fw-bold">حفظ ونشر التقرير</button>
+            </div>
+            {{ form_end(rapportForm) }}
         </div>
     </div>
 </div>

@@ -1,0 +1,100 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}الجدول الزمني{% endblock %}
+
+{% block body %}
+<div class="page-header">
+    <div class="page-title">
+        <h2>جدولي الزمني</h2>
+        <p>متابعة الحصص المبرمجة حسب الأيام</p>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-12">
+        {% for date, daySessions in groupedSessions %}
+            <div class="card mb-4 border-0 shadow-sm overflow-hidden">
+                <div class="card-header bg-primary text-white p-3 border-0">
+                    <h5 class="mb-0 fw-800">
+                        <i class="bi bi-calendar3 ms-2"></i>
+                        {{ date|date('l d F Y') }}
+                    </h5>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0">
+                            <thead class="bg-light">
+                                <tr>
+                                    <th class="ps-4">التوقيت</th>
+                                    <th>نوع الحصة</th>
+                                    <th>المستفيدون</th>
+                                    <th>الحالة</th>
+                                    <th class="text-center">إجراءات</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for session in daySessions %}
+                                    <tr>
+                                        <td class="ps-4">
+                                            <div class="d-flex align-items-center">
+                                                <div class="avatar-sq bg-soft-primary text-primary me-3" style="width: 40px; height: 40px;">
+                                                    <i class="bi bi-clock"></i>
+                                                </div>
+                                                <div>
+                                                    <div class="fw-800">{{ session.heureDebut|date('H:i') }} - {{ session.heureFin|date('H:i') }}</div>
+                                                    <small class="text-muted">{{ session.titre }}</small>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <span class="badge-2026 {{ session.type == 'Individuelle' ? 'bg-info text-white' : 'bg-warning text-dark' }}">
+                                                {{ session.type }}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <div class="d-flex gap-2">
+                                                {% for b in session.beneficiaires %}
+                                                    <span class="badge bg-light text-dark rounded-pill px-3 border">
+                                                        {{ b.nom }} {{ b.prenom }}
+                                                    </span>
+                                                {% endfor %}
+                                            </div>
+                                        </td>
+                                        <td>
+                                            {% set statusClass = {
+                                                'Planned': 'bg-primary',
+                                                'Completed': 'bg-success',
+                                                'Cancelled': 'bg-danger'
+                                            } %}
+                                            <span class="badge-2026 {{ statusClass[session.etat] ?? 'bg-secondary' }}">
+                                                {{ session.etat }}
+                                            </span>
+                                        </td>
+                                        <td class="text-center">
+                                            <a href="{{ path('app_specialiste_report_new', {'beneficiaire': session.beneficiaires|first ? session.beneficiaires|first.id : null}) }}" class="action-btn-2026" title="كتابة تقرير">
+                                                <i class="bi bi-file-earmark-plus"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        {% else %}
+            <div class="card border-0 shadow-sm p-5 text-center">
+                <div class="mb-4">
+                    <i class="bi bi-calendar-x text-muted opacity-25" style="font-size: 5rem;"></i>
+                </div>
+                <h4 class="fw-800 text-muted">لا توجد حصص مبرمجة حالياً</h4>
+                <p class="text-muted">ستظهر الحصص هنا بمجرد جدولتها من قبل الإدارة.</p>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+
+<style>
+    .bg-soft-primary { background-color: rgba(37, 99, 235, 0.1); }
+</style>
+{% endblock %}

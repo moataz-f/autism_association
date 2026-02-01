@@ -434,8 +434,27 @@
                         <a class="nav-link {{ app.request.get('_route') starts with 'app_parent_reports' ? 'active' : '' }}" href="{{ path('app_parent_reports') }}">
                             <i class="bi bi-file-earmark-medical"></i> تقارير المتابعة
                         </a>
-                        <a class="nav-link {{ app.request.get('_route') starts with 'app_messaging' ? 'active' : '' }}" href="{{ path('app_messaging_index') }}">
+                        <a href="{{ path('app_messaging_index') }}" class="nav-link {{ app.request.get('_route') starts with 'app_messaging' ? 'active' : '' }}">
                             <i class="bi bi-chat-dots-fill"></i> Messagerie / المراسلة
+                        </a>
+                    {% endif %}
+
+                    {% if is_granted('ROLE_PERSONNEL') %}
+                        <div class="nav-section-label">فضاء الفريق</div>
+                        <a class="nav-link {{ app.request.get('_route') == 'app_specialiste_planning' ? 'active' : '' }}" href="{{ path('app_specialiste_planning') }}">
+                            <i class="bi bi-calendar3"></i> جدولي الزمني
+                        </a>
+                        <a class="nav-link {{ app.request.get('_route') == 'app_specialiste_sessions' ? 'active' : '' }}" href="{{ path('app_specialiste_sessions') }}">
+                            <i class="bi bi-journal-text"></i> حصصي
+                        </a>
+                        <a class="nav-link {{ app.request.get('_route') starts with 'app_specialiste_reports' ? 'active' : '' }}" href="{{ path('app_specialiste_reports') }}">
+                            <i class="bi bi-file-earmark-text"></i> تقارير المتابعة
+                        </a>
+                        <a class="nav-link {{ app.request.get('_route') == 'app_pointage_history' ? 'active' : '' }}" href="{{ path('app_pointage_history') }}">
+                            <i class="bi bi-clock-history"></i> سجل حضوري
+                        </a>
+                        <a class="nav-link {{ app.request.get('_route') == 'app_messaging_index' and not is_granted('ROLE_PARENT') ? 'active' : '' }}" href="{{ path('app_messaging_index') }}">
+                            <i class="bi bi-chat-dots-fill"></i> المراسلة
                         </a>
                     {% endif %}
 

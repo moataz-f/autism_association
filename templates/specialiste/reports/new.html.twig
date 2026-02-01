@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}تقرير جديد{% endblock %}
+
+{% block body %}
+<div class="page-header">
+    <div class="page-title">
+        <h2>إنشاء تقرير متابعة</h2>
+        <p>تسجيل الملاحظات والتقييمات الخاصة بحالة الطفل</p>
+    </div>
+</div>
+
+<div class="card border-0 shadow-sm p-4 rounded-24">
+    {% include 'specialiste/reports/_form.html.twig' %}
+</div>
+{% endblock %}
