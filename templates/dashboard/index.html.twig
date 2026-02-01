@@ -132,12 +132,14 @@
                     </a>
                 </div>
 
+                {% if is_granted('ROLE_ADMIN') %}
                 <div class="col-md-3">
                     <a href="{{ path('admin_donation_index') }}" class="bento-link">
                         <div class="b-icon"><i class="bi bi-gift-fill"></i></div>
                         <span>التبرعات</span>
                     </a>
                 </div>
+                {% endif %}
                 <div class="col-md-3">
                     <a href="{{ path('admin_seance_index') }}" class="bento-link">
                         <div class="b-icon"><i class="bi bi-clock-fill"></i></div>
@@ -152,6 +154,7 @@
                 </div>
             </div>
 
+            {% if is_granted('ROLE_ADMIN') %}
             <div class="mt-5 pt-5 border-top">
                 <h5 class="fw-900 mb-4">النشر الرقمي</h5>
                 <div class="row g-3">
@@ -175,6 +178,7 @@
                     </div>
                 </div>
             </div>
+            {% endif %}
         </div>
     </div>
 

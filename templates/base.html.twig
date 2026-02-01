@@ -463,15 +463,19 @@
                         <a class="nav-link {{ app.request.get('_route') starts with 'app_beneficiaire' ? 'active' : '' }}" href="{{ path('app_beneficiaire_index') }}">
                             <i class="bi bi-person-fill"></i> المنتفعون
                         </a>
+                        {% if is_granted('ROLE_ADMIN') %}
                         <a class="nav-link {{ app.request.get('_route') starts with 'admin_donation_index' ? 'active' : '' }}" href="{{ path('admin_donation_index') }}">
                             <i class="bi bi-gift-fill"></i> حملات التبرع
                         </a>
+                        {% endif %}
                         <a class="nav-link {{ app.request.get('_route') starts with 'admin_child_registration' ? 'active' : '' }}" href="{{ path('admin_child_registration_index') }}">
                             <i class="bi bi-person-plus-fill"></i> طلبات تسجيل الأطفال
                         </a>
+                        {% if is_granted('ROLE_ADMIN') %}
                         <a class="nav-link {{ app.request.get('_route') starts with 'admin_donation_request' ? 'active' : '' }}" href="{{ path('admin_donation_request_index') }}">
                             <i class="bi bi-heart-fill"></i> طلبات التبرع
                         </a>
+                        {% endif %}
                         <a class="nav-link {{ app.request.get('_route') starts with 'admin_seance' ? 'active' : '' }}" href="{{ path('admin_seance_index') }}">
                             <i class="bi bi-calendar-event"></i> الجدولة
                         </a>
@@ -501,6 +505,7 @@
                             </a>
                         {% endif %}
 
+                        {% if is_granted('ROLE_ADMIN') %}
                         <div class="nav-section-label">النشر الرقمي</div>
                         <a class="nav-link complex {{ app.request.get('_route') starts with 'admin_content' ? 'active' : '' }}" href="{{ path('admin_content_index') }}">
                             <i class="bi bi-pencil-square"></i>
@@ -530,6 +535,7 @@
                                 <span class="sub">إدارة محتوى الصفحات</span>
                             </div>
                         </a>
+                        {% endif %}
 
                         {% if is_granted('ROLE_ADMIN') %}
                             <div class="nav-section-label">النظام</div>
