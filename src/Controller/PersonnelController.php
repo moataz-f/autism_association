@@ -14,7 +14,10 @@ use Symfony\Component\Routing\Annotation\Route;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
+use Symfony\Component\Security\Http\Attribute\IsGranted;
+
 #[Route('/personnel')]
+#[IsGranted('ROLE_SUPER_ADMIN')]
 class PersonnelController extends AbstractController
 {
     #[Route('/', name: 'app_personnel_index', methods: ['GET'])]

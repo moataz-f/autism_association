@@ -43,9 +43,6 @@ class UserType extends AbstractType
                     'مدير (Admin)' => 'ROLE_ADMIN',
                     'أخصائي (Specialist)' => 'ROLE_SPECIALIST',
                     'ولي أمر (Parent)' => 'ROLE_PARENT',
-                    'موظف (Staff)' => 'ROLE_STAFF',
-                    'متطوع (Volunteer)' => 'ROLE_VOLUNTEER',
-                    'متبرع (Donor)' => 'ROLE_DONOR',
                 ],
                 'multiple' => true,
                 'expanded' => true,
@@ -61,23 +58,28 @@ class UserType extends AbstractType
                 'help' => 'اختر الأطفال الذين يتبعون لهذا الحساب (خاص بأولياء الأمور)',
             ]);
 
-        if ($options['is_new']) {
-            $builder->add('plainPassword', PasswordType::class, [
-                'label' => 'كلمة المرور',
-                'mapped' => false,
-                'attr' => ['autocomplete' => 'new-password', 'class' => 'form-control'],
-                'constraints' => [
-                    new NotBlank([
-                        'message' => 'يرجى إدخال كلمة المرور',
-                    ]),
-                    new Length([
-                        'min' => 6,
-                        'minMessage' => 'يجب أن تتكون كلمة المرور من {{ limit }} أحرف على الأقل',
-                        'max' => 4096,
-                    ]),
-                ],
-            ]);
-        }
+        $builder->add('plainPassword', PasswordType::class, [
+            'label' => $options['is_new'] ? 'كلمة المرور' : 'كلمة المرور الجديدة (اختياري)',
+            'mapped' => false,
+            'required' => $options['is_new'],
+            'attr' => ['autocomplete' => 'new-password', 'class' => 'form-control'],
+            'constraints' => $options['is_new'] ? [
+                new NotBlank([
+                    'message' => 'يرجى إدخال كلمة المرور',
+                ]),
+                new Length([
+                    'min' => 6,
+                    'minMessage' => 'يجب أن تتكون كلمة المرور من {{ limit }} أحرف على الأقل',
+                    'max' => 4096,
+                ]),
+            ] : [
+                new Length([
+                    'min' => 6,
+                    'minMessage' => 'يجب أن تتكون كلمة المرور من {{ limit }} أحرف على الأقل',
+                    'max' => 4096,
+                ]),
+            ],
+        ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

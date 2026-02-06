@@ -16,63 +16,65 @@ class DashboardController extends AbstractController
     public function index(
         BeneficiaireRepository $beneficiaireRepo,
         ActiviteRepository $activiteRepo,
-        PersonnelRepository $personnelRepo
+        PersonnelRepository $personnelRepo,
+        \App\Repository\SeanceRepository $seanceRepo,
+        \App\Repository\UserRepository $userRepo
     ): Response {
-        $totalBeneficiaires = $beneficiaireRepo->count(['actif' => true]);
-        $totalActivites = $activiteRepo->count(['actif' => true]);
-        $totalPersonnel = $personnelRepo->count(['actif' => true]);
-
-        $beneficiairesRecents = $beneficiaireRepo->findBy(
-            ['actif' => true],
-            ['dateInscription' => 'DESC'],
-            5
-        );
-
-        $activitesProchaines = $activiteRepo->createQueryBuilder('a')
-            ->where('a.dateDebut > :now')
-            ->andWhere('a.actif = true')
-            ->setParameter('now', new \DateTime())
-            ->orderBy('a.dateDebut', 'ASC')
-            ->setMaxResults(5)
-            ->getQuery()
-            ->getResult();
-
-        $statsParNiveau = $beneficiaireRepo->createQueryBuilder('b')
-            ->select('b.niveauAutisme, COUNT(b) as total')
-            ->where('b.actif = true')
-            ->groupBy('b.niveauAutisme')
-            ->getQuery()
-            ->getResult();
-
-        // Tasks and Events for logged in user
         $user = $this->getUser();
-        $myTasks = [];
-        $myEvents = [];
-        $personnel = null;
-        $myChildren = [];
+        $data = [
+            'totalBeneficiaires' => $beneficiaireRepo->count(['actif' => true]),
+            'totalActivites' => $activiteRepo->count(['actif' => true]),
+            'totalPersonnel' => $personnelRepo->count(['actif' => true]),
+            'pendingUsers' => $userRepo->count(['isApproved' => false]),
+            'myTasks' => [],
+            'myEvents' => [],
+            'personnel' => null,
+            'myChildren' => [],
+            'upcomingSessions' => [],
+            'childSessions' => []
+        ];
 
         if ($user) {
+            // Personnel / Specialist Data
             if (method_exists($user, 'getPersonnel') && $personnel = $user->getPersonnel()) {
-                $myTasks = $personnel->getTasks();
-                $myEvents = $personnel->getEvents();
+                $data['personnel'] = $personnel;
+                $data['myTasks'] = $personnel->getTasks();
+                $data['myEvents'] = $personnel->getEvents();
             }
 
+            // Specialist Specific: Upcoming Sessions
+            if ($this->isGranted('ROLE_SPECIALISTE') || $this->isGranted('ROLE_SPECIALIST')) {
+                $data['upcomingSessions'] = $seanceRepo->createQueryBuilder('s')
+                    ->where('s.specialiste = :user')
+                    ->andWhere('s.date >= :today')
+                    ->setParameter('user', $user)
+                    ->setParameter('today', new \DateTime('today'))
+                    ->orderBy('s.date', 'ASC')
+                    ->addOrderBy('s.heureDebut', 'ASC')
+                    ->setMaxResults(10)
+                    ->getQuery()
+                    ->getResult();
+            }
+
+            // Parent Specific: Children and their Sessions
             if ($this->isGranted('ROLE_PARENT')) {
-                $myChildren = $user->getChildren();
+                $data['myChildren'] = $user->getChildren();
+                if (count($data['myChildren']) > 0) {
+                    $data['childSessions'] = $seanceRepo->createQueryBuilder('s')
+                        ->innerJoin('s.beneficiaires', 'b')
+                        ->where('b IN (:children)')
+                        ->andWhere('s.date >= :today')
+                        ->setParameter('children', $data['myChildren'])
+                        ->setParameter('today', new \DateTime('today'))
+                        ->orderBy('s.date', 'ASC')
+                        ->addOrderBy('s.heureDebut', 'ASC')
+                        ->setMaxResults(10)
+                        ->getQuery()
+                        ->getResult();
+                }
             }
         }
 
-        return $this->render('dashboard/index.html.twig', [
-            'totalBeneficiaires' => $totalBeneficiaires,
-            'totalActivites' => $totalActivites,
-            'totalPersonnel' => $totalPersonnel,
-            'beneficiairesRecents' => $beneficiairesRecents,
-            'activitesProchaines' => $activitesProchaines,
-            'statsParNiveau' => $statsParNiveau,
-            'myTasks' => $myTasks,
-            'myEvents' => $myEvents,
-            'personnel' => $personnel,
-            'myChildren' => $myChildren
-        ]);
+        return $this->render('dashboard/index.html.twig', $data);
     }
 }

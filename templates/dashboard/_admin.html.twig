@@ -1,0 +1,158 @@
+{# templates/dashboard/_admin.html.twig #}
+<div class="card card-2026 border-0 shadow-sm mb-4 p-4 overflow-hidden position-relative" style="background: linear-gradient(135deg, #6366F1 0%, #8B5CF6 100%);">
+    <div class="row align-items-center position-relative" style="z-index: 2;">
+        <div class="col-md-8 text-white">
+            <h4 class="fw-900 mb-2">تسجيل الحضور اليومي</h4>
+            <p class="opacity-75 mb-0 fw-600">يمكنك تسجيل دخولك أو خروجك بمسح الرمز اليومي الخاص بالجمعية.</p>
+        </div>
+        <div class="col-md-4 text-md-end mt-3 mt-md-0">
+            <a href="{{ path('app_pointage_scan') }}" class="btn btn-white px-4 py-2 fw-800 rounded-pill shadow-sm">
+                <i class="bi bi-camera ms-2"></i> تـسـجيل بـالـكاميرا
+            </a>
+        </div>
+    </div>
+    <i class="bi bi-clock-history position-absolute end-0 bottom-0 opacity-10" style="font-size: 8rem; transform: translate(20%, 20%); color: white;"></i>
+</div>
+<div class="row g-4 mb-5">
+    <div class="col-lg-4">
+        <div class="card h-100 p-4 border-0 shadow-sm">
+            <div class="d-flex flex-column h-100">
+                <div class="stat-icon-2026 mb-4" style="background: rgba(37, 99, 235, 0.08); color: var(--primary);">
+                    <i class="bi bi-person-heart"></i>
+                </div>
+                <h3 class="fw-900 mb-1">{{ totalBeneficiaires }}</h3>
+                <span class="text-muted fw-600 small">طفل منتفع مسجل</span>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="card h-100 p-4 border-0 shadow-sm">
+            <div class="d-flex flex-column h-100">
+                <div class="stat-icon-2026 mb-4" style="background: rgba(245, 158, 11, 0.08); color: var(--warning);">
+                    <i class="bi bi-calendar-check"></i>
+                </div>
+                <h3 class="fw-900 mb-1">{{ totalActivites }}</h3>
+                <span class="text-muted fw-600 small">نشاط مبرمج هذا الشهر</span>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="card h-100 p-4 border-0 shadow-sm">
+            <div class="d-flex flex-column h-100">
+                <div class="stat-icon-2026 mb-4" style="background: rgba(239, 68, 68, 0.08); color: var(--danger);">
+                    <i class="bi bi-person-badge"></i>
+                </div>
+                <h3 class="fw-900 mb-1">{{ totalPersonnel }}</h3>
+                <span class="text-muted fw-600 small">موظف ومتطوع فعال</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4">
+    <div class="col-lg-8">
+        <div class="card h-100 p-5 border-0 shadow-sm">
+            <h5 class="fw-900 mb-5 d-flex align-items-center">
+                <i class="bi bi-lightning-charge-fill ms-3 text-warning"></i>
+                الوصول السريع والعمليات الإدارية
+            </h5>
+            <div class="row g-3 g-md-4">
+                <div class="col-6 col-md-3">
+                    <a href="{{ path('app_beneficiaire_index') }}" class="bento-link">
+                        <div class="b-icon"><i class="bi bi-people-fill"></i></div>
+                        <span>المنتفعون</span>
+                    </a>
+                </div>
+                <div class="col-6 col-md-3">
+                    <a href="{{ path('admin_donation_index') }}" class="bento-link">
+                        <div class="b-icon"><i class="bi bi-gift-fill"></i></div>
+                        <span>التبرعات</span>
+                    </a>
+                </div>
+                <div class="col-6 col-md-3">
+                    <a href="{{ path('admin_seance_index') }}" class="bento-link">
+                        <div class="b-icon"><i class="bi bi-clock-fill"></i></div>
+                        <span>الجدولة</span>
+                    </a>
+                </div>
+                <div class="col-6 col-md-3">
+                    <a href="{{ path('app_messaging_index') }}" class="bento-link">
+                        <div class="b-icon"><i class="bi bi-chat-dots-fill"></i></div>
+                        <span>المراسلة</span>
+                    </a>
+                </div>
+            </div>
+
+            <div class="mt-5 pt-5 border-top">
+                <h5 class="fw-900 mb-4">النشر الرقمي</h5>
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <a href="{{ path('admin_content_index') }}" class="bento-sublink">
+                            <div class="s-icon bg-primary bg-opacity-10 text-primary"><i class="bi bi-pencil-square"></i></div>
+                            <div>
+                                <h6 class="mb-0 fw-800">محتوى الصفحات</h6>
+                                <p class="mb-0 small text-muted">إدارة النصوص والروابط</p>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-md-6">
+                        <a href="{{ path('admin_gallery_index') }}" class="bento-sublink">
+                            <div class="s-icon bg-secondary bg-opacity-10 text-secondary"><i class="bi bi-images"></i></div>
+                            <div>
+                                <h6 class="mb-0 fw-800">معرض الصور</h6>
+                                <p class="mb-0 small text-muted">تحديث ألبوم الجمعية</p>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-4 d-flex flex-column gap-4">
+        <div class="card p-5 border-0 shadow-sm" style="background: linear-gradient(135deg, #FFF 0%, #F8FAFC 100%); border-radius: var(--radius-bento);">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h5 class="fw-900 mb-0">تحقق من الحسابات</h5>
+                {% if pendingUsers > 0 %}
+                    <span class="badge bg-danger rounded-pill fw-800">{{ pendingUsers }}</span>
+                {% endif %}
+            </div>
+            <p class="text-muted small fw-600 mb-4">هناك طلبات انضمام جديدة من أولياء الأمور تنتظر المراجعة والتفعيل.</p>
+            <a href="{{ path('admin_user_index') }}" class="btn btn-navy w-100 py-3 rounded-pill fw-800 text-white shadow-sm">
+                <i class="bi bi-shield-check ms-2"></i> مراجعة طلبات الأولياء
+            </a>
+        </div>
+
+        <div class="card flex-grow-1 p-5 border-0 bg-dark text-white shadow-lg" style="background: var(--text-main) !important; border-radius: var(--radius-bento);">
+            <h5 class="fw-900 mb-4">إدارة النظام</h5>
+            <div class="d-flex flex-column gap-3">
+                <a href="{{ path('admin_user_index') }}" class="sys-link-dark">
+                    <i class="bi bi-shield-lock ms-3"></i>
+                    <span>الصلاحيات والمستخدمين</span>
+                </a>
+                <a href="{{ path('admin_task_index') }}" class="sys-link-dark">
+                    <i class="bi bi-list-check ms-3"></i>
+                    <span>إدارة المهام</span>
+                </a>
+                <a href="{{ path('admin_event_index') }}" class="sys-link-dark">
+                    <i class="bi bi-calendar-event ms-3"></i>
+                    <span>إدارة الأحداث</span>
+                </a>
+                <a href="{{ path('app_profile_edit') }}" class="sys-link-dark">
+                    <i class="bi bi-person-circle ms-3"></i>
+                    <span>إعدادات الحساب</span>
+                </a>
+            </div>
+
+            <div class="mt-auto pt-5">
+                <div class="premium-support-box p-4 rounded-4" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);">
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="p-icon ms-3" style="color: var(--primary-light) !important;"><i class="bi bi-headset"></i></div>
+                        <h6 class="mb-0 fw-800">الدعم الذكي 2026</h6>
+                    </div>
+                    <p class="small text-white-50 mb-0">نظام المساعدة المتقدم متاح دائماً لخدمتكم.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -43,11 +43,12 @@ security:
         - { path: ^/beneficiaire, roles: ROLE_USER }
         - { path: ^/famille, roles: ROLE_USER }
         - { path: ^/activite, roles: ROLE_USER }
-        - { path: ^/personnel, roles: ROLE_ADMIN }      # Seulement admin
+        - { path: ^/personnel, roles: ROLE_SUPER_ADMIN }
         - { path: ^/export, roles: ROLE_USER }
         - { path: ^/rapport, roles: ROLE_USER }
 
     role_hierarchy:
+        ROLE_SUPER_ADMIN: [ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH]
         ROLE_ADMIN: [ROLE_SPECIALIST, ROLE_SPECIALISTE, ROLE_PARENT, ROLE_STAFF, ROLE_VOLUNTEER, ROLE_DONOR, ROLE_PERSONNEL, ROLE_USER]
         ROLE_SPECIALIST: [ROLE_PERSONNEL, ROLE_USER]
         ROLE_SPECIALISTE: [ROLE_PERSONNEL, ROLE_USER]

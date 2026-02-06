@@ -10,375 +10,115 @@
     </div>
 </div>
 
-<div class="row g-4 mb-5">
-    <div class="col-lg-4">
-        <div class="card h-100 p-4 border-0">
-            <div class="d-flex flex-column h-100">
-                <div class="stat-icon-2026 mb-4" style="background: rgba(37, 99, 235, 0.08); color: var(--primary);">
-                    <i class="bi bi-person-heart"></i>
-                </div>
-                <h3 class="fw-900 mb-1">{{ totalBeneficiaires }}</h3>
-                <span class="text-muted fw-600 small">طفل منتفع مسجل</span>
+    {% if is_granted('ROLE_ADMIN') %}
+        {{ include('dashboard/_admin.html.twig') }}
+    {% elseif is_granted('ROLE_SPECIALISTE') or is_granted('ROLE_SPECIALIST') %}
+        {{ include('dashboard/_specialist.html.twig') }}
+    {% elseif is_granted('ROLE_PARENT') %}
+        {{ include('dashboard/_parent.html.twig') }}
+    {% else %}
+        <div class="card p-5 border-0 shadow-sm text-center">
+            <i class="bi bi-shield-lock text-muted opacity-25 mb-4" style="font-size: 4rem;"></i>
+            <h4 class="fw-900 text-navy mb-3">حسابك في انتظار التفعيل</h4>
+            <p class="text-muted fw-600">شكراً لانضمامك إلينا. يقوم مدير النظام حالياً بمراجعة حسابك وتفعيل الصلاحيات المناسبة لك.</p>
+            <div class="mt-4">
+                <a href="{{ path('app_home') }}" class="btn btn-navy py-2 px-5 rounded-pill fw-800 text-white">العودة للرئيسية</a>
             </div>
         </div>
-    </div>
-    <div class="col-lg-4">
-        <div class="card h-100 p-4 border-0">
-            <div class="d-flex flex-column h-100">
-                <div class="stat-icon-2026 mb-4" style="background: rgba(245, 158, 11, 0.08); color: var(--warning);">
-                    <i class="bi bi-calendar-check"></i>
-                </div>
-                <h3 class="fw-900 mb-1">{{ totalActivites }}</h3>
-                <span class="text-muted fw-600 small">نشاط مبرمج هذا الشهر</span>
-            </div>
-        </div>
-    </div>
-    <div class="col-lg-4">
-        <div class="card h-100 p-4 border-0">
-            <div class="d-flex flex-column h-100">
-                <div class="stat-icon-2026 mb-4" style="background: rgba(239, 68, 68, 0.08); color: var(--danger);">
-                    <i class="bi bi-person-badge"></i>
-                </div>
-                <h3 class="fw-900 mb-1">{{ totalPersonnel }}</h3>
-                <span class="text-muted fw-600 small">موظف ومتطوع فعال</span>
-            </div>
-        </div>
-    </div>
-</div>
+    {% endif %}
 
-{% if is_granted('ROLE_PARENT') %}
-<div class="card border-0 shadow-sm mb-4 p-4 overflow-hidden position-relative" style="background: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%);">
-    <div class="row align-items-center position-relative" style="z-index: 2;">
-        <div class="col-md-8 text-white">
-            <h4 class="fw-900 mb-2">مرحباً بك في فضاء الأولياء</h4>
-            <p class="opacity-75 mb-0 fw-600">يمكنك هنا متابعة حصص أطفالك، قراءة تقاريرهم، والتواصل مع الجمعية.</p>
-        </div>
-        <div class="col-md-4 text-md-end mt-3 mt-md-0">
-            <a href="{{ path('app_parent_children') }}" class="btn btn-white px-4 py-2 fw-800 rounded-pill shadow-sm">
-                <i class="bi bi-people ms-2"></i> ملفات أطفالي
-            </a>
-        </div>
-    </div>
-    <i class="bi bi-house-heart position-absolute end-0 bottom-0 opacity-10" style="font-size: 8rem; transform: translate(20%, 20%); color: white;"></i>
-</div>
-
-<div class="row g-4 mb-4">
-    <div class="col-lg-6">
-        <div class="card h-100 p-4 border-0">
-            <h5 class="fw-900 mb-4 ms-2">أطفالي المسجلون</h5>
-            <div class="d-flex flex-wrap gap-3">
-                {% for child in myChildren %}
-                    <div class="p-3 rounded-24 bg-light text-center" style="min-width: 120px;">
-                        <div class="avatar-sq mx-auto mb-2 bg-primary text-white" style="width: 40px; height: 40px;">
-                            {{ child.prenom|first|upper }}
-                        </div>
-                        <div class="fw-800 small">{{ child.prenom }}</div>
-                        <div class="text-muted small">{{ child.niveauAutisme }}</div>
-                    </div>
-                {% else %}
-                    <p class="text-muted small ms-2">لا يوجد أطفال مرتبطون بحسابك حالياً. يرجى مراجعة الإدارة.</p>
-                {% endfor %}
-            </div>
-        </div>
-    </div>
-    <div class="col-lg-6">
-        <div class="card h-100 p-4 border-0">
-            <h5 class="fw-900 mb-4 ms-2">خيوط التواصل</h5>
-            <div class="d-grid gap-2">
-                <a href="{{ path('app_messaging_index') }}" class="btn btn-outline-primary py-3 rounded-16 border-2 fw-800">
-                    <i class="bi bi-chat-left-dots-fill ms-2"></i> المحادثات والرسائل
-                </a>
-                <a href="{{ path('app_parent_registration_new') }}" class="btn btn-navy py-3 rounded-16 fw-800 text-white">
-                    <i class="bi bi-file-earmark-plus ms-2"></i> تقديم طلب تسجيل جديد
-                </a>
-            </div>
-        </div>
-    </div>
-</div>
-{% endif %}
-
-{# New: Employee Personal Attendance Block #}
-{% if is_granted('ROLE_PERSONNEL') or is_granted('ROLE_EDUCATEUR') %}
-<div class="card card-2026 border-0 shadow-sm mb-4 p-4 overflow-hidden position-relative" style="background: linear-gradient(135deg, #6366F1 0%, #8B5CF6 100%);">
-    <div class="row align-items-center position-relative" style="z-index: 2;">
-        <div class="col-md-8 text-white">
-            <h4 class="fw-900 mb-2">تسجيل الحضور اليومي</h4>
-            <p class="opacity-75 mb-0 fw-600">يمكنك تسجيل دخولك أو خروجك بمسح الرمز اليومي الخاص بالجمعية.</p>
-        </div>
-        <div class="col-md-4 text-md-end mt-3 mt-md-0">
-            <a href="{{ path('app_pointage_scan') }}" class="btn btn-white px-4 py-2 fw-800 rounded-pill shadow-sm">
-                <i class="bi bi-camera ms-2"></i> تـسـجيل بـالـكاميرا
-            </a>
-        </div>
-    </div>
-    <i class="bi bi-clock-history position-absolute end-0 bottom-0 opacity-10" style="font-size: 8rem; transform: translate(20%, 20%); color: white;"></i>
-</div>
-{% endif %}
-
-{% if not is_granted('ROLE_PARENT') %}
-<div class="row g-4">
-    {# Big Bento Section: Quick Access #}
-    <div class="col-lg-8">
-        <div class="card h-100 p-5 border-0">
-            <h5 class="fw-900 mb-5 d-flex align-items-center">
-                <i class="bi bi-lightning-charge-fill ms-3 text-warning"></i>
-                الوصول السريع والعمليات
-            </h5>
-            <div class="row g-4">
-                <div class="col-md-3">
-                    <a href="{{ path('app_beneficiaire_index') }}" class="bento-link">
-                        <div class="b-icon"><i class="bi bi-people-fill"></i></div>
-                        <span>المنتفعون</span>
-                    </a>
-                </div>
-
-                {% if is_granted('ROLE_ADMIN') %}
-                <div class="col-md-3">
-                    <a href="{{ path('admin_donation_index') }}" class="bento-link">
-                        <div class="b-icon"><i class="bi bi-gift-fill"></i></div>
-                        <span>التبرعات</span>
-                    </a>
-                </div>
-                {% endif %}
-                <div class="col-md-3">
-                    <a href="{{ path('admin_seance_index') }}" class="bento-link">
-                        <div class="b-icon"><i class="bi bi-clock-fill"></i></div>
-                        <span>الجدولة</span>
-                    </a>
-                </div>
-                <div class="col-md-3">
-                    <a href="{{ path('app_messaging_index') }}" class="bento-link">
-                        <div class="b-icon"><i class="bi bi-chat-dots-fill"></i></div>
-                        <span>المراسلة</span>
-                    </a>
-                </div>
-            </div>
-
-            {% if is_granted('ROLE_ADMIN') %}
-            <div class="mt-5 pt-5 border-top">
-                <h5 class="fw-900 mb-4">النشر الرقمي</h5>
-                <div class="row g-3">
-                    <div class="col-md-6">
-                        <a href="{{ path('admin_content_index') }}" class="bento-sublink">
-                            <div class="s-icon bg-primary bg-opacity-10 text-primary"><i class="bi bi-pencil-square"></i></div>
-                            <div>
-                                <h6 class="mb-0 fw-800">محتوى الصفحات</h6>
-                                <p class="mb-0 small text-muted">إدارة النصوص والروابط</p>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="col-md-6">
-                        <a href="{{ path('admin_gallery_index') }}" class="bento-sublink">
-                            <div class="s-icon bg-secondary bg-opacity-10 text-secondary"><i class="bi bi-images"></i></div>
-                            <div>
-                                <h6 class="mb-0 fw-800">معرض الصور</h6>
-                                <p class="mb-0 small text-muted">تحديث ألبوم الجمعية</p>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-            </div>
-            {% endif %}
-        </div>
-    </div>
-
-    {# Sidebar Bento: System #}
-    <div class="col-lg-4">
-        <div class="card h-100 p-5 border-0 bg-dark text-white shadow-lg" style="background: var(--text-main) !important;">
-            <h5 class="fw-900 mb-4">إدارة النظام</h5>
-            <div class="d-flex flex-column gap-3">
-                {% if is_granted('ROLE_ADMIN') %}
-                <a href="{{ path('admin_user_index') }}" class="sys-link-dark">
-                    <i class="bi bi-shield-lock ms-3"></i>
-                    <span>الصلاحيات والمستخدمين</span>
-                </a>
-                <a href="{{ path('admin_task_index') }}" class="sys-link-dark">
-                    <i class="bi bi-list-check ms-3"></i>
-                    <span>إدارة المهام</span>
-                </a>
-                <a href="{{ path('admin_event_index') }}" class="sys-link-dark">
-                    <i class="bi bi-calendar-event ms-3"></i>
-                    <span>إدارة الأحداث</span>
-                </a>
-                {% endif %}
-                <a href="{{ path('app_profile_edit') }}" class="sys-link-dark">
-                    <i class="bi bi-person-circle ms-3"></i>
-                    <span>إعدادات الحساب</span>
-                </a>
-            </div>
-
-            <div class="mt-auto pt-5">
-                <div class="premium-support-box p-4 rounded-4" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);">
-                    <div class="d-flex align-items-center mb-3">
-                        <div class="p-icon ms-3"><i class="bi bi-headset"></i></div>
-                        <h6 class="mb-0 fw-800">الدعم الذكي 2026</h6>
-                    </div>
-                    <p class="small text-white-50 mb-0">نظام المساعدة المتقدم متاح دائماً لخدمتكم.</p>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-{% endif %}
-
-{# New Row: My Tasks and My Events for Personnel #}
-{% if personnel %}
-<div class="row g-4 mt-2 mb-5">
-    <div class="col-lg-6">
-        <div class="card h-100 p-4 border-0 shadow-sm border-start border-primary border-4">
-            <h5 class="fw-900 mb-4 d-flex align-items-center">
-                <i class="bi bi-list-check ms-3 text-primary"></i>
-                مهامي الحالية
-            </h5>
-            {% if myTasks|length > 0 %}
-                <div class="list-group list-group-flush">
-                    {% for task in myTasks %}
-                        <div class="list-group-item px-0 py-3 bg-transparent border-0 d-flex align-items-center">
-                            <div class="me-3 cursor-pointer p-2 rounded-circle hover-bg-light toggle-task" data-id="{{ task.id }}" style="transition: all 0.2s;">
-                                {% if task.status == 'COMPLETED' %}
-                                    <i class="bi bi-check-circle-fill text-success fs-4"></i>
-                                {% else %}
-                                    <i class="bi bi-circle text-muted fs-4"></i>
-                                {% endif %}
-                            </div>
-                            <div class="flex-grow-1 ms-3 text-end">
-                                <h6 class="mb-1 fw-800 task-title-{{ task.id }} {% if task.status == 'COMPLETED' %}text-decoration-line-through text-muted{% endif %}">{{ task.title }}</h6>
-                                <small class="text-muted">{{ task.dueDate ? 'موعد التسليم: ' ~ task.dueDate|date('Y-m-d H:i') : '' }}</small>
-                            </div>
-                        </div>
-                    {% endfor %}
-                </div>
-            {% else %}
-                <div class="text-center py-4">
-                    <i class="bi bi-emoji-smile text-muted opacity-25" style="font-size: 3rem;"></i>
-                    <p class="text-muted fw-600 mt-2">لا توجد مهام معلقة لديك.</p>
-                </div>
-            {% endif %}
-        </div>
-    </div>
-    <div class="col-lg-6">
-        <div class="card h-100 p-4 border-0 shadow-sm border-start border-secondary border-4">
-            <h5 class="fw-900 mb-4 d-flex align-items-center">
-                <i class="bi bi-calendar-event ms-3 text-secondary"></i>
-                أحداثي ومواعيدي الخاصة
-            </h5>
-            {% if myEvents|length > 0 %}
-                <div class="list-group list-group-flush">
-                    {% for event in myEvents %}
-                        <div class="list-group-item px-0 py-3 bg-transparent border-0 d-flex align-items-center">
-                            <div class="event-date-box text-center me-3 p-2 rounded-3 bg-light shadow-sm" style="min-width: 60px;">
-                                <small class="d-block text-uppercase fw-bold text-primary">{{ event.startDate|date('M') }}</small>
-                                <span class="d-block fw-900 fs-5 text-main">{{ event.startDate|date('d') }}</span>
-                            </div>
-                            <div class="flex-grow-1 ms-3 text-end">
-                                <h6 class="mb-1 fw-800">{{ event.title }}</h6>
-                                <small class="text-muted">
-                                    <i class="bi bi-clock-history ms-1"></i>
-                                    {{ event.startDate|date('H:i') }} - {{ event.endDate|date('H:i') }}
-                                </small>
-                            </div>
-                        </div>
-                    {% endfor %}
-                </div>
-            {% else %}
-                <div class="text-center py-4">
-                    <i class="bi bi-calendar-x text-muted opacity-25" style="font-size: 3rem;"></i>
-                    <p class="text-muted fw-600 mt-2">لا توجد أحداث مخططة لك حالياً.</p>
-                </div>
-            {% endif %}
-        </div>
-    </div>
-</div>
-
-<script>
-document.querySelectorAll('.toggle-task').forEach(btn => {
-    btn.addEventListener('click', async function() {
-        const taskId = this.dataset.id;
-        const icon = this.querySelector('i');
-        const title = document.querySelector('.task-title-' + taskId);
-        
-        try {
-            const response = await fetch('/personnel/task/' + taskId + '/toggle', {
-                method: 'POST',
-                headers: { 'X-Requested-With': 'XMLHttpRequest' }
-            });
-            const data = await response.json();
+    <script>
+    document.querySelectorAll('.toggle-task').forEach(btn => {
+        btn.addEventListener('click', async function() {
+            const taskId = this.dataset.id;
+            const icon = this.querySelector('i');
+            const title = document.querySelector('.task-title-' + taskId);
             
-            if (data.success) {
-                if (data.newStatus === 'COMPLETED') {
-                    icon.className = 'bi bi-check-circle-fill text-success fs-4';
-                    title.classList.add('text-decoration-line-through', 'text-muted');
-                } else {
-                    icon.className = 'bi bi-circle text-muted fs-4';
-                    title.classList.remove('text-decoration-line-through', 'text-muted');
+            try {
+                const response = await fetch('/personnel/task/' + taskId + '/toggle', {
+                    method: 'POST',
+                    headers: { 'X-Requested-With': 'XMLHttpRequest' }
+                });
+                const data = await response.json();
+                
+                if (data.success) {
+                    if (data.newStatus === 'COMPLETED') {
+                        icon.className = 'bi bi-check-circle-fill text-success fs-4';
+                        title.classList.add('text-decoration-line-through', 'text-muted');
+                    } else {
+                        icon.className = 'bi bi-circle text-muted fs-4';
+                        title.classList.remove('text-decoration-line-through', 'text-muted');
+                    }
                 }
+            } catch (error) {
+                console.error('Error toggling task:', error);
             }
-        } catch (error) {
-            console.error('Error toggling task:', error);
-        }
+        });
     });
-});
-</script>
+    </script>
 
-{% endif %}
+    <style>
+        .cursor-pointer { cursor: pointer; }
+        .hover-bg-light:hover { background: rgba(0,0,0,0.05); }
 
-<style>
-    .cursor-pointer { cursor: pointer; }
-    .hover-bg-light:hover { background: rgba(0,0,0,0.05); }
+        .stat-icon-2026 {
+            width: 56px;
+            height: 56px;
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+        .fw-900 { font-weight: 900; }
+        .fw-800 { font-weight: 800; }
+        
+        .bento-link {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 2.5rem 1.5rem;
+            background: #F8FAFC;
+            border-radius: var(--radius-bento);
+            text-decoration: none;
+            color: var(--text-main);
+            font-weight: 800;
+            transition: var(--transition-smooth);
+        }
+        .b-icon { font-size: 2.5rem; margin-bottom: 1rem; color: var(--primary); }
+        .bento-link:hover { background: white; box-shadow: var(--shadow-hover); transform: scale(1.05); }
 
-    .stat-icon-2026 {
-        width: 56px;
-        height: 56px;
-        border-radius: 18px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 1.5rem;
-    }
-    .fw-900 { font-weight: 900; }
-    .fw-800 { font-weight: 800; }
-    
-    .bento-link {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        padding: 2.5rem 1.5rem;
-        background: #F8FAFC;
-        border-radius: var(--radius-bento);
-        text-decoration: none;
-        color: var(--text-main);
-        font-weight: 800;
-        transition: var(--transition-smooth);
-    }
-    .b-icon { font-size: 2.5rem; margin-bottom: 1rem; color: var(--primary); }
-    .bento-link:hover { background: white; box-shadow: var(--shadow-hover); transform: scale(1.05); }
+        .bento-sublink {
+            display: flex;
+            align-items: center;
+            padding: 1.5rem;
+            background: #F8FAFC;
+            border-radius: 20px;
+            text-decoration: none;
+            color: inherit;
+            transition: var(--transition-smooth);
+        }
+        .bento-sublink:hover { background: white; box-shadow: var(--shadow-neo); }
+        .s-icon { width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-left: 1rem; font-size: 1.2rem; }
 
-    .bento-sublink {
-        display: flex;
-        align-items: center;
-        padding: 1.5rem;
-        background: #F8FAFC;
-        border-radius: 20px;
-        text-decoration: none;
-        color: inherit;
-        transition: var(--transition-smooth);
-    }
-    .bento-sublink:hover { background: white; box-shadow: var(--shadow-neo); }
-    .s-icon { width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-left: 1rem; font-size: 1.2rem; }
+        .sys-link-dark {
+            display: flex;
+            align-items: center;
+            padding: 1rem 1.25rem;
+            background: rgba(255,255,255,0.03);
+            border-radius: 15px;
+            text-decoration: none;
+            color: rgba(255,255,255,0.7);
+            font-weight: 600;
+            transition: var(--transition-smooth);
+        }
+        .sys-link-dark:hover { background: rgba(255,255,255,0.1); color: white; }
+        
+        .p-icon { font-size: 1.5rem; color: var(--primary); }
 
-    .sys-link-dark {
-        display: flex;
-        align-items: center;
-        padding: 1rem 1.25rem;
-        background: rgba(255,255,255,0.03);
-        border-radius: 15px;
-        text-decoration: none;
-        color: rgba(255,255,255,0.7);
-        font-weight: 600;
-        transition: var(--transition-smooth);
-    }
-    .sys-link-dark:hover { background: rgba(255,255,255,0.1); color: white; }
-    
-    .p-icon { font-size: 1.5rem; color: var(--primary); }
-</style>
+        .btn-navy { background: var(--text-main) !important; color: white !important; }
+        .btn-white { background: white !important; color: var(--primary) !important; }
+        .rounded-16 { border-radius: 16px; }
+        .rounded-24 { border-radius: 24px; }
+    </style>
 {% endblock %}

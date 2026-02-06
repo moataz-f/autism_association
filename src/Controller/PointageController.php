@@ -112,21 +112,31 @@ class PointageController extends AbstractController
     public function history(PointageRepository $pointageRepo, Request $request): Response
     {
         $user = $this->getUser();
-        if (!$user || !$personnel = $user->getPersonnel()) {
+        if (!$user) {
+            throw $this->createAccessDeniedException();
+        }
+
+        $personnel = $user->getPersonnel();
+        
+        // Autoriser si l'utilisateur est personnel OU admin
+        if (!$personnel && !$this->isGranted('ROLE_ADMIN')) {
             throw $this->createAccessDeniedException('Accès limité au personnel.');
         }
 
         $month = $request->query->get('month', date('m'));
         $year = $request->query->get('year', date('Y'));
 
-        $pointages = $pointageRepo->createQueryBuilder('p')
-            ->where('p.personnel = :personnel')
-            ->andWhere('p.date LIKE :date')
-            ->setParameter('personnel', $personnel)
-            ->setParameter('date', "$year-$month-%")
-            ->orderBy('p.date', 'DESC')
-            ->getQuery()
-            ->getResult();
+        $pointages = [];
+        if ($personnel) {
+            $pointages = $pointageRepo->createQueryBuilder('p')
+                ->where('p.personnel = :personnel')
+                ->andWhere('p.date LIKE :date')
+                ->setParameter('personnel', $personnel)
+                ->setParameter('date', "$year-$month-%")
+                ->orderBy('p.date', 'DESC')
+                ->getQuery()
+                ->getResult();
+        }
 
         return $this->render('pointage/history.html.twig', [
             'pointages' => $pointages,

@@ -1,0 +1,117 @@
+{# templates/dashboard/_specialist.html.twig #}
+<div class="card card-2026 border-0 shadow-sm mb-4 p-4 overflow-hidden position-relative" style="background: linear-gradient(135deg, #6366F1 0%, #8B5CF6 100%);">
+    <div class="row align-items-center position-relative" style="z-index: 2;">
+        <div class="col-md-8 text-white">
+            <h4 class="fw-900 mb-2">تسجيل الحضور اليومي</h4>
+            <p class="opacity-75 mb-0 fw-600">يمكنك تسجيل دخولك أو خروجك بمسح الرمز اليومي الخاص بالجمعية.</p>
+        </div>
+        <div class="col-md-4 text-md-end mt-3 mt-md-0">
+            <a href="{{ path('app_pointage_scan') }}" class="btn btn-white px-4 py-2 fw-800 rounded-pill shadow-sm">
+                <i class="bi bi-camera ms-2"></i> تـسـجيل بـالـكاميرا
+            </a>
+        </div>
+    </div>
+    <i class="bi bi-clock-history position-absolute end-0 bottom-0 opacity-10" style="font-size: 8rem; transform: translate(20%, 20%); color: white;"></i>
+</div>
+
+<div class="row g-3 g-lg-4 mb-4">
+    <div class="col-lg-8">
+        <div class="card h-100 p-4 border-0 shadow-sm">
+            <h5 class="fw-900 mb-4 d-flex align-items-center">
+                <i class="bi bi-calendar2-range ms-3 text-primary"></i>
+                حصصي المبرمجة القادمة
+            </h5>
+            <div class="table-responsive">
+                <table class="table table-hover border-0">
+                    <thead>
+                        <tr class="text-muted small">
+                            <th class="border-0">التاريخ</th>
+                            <th class="border-0">الوقت</th>
+                            <th class="border-0">الحصة</th>
+                            <th class="border-0">المنتفعون</th>
+                            <th class="border-0">الحالة</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for session in upcomingSessions %}
+                            <tr class="align-middle">
+                                <td class="border-0 fw-700">{{ session.date|date('Y-m-d') }}</td>
+                                <td class="border-0 text-muted">{{ session.heureDebut|date('H:i') }} - {{ session.heureFin|date('H:i') }}</td>
+                                <td class="border-0 fw-800 text-navy">{{ session.titre }}</td>
+                                <td class="border-0">
+                                    <div class="d-flex gap-1">
+                                        {% for b in session.beneficiaires %}
+                                            <span class="badge bg-light text-navy fw-600">{{ b.prenom }}</span>
+                                        {% endfor %}
+                                    </div>
+                                </td>
+                                <td class="border-0">
+                                    {% if session.etat == 'Planned' %}
+                                        <span class="badge bg-primary bg-opacity-10 text-primary">مبرمجة</span>
+                                    {% elseif session.etat == 'Completed' %}
+                                        <span class="badge bg-success bg-opacity-10 text-success">مكتملة</span>
+                                    {% else %}
+                                        <span class="badge bg-danger bg-opacity-10 text-danger">ملغاة</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% else %}
+                            <tr>
+                                <td colspan="5" class="text-center py-5 text-muted">لا يوجد حصص مبرمجة حالياً.</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="mt-4 text-center">
+                <a href="{{ path('admin_seance_index') }}" class="btn btn-navy py-2 px-4 rounded-pill fw-800 text-white">
+                    عرض جدول المواعيد الكامل
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="card h-100 p-4 border-0 shadow-sm border-start border-primary border-4">
+            <h5 class="fw-900 mb-4 d-flex align-items-center">
+                <i class="bi bi-list-check ms-3 text-primary"></i>
+                مهامي الحالية
+            </h5>
+            {% if myTasks|length > 0 %}
+                <div class="list-group list-group-flush">
+                    {% for task in myTasks %}
+                        <div class="list-group-item px-0 py-3 bg-transparent border-0 d-flex align-items-center">
+                            <div class="me-3 cursor-pointer p-2 rounded-circle hover-bg-light toggle-task" data-id="{{ task.id }}" style="transition: all 0.2s;">
+                                {% if task.status == 'COMPLETED' %}
+                                    <i class="bi bi-check-circle-fill text-success fs-4"></i>
+                                {% else %}
+                                    <i class="bi bi-circle text-muted fs-4"></i>
+                                {% endif %}
+                            </div>
+                            <div class="flex-grow-1 ms-3 text-end">
+                                <h6 class="mb-1 fw-800 task-title-{{ task.id }} {% if task.status == 'COMPLETED' %}text-decoration-line-through text-muted{% endif %}">{{ task.title }}</h6>
+                                <small class="text-muted">{{ task.dueDate ? 'موعد التسليم: ' ~ task.dueDate|date('Y-m-d H:i') : '' }}</small>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="text-center py-4">
+                    <i class="bi bi-emoji-smile text-muted opacity-25" style="font-size: 3rem;"></i>
+                    <p class="text-muted fw-600 mt-2">لا توجد مهام معلقة لديك.</p>
+                </div>
+            {% endif %}
+
+            <div class="mt-auto pt-4 border-top">
+                <a href="{{ path('admin_seance_index') }}" class="btn btn-navy w-100 py-2 rounded-12 fw-800 text-white mb-2">
+                    <i class="bi bi-calendar-event ms-2"></i> الجدولة
+                </a>
+                <a href="{{ path('app_profile_edit') }}" class="btn btn-light w-100 py-2 rounded-12 fw-800 text-navy mb-2">
+                    <i class="bi bi-person-circle ms-2"></i> إعدادات الحساب
+                </a>
+                <a href="{{ path('app_messaging_index') }}" class="btn btn-outline-primary w-100 py-2 rounded-12 fw-800">
+                    <i class="bi bi-chat-dots ms-2"></i> المراسلات
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

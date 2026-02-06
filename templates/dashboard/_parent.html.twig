@@ -1,0 +1,91 @@
+{# templates/dashboard/_parent.html.twig #}
+<div class="card border-0 shadow-sm mb-4 p-4 overflow-hidden position-relative" style="background: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%);">
+    <div class="row align-items-center position-relative" style="z-index: 2;">
+        <div class="col-md-8 text-white">
+            <h4 class="fw-900 mb-2">مرحباً بك في فضاء الأولياء</h4>
+            <p class="opacity-75 mb-0 fw-600">يمكنك هنا متابعة حصص أطفالك، قراءة تقاريرهم، والتواصل مع الجمعية.</p>
+        </div>
+    </div>
+    <i class="bi bi-house-heart position-absolute end-0 bottom-0 opacity-10" style="font-size: 8rem; transform: translate(20%, 20%); color: white;"></i>
+</div>
+
+<div class="row g-3 g-lg-4 mb-4">
+    <div class="col-lg-6">
+        <div class="card h-100 p-4 border-0 shadow-sm">
+            <h5 class="fw-900 mb-4 ms-2">أطفالي المسجلون</h5>
+            <div class="d-flex flex-wrap gap-3">
+                {% for child in myChildren %}
+                    <div class="p-3 rounded-24 bg-light text-center" style="min-width: 120px;">
+                        <div class="avatar-sq mx-auto mb-2 bg-primary text-white" style="width: 40px; height: 40px; border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                            {{ child.prenom|first|upper }}
+                        </div>
+                        <div class="fw-800 small">{{ child.prenom }}</div>
+                        <div class="text-muted small">{{ child.niveauAutisme }}</div>
+                    </div>
+                {% else %}
+                    <div class="text-center py-4 w-100">
+                        <i class="bi bi-person-x text-muted opacity-25" style="font-size: 2rem;"></i>
+                        <p class="text-muted small mt-2">لا يوجد أطفال مرتبطون بحسابك حالياً. يرجى مراجعة الإدارة.</p>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="card h-100 p-4 border-0 shadow-sm">
+            <h5 class="fw-900 mb-4 ms-2">خيوط التواصل السريع</h5>
+            <div class="d-grid gap-3">
+                <a href="{{ path('app_messaging_index') }}" class="btn btn-outline-primary py-3 rounded-16 border-2 fw-800">
+                    <i class="bi bi-chat-left-dots-fill ms-2"></i> المحادثات والرسائل
+                </a>
+                <a href="{{ path('app_parent_registration_new') }}" class="btn btn-navy py-3 rounded-16 fw-800 text-white">
+                    <i class="bi bi-file-earmark-plus ms-2"></i> تقديم طلب تسجيل جديد
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card border-0 shadow-sm p-4">
+    <h5 class="fw-900 mb-4 d-flex align-items-center">
+        <i class="bi bi-calendar2-week ms-3 text-primary"></i>
+        المواعيد القادمة لأطفالي
+    </h5>
+    <div class="table-responsive">
+        <table class="table table-hover border-0">
+            <thead>
+                <tr class="text-muted small">
+                    <th class="border-0">الطفل</th>
+                    <th class="border-0">التاريخ</th>
+                    <th class="border-0">الوقت</th>
+                    <th class="border-0">نوع الحصة</th>
+                    <th class="border-0">المختص</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for session in childSessions %}
+                    <tr class="align-middle">
+                        <td class="border-0">
+                            {% for b in session.beneficiaires %}
+                                {% if b in myChildren %}
+                                    <span class="fw-800 text-primary">{{ b.prenom }}</span>
+                                {% endif %}
+                            {% endfor %}
+                        </td>
+                        <td class="border-0 fw-700">{{ session.date|date('Y-m-d') }}</td>
+                        <td class="border-0 text-muted">{{ session.heureDebut|date('H:i') }} - {{ session.heureFin|date('H:i') }}</td>
+                        <td class="border-0 fw-800">{{ session.titre }}</td>
+                        <td class="border-0">
+                            <i class="bi bi-person-workspace ms-1"></i>
+                            {{ session.specialiste.nom }} {{ session.specialiste.prenom }}
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="5" class="text-center py-5 text-muted">لا توجد مواعيد مبرمجة حالياً.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>

@@ -24,14 +24,6 @@ class AdminEventController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'admin_event_show', methods: ['GET'])]
-    public function show(PersonnelEvent $event): Response
-    {
-        return $this->render('admin/event/show.html.twig', [
-            'event' => $event,
-        ]);
-    }
-
     #[Route('/new', name: 'admin_event_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
@@ -50,6 +42,14 @@ class AdminEventController extends AbstractController
         return $this->render('admin/event/new.html.twig', [
             'event' => $event,
             'form' => $form,
+        ]);
+    }
+
+    #[Route('/{id}', name: 'admin_event_show', methods: ['GET'])]
+    public function show(PersonnelEvent $event): Response
+    {
+        return $this->render('admin/event/show.html.twig', [
+            'event' => $event,
         ]);
     }
 

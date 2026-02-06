@@ -386,16 +386,100 @@
         .bg-warning { background-color: var(--warning) !important; color: black !important; }
         .bg-danger { background-color: var(--danger) !important; color: white !important; }
 
-        @media (max-width: 992px) {
-            .sidebar { transform: translateX(100%); transition: transform 0.3s ease; }
+        @media (max-width: 991.98px) {
+            :root {
+                --sidebar-width: 260px;
+            }
+            .sidebar { 
+                transform: translateX(100%); 
+                transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                box-shadow: -10px 0 30px rgba(0,0,0,0.1);
+            }
             .sidebar.active { transform: translateX(0); }
-            .main-content { margin-right: 0; width: 100%; padding: 1.5rem; }
+            .main-content { 
+                margin-right: 0 !important; 
+                width: 100% !important; 
+                padding: 1.25rem !important;
+                margin-top: 70px; /* Space for mobile header */
+            }
+            .page-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+                padding: 1.25rem;
+            }
+            .page-header .btn { width: 100%; }
+        }
+
+        /* Mobile Header */
+        .mobile-header {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 70px;
+            background: white;
+            z-index: 1040;
+            padding: 0 1.25rem;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+            border-bottom: 1px solid var(--border-soft);
+        }
+
+        @media (max-width: 991.98px) {
+            .mobile-header { display: flex; }
+        }
+
+        .mobile-toggle {
+            background: none;
+            border: none;
+            color: var(--text-main);
+            font-size: 1.75rem;
+            padding: 0;
+            cursor: pointer;
+        }
+
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(15, 23, 42, 0.4);
+            backdrop-filter: blur(4px);
+            z-index: 1045;
+        }
+
+        .sidebar-overlay.active { display: block; }
+
+        /* RTL Adjustments for Sidebar Close */
+        .sidebar { right: 0; left: auto; border-left: 1px solid rgba(255,255,255,0.05); border-right: none; }
+        @media (max-width: 991.98px) {
+            .sidebar { transform: translateX(100%); }
+            .sidebar.active { transform: translateX(0); }
         }
     </style>
     {% block stylesheets %}{% endblock %}
 </head>
 <body>
     <div class="container-fluid p-0">
+        {# Mobile Top Header #}
+        <header class="mobile-header">
+            <div class="d-flex align-items-center">
+                <img src="{{ asset('assets/images/logo-v2.jpg') }}" alt="Logo" height="40" class="ms-2">
+                <h5 class="fw-900 mb-0" style="font-size: 1.1rem; color: var(--text-main);">حلم البراءة</h5>
+            </div>
+            <button class="mobile-toggle" id="sidebarToggle">
+                <i class="bi bi-list"></i>
+            </button>
+        </header>
+
+        {# Overlay for mobile #}
+        <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
         {# Sidebar #}
         <aside class="sidebar">
             <div class="sidebar-header">
@@ -468,17 +552,21 @@
                             <i class="bi bi-gift-fill"></i> حملات التبرع
                         </a>
                         {% endif %}
+                        {% if is_granted('ROLE_ADMIN') %}
                         <a class="nav-link {{ app.request.get('_route') starts with 'admin_child_registration' ? 'active' : '' }}" href="{{ path('admin_child_registration_index') }}">
                             <i class="bi bi-person-plus-fill"></i> طلبات تسجيل الأطفال
                         </a>
+                        {% endif %}
                         {% if is_granted('ROLE_ADMIN') %}
                         <a class="nav-link {{ app.request.get('_route') starts with 'admin_donation_request' ? 'active' : '' }}" href="{{ path('admin_donation_request_index') }}">
                             <i class="bi bi-heart-fill"></i> طلبات التبرع
                         </a>
                         {% endif %}
+                        {% if is_granted('ROLE_ADMIN') %}
                         <a class="nav-link {{ app.request.get('_route') starts with 'admin_seance' ? 'active' : '' }}" href="{{ path('admin_seance_index') }}">
                             <i class="bi bi-calendar-event"></i> الجدولة
                         </a>
+                        {% endif %}
                         {% if is_granted('ROLE_ADMIN') %}
                             <a class="nav-link {{ app.request.get('_route') starts with 'admin_task' ? 'active' : '' }}" href="{{ path('admin_task_index') }}">
                                 <i class="bi bi-list-check"></i> إدارة المهام
@@ -496,6 +584,7 @@
                                     <span class="sub">متابعة الغياب والتأخير</span>
                                 </div>
                             </a>
+                            {% if is_granted('ROLE_SUPER_ADMIN') %}
                             <a class="nav-link complex" href="{{ path('admin_pointage_print_daily') }}" target="_blank">
                                 <i class="bi bi-qr-code-scan"></i>
                                 <div class="link-info">
@@ -503,6 +592,7 @@
                                     <span class="sub">فتح واجهة الرموز اليومية</span>
                                 </div>
                             </a>
+                            {% endif %}
                         {% endif %}
 
                         {% if is_granted('ROLE_ADMIN') %}
@@ -537,7 +627,7 @@
                         </a>
                         {% endif %}
 
-                        {% if is_granted('ROLE_ADMIN') %}
+                        {% if is_granted('ROLE_SUPER_ADMIN') %}
                             <div class="nav-section-label">النظام</div>
                             <a class="nav-link {{ app.request.get('_route') starts with 'app_personnel' ? 'active' : '' }}" href="{{ path('app_personnel_index') }}">
                                 <i class="bi bi-people-fill"></i> الفريق
@@ -596,6 +686,34 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const toggle = document.getElementById('sidebarToggle');
+            const sidebar = document.querySelector('.sidebar');
+            const overlay = document.getElementById('sidebarOverlay');
+
+            if (toggle && sidebar && overlay) {
+                toggle.addEventListener('click', function() {
+                    sidebar.classList.add('active');
+                    overlay.classList.add('active');
+                });
+
+                overlay.addEventListener('click', function() {
+                    sidebar.classList.remove('active');
+                    overlay.classList.remove('active');
+                });
+
+                // Auto-close on link click (optional but good for SPA feel)
+                const navLinks = sidebar.querySelectorAll('.nav-link');
+                navLinks.forEach(link => {
+                    link.addEventListener('click', () => {
+                        sidebar.classList.remove('active');
+                        overlay.classList.remove('active');
+                    });
+                });
+            }
+        });
+    </script>
     {% block javascripts %}{% endblock %}
 </body>
 </html>
