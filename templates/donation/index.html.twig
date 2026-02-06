@@ -39,6 +39,7 @@
                         </p>
 
                         <div class="mt-auto pt-4 border-top border-micro">
+                            {% if is_granted('ROLE_ADMIN') %}
                             <div class="d-flex justify-content-between mb-3 align-items-end">
                                 <div>
                                     <h5 class="mb-0 fw-900 text-primary">{{ campaign.montantCollecte|number_format(0) }} د.ت</h5>
@@ -53,6 +54,9 @@
                             <div class="progress-2026 mb-4">
                                 <div class="bar" style="width: {{ campaign.pourcentage }}%"></div>
                             </div>
+                            {% else %}
+                                <div class="mb-4"></div>
+                            {% endif %}
 
                             {% if campaign.isFilled %}
                                 <div class="filled-seal py-2 rounded-pill text-center w-100">
