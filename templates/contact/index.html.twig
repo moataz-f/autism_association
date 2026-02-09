@@ -43,26 +43,26 @@
         <div class="col-lg-7">
             <div class="card card-2026 p-5 border-0 shadow-lg h-100">
                 <h4 class="fw-900 mb-4">أرسل لنا رسالة</h4>
-                <form>
+                <form method="POST">
                     <div class="row g-3">
                         <div class="col-md-6 mb-3">
                             <label class="form-label fw-700">الاسم الكامل</label>
-                            <input type="text" class="form-control rounded-3" placeholder="مثال: أحمد علي">
+                            <input type="text" name="fullName" class="form-control rounded-3" placeholder="مثال: أحمد علي" required>
                         </div>
                         <div class="col-md-6 mb-3">
                             <label class="form-label fw-700">البريد الإلكتروني</label>
-                            <input type="email" class="form-control rounded-3" placeholder="email@example.com">
+                            <input type="email" name="email" class="form-control rounded-3" placeholder="email@example.com" required>
                         </div>
                     </div>
                     <div class="mb-3">
                         <label class="form-label fw-700">الموضوع</label>
-                        <input type="text" class="form-control rounded-3" placeholder="بخصوص تسجيل طفل...">
+                        <input type="text" name="subject" class="form-control rounded-3" placeholder="بخصوص تسجيل طفل...">
                     </div>
                     <div class="mb-4">
                         <label class="form-label fw-700">الرسالة</label>
-                        <textarea class="form-control rounded-3" rows="5" placeholder="اكتب رسالتك هنا..."></textarea>
+                        <textarea name="message" class="form-control rounded-3" rows="5" placeholder="اكتب رسالتك هنا..." required></textarea>
                     </div>
-                    <button type="button" class="btn btn-primary w-100 py-3 fw-800 rounded-4" onclick="alert('تم إرسال رسالتك بنجاح!')">
+                    <button type="submit" class="btn btn-primary w-100 py-3 fw-800 rounded-4">
                         إرسال الرسالة
                     </button>
                 </form>

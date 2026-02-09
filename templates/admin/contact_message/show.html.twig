@@ -1,0 +1,70 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}تفاصيل الرسالة - {{ message.fullName }}{% endblock %}
+
+{% block body %}
+<div class="page-header">
+    <div class="page-title">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-2">
+                <li class="breadcrumb-item"><a href="{{ path('admin_contact_message_index') }}">رسائل التواصل</a></li>
+                <li class="breadcrumb-item active">تفاصيل الرسالة</li>
+            </ol>
+        </nav>
+        <h2>تفاصيل الرسالة</h2>
+    </div>
+    <div class="page-actions">
+        <a href="{{ path('admin_contact_message_index') }}" class="btn btn-outline-secondary rounded-pill px-4">
+            <i class="bi bi-arrow-right ms-2"></i> العودة للقائمة
+        </a>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-8">
+        <div class="card border-0 shadow-sm p-5 mb-4">
+            <div class="d-flex justify-content-between align-items-center mb-5">
+                <div class="d-flex align-items-center">
+                    <div class="avatar-sq bg-primary text-white ms-3" style="width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem;">
+                        {{ message.fullName|first|upper }}
+                    </div>
+                    <div>
+                        <h5 class="fw-900 mb-1">{{ message.fullName }}</h5>
+                        <p class="text-muted small mb-0">{{ message.email }}</p>
+                    </div>
+                </div>
+                <div class="text-end">
+                    <span class="text-muted small d-block mb-1">{{ message.createdAt|date('Y-m-d H:i') }}</span>
+                    <span class="badge bg-success bg-opacity-10 text-success rounded-pill px-3">مقروءة</span>
+                </div>
+            </div>
+
+            <div class="mb-4">
+                <h6 class="text-muted small fw-800 mb-2">الموضوع:</h6>
+                <p class="fs-5 fw-800">{{ message.subject|default('بدون موضوع') }}</p>
+            </div>
+
+            <div class="p-4 bg-light rounded-24">
+                <h6 class="text-muted small fw-800 mb-3">الرسالة:</h6>
+                <div style="white-space: pre-wrap; line-height: 1.8;">{{ message.message }}</div>
+            </div>
+
+            <div class="mt-5 pt-4 border-top">
+                <a href="mailto:{{ message.email }}" class="btn btn-primary rounded-pill px-5 py-3 fw-800">
+                    <i class="bi bi-reply ms-2"></i> الرد عبر البريد الإلكتروني
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-lg-4">
+        <div class="card border-0 shadow-sm p-4 text-center">
+            <div class="stat-icon-2026 mx-auto mb-4 bg-info bg-opacity-10 text-info">
+                <i class="bi bi-info-circle"></i>
+            </div>
+            <h6 class="fw-900 mb-2">جهة الاتصال</h6>
+            <p class="text-muted small">هذه الرسالة مرسلة من زائر للموقع العام. يمكنك الرد عليه مباشرة عبر بريده الإلكتروني الموضح.</p>
+        </div>
+    </div>
+</div>
+{% endblock %}

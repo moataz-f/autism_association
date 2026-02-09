@@ -32,9 +32,8 @@ class RegistrationController extends AbstractController
             // Set initial state
             $user->setIsApproved(false);
             
-            // Set roles based on selection
-            $selectedRole = $form->get('registrationRole')->getData();
-            $user->setRegistrationRole($selectedRole);
+            // Set role to PARENT by default
+            $user->setRegistrationRole('PARENT');
             
             // Set basic ROLE_USER, specific roles will be granted upon approval
             $user->setRoles(['ROLE_USER']);

@@ -498,104 +498,49 @@
                         <i class="bi bi-grid-fill"></i> لوحة القيادة
                     </a>
 
-                    {% if app.user and not is_granted('ROLE_PARENT') %}
-                    <a class="nav-link {{ app.request.get('_route') == 'app_pointage_scan' ? 'active' : '' }}" href="{{ path('app_pointage_scan') }}">
-                        <i class="bi bi-camera-fill"></i> تسجيل الحضور
-                    </a>
-                    {% endif %}
-                    
-                    {% if is_granted('ROLE_PARENT') %}
-                        <div class="nav-section-label">فضاء الأولياء</div>
-                        <a class="nav-link {{ app.request.get('_route') starts with 'app_parent_children' ? 'active' : '' }}" href="{{ path('app_parent_children') }}">
-                            <i class="bi bi-people-fill"></i> ملفات الأطفال
+                    {% if is_granted('ROLE_ADMIN') %}
+                        <a class="nav-link {{ app.request.get('_route') == 'admin_user_index' and app.request.query.get('filter') == 'pending' ? 'active' : '' }}" href="{{ path('admin_user_index', {'filter': 'pending'}) }}">
+                            <i class="bi bi-person-check-fill"></i> طلبات التسجيل
                         </a>
-                        <a class="nav-link {{ app.request.get('_route') starts with 'app_parent_registration' ? 'active' : '' }}" href="{{ path('app_parent_registration_new') }}">
-                            <i class="bi bi-person-plus-fill"></i> طلبات التسجيل
-                        </a>
-                        <a class="nav-link {{ app.request.get('_route') starts with 'app_parent_sessions' ? 'active' : '' }}" href="{{ path('app_parent_sessions') }}">
-                            <i class="bi bi-calendar-event"></i> جدول الحصص
-                        </a>
-                        <a class="nav-link {{ app.request.get('_route') starts with 'app_parent_reports' ? 'active' : '' }}" href="{{ path('app_parent_reports') }}">
-                            <i class="bi bi-file-earmark-medical"></i> تقارير المتابعة
-                        </a>
-                        <a href="{{ path('app_messaging_index') }}" class="nav-link {{ app.request.get('_route') starts with 'app_messaging' ? 'active' : '' }}">
+                        <a class="nav-link {{ app.request.get('_route') starts with 'app_messaging' ? 'active' : '' }}" href="{{ path('app_messaging_index') }}">
                             <i class="bi bi-chat-dots-fill"></i> Messagerie / المراسلة
                         </a>
-                    {% endif %}
 
-                    {% if is_granted('ROLE_PERSONNEL') %}
                         <div class="nav-section-label">فضاء الفريق</div>
-                        <a class="nav-link {{ app.request.get('_route') == 'app_specialiste_planning' ? 'active' : '' }}" href="{{ path('app_specialiste_planning') }}">
-                            <i class="bi bi-calendar3"></i> جدولي الزمني
-                        </a>
-                        <a class="nav-link {{ app.request.get('_route') == 'app_specialiste_sessions' ? 'active' : '' }}" href="{{ path('app_specialiste_sessions') }}">
-                            <i class="bi bi-journal-text"></i> حصصي
-                        </a>
-                        <a class="nav-link {{ app.request.get('_route') starts with 'app_specialiste_reports' ? 'active' : '' }}" href="{{ path('app_specialiste_reports') }}">
-                            <i class="bi bi-file-earmark-text"></i> تقارير المتابعة
-                        </a>
                         <a class="nav-link {{ app.request.get('_route') == 'app_pointage_history' ? 'active' : '' }}" href="{{ path('app_pointage_history') }}">
                             <i class="bi bi-clock-history"></i> سجل حضوري
                         </a>
-                        <a class="nav-link {{ app.request.get('_route') == 'app_messaging_index' and not is_granted('ROLE_PARENT') ? 'active' : '' }}" href="{{ path('app_messaging_index') }}">
-                            <i class="bi bi-chat-dots-fill"></i> المراسلة
-                        </a>
-                    {% endif %}
 
-                    {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_SPECIALIST') or is_granted('ROLE_STAFF') %}
                         <div class="nav-section-label">الإدارة</div>
                         <a class="nav-link {{ app.request.get('_route') starts with 'app_beneficiaire' ? 'active' : '' }}" href="{{ path('app_beneficiaire_index') }}">
                             <i class="bi bi-person-fill"></i> المنتفعون
                         </a>
-                        {% if is_granted('ROLE_ADMIN') %}
                         <a class="nav-link {{ app.request.get('_route') starts with 'admin_donation_index' ? 'active' : '' }}" href="{{ path('admin_donation_index') }}">
                             <i class="bi bi-gift-fill"></i> حملات التبرع
                         </a>
-                        {% endif %}
-                        {% if is_granted('ROLE_ADMIN') %}
                         <a class="nav-link {{ app.request.get('_route') starts with 'admin_child_registration' ? 'active' : '' }}" href="{{ path('admin_child_registration_index') }}">
                             <i class="bi bi-person-plus-fill"></i> طلبات تسجيل الأطفال
                         </a>
-                        {% endif %}
-                        {% if is_granted('ROLE_ADMIN') %}
                         <a class="nav-link {{ app.request.get('_route') starts with 'admin_donation_request' ? 'active' : '' }}" href="{{ path('admin_donation_request_index') }}">
                             <i class="bi bi-heart-fill"></i> طلبات التبرع
                         </a>
-                        {% endif %}
-                        {% if is_granted('ROLE_ADMIN') %}
                         <a class="nav-link {{ app.request.get('_route') starts with 'admin_seance' ? 'active' : '' }}" href="{{ path('admin_seance_index') }}">
                             <i class="bi bi-calendar-event"></i> الجدولة
                         </a>
-                        {% endif %}
-                        {% if is_granted('ROLE_ADMIN') %}
-                            <a class="nav-link {{ app.request.get('_route') starts with 'admin_task' ? 'active' : '' }}" href="{{ path('admin_task_index') }}">
-                                <i class="bi bi-list-check"></i> إدارة المهام
-                            </a>
-                            <a class="nav-link {{ app.request.get('_route') starts with 'admin_event' ? 'active' : '' }}" href="{{ path('admin_event_index') }}">
-                                <i class="bi bi-calendar-check"></i> إدارة الأحداث
-                            </a>
-                        {% endif %}
+                        <a class="nav-link {{ app.request.get('_route') starts with 'admin_task' ? 'active' : '' }}" href="{{ path('admin_task_index') }}">
+                            <i class="bi bi-list-check"></i> إدارة المهام
+                        </a>
+                        <a class="nav-link {{ app.request.get('_route') starts with 'admin_event' ? 'active' : '' }}" href="{{ path('admin_event_index') }}">
+                            <i class="bi bi-calendar-check"></i> إدارة الأحداث
+                        </a>
+                        <a class="nav-link complex {{ app.request.get('_route') starts with 'admin_pointage' ? 'active' : '' }}" href="{{ path('admin_pointage_index') }}">
+                            <i class="bi bi-clock-history"></i>
+                            <div class="link-info">
+                                <span>سجل الحضور</span>
+                                <span class="sub">متابعة الغياب والتأخير</span>
+                            </div>
+                        </a>
 
-                        {% if is_granted('ROLE_ADMIN') %}
-                            <a class="nav-link complex {{ app.request.get('_route') starts with 'admin_pointage' ? 'active' : '' }}" href="{{ path('admin_pointage_index') }}">
-                                <i class="bi bi-clock-history"></i>
-                                <div class="link-info">
-                                    <span>سجل الحضور</span>
-                                    <span class="sub">متابعة الغياب والتأخير</span>
-                                </div>
-                            </a>
-                            {% if is_granted('ROLE_SUPER_ADMIN') %}
-                            <a class="nav-link complex" href="{{ path('admin_pointage_print_daily') }}" target="_blank">
-                                <i class="bi bi-qr-code-scan"></i>
-                                <div class="link-info">
-                                    <span>طباعة رموز اليوم</span>
-                                    <span class="sub">فتح واجهة الرموز اليومية</span>
-                                </div>
-                            </a>
-                            {% endif %}
-                        {% endif %}
-
-                        {% if is_granted('ROLE_ADMIN') %}
                         <div class="nav-section-label">النشر الرقمي</div>
                         <a class="nav-link complex {{ app.request.get('_route') starts with 'admin_content' ? 'active' : '' }}" href="{{ path('admin_content_index') }}">
                             <i class="bi bi-pencil-square"></i>
@@ -625,15 +570,54 @@
                                 <span class="sub">إدارة محتوى الصفحات</span>
                             </div>
                         </a>
-                        {% endif %}
 
                         {% if is_granted('ROLE_SUPER_ADMIN') %}
-                            <div class="nav-section-label">النظام</div>
+                            <div class="nav-section-label">SA</div>
                             <a class="nav-link {{ app.request.get('_route') starts with 'app_personnel' ? 'active' : '' }}" href="{{ path('app_personnel_index') }}">
                                 <i class="bi bi-people-fill"></i> الفريق
                             </a>
-                            <a class="nav-link {{ app.request.get('_route') starts with 'admin_user' ? 'active' : '' }}" href="{{ path('admin_user_index') }}">
+                            <a class="nav-link {{ app.request.get('_route') == 'admin_user_index' and app.request.query.get('filter') != 'pending' ? 'active' : '' }}" href="{{ path('admin_user_index') }}">
                                 <i class="bi bi-shield-lock-fill"></i> الصلاحيات
+                            </a>
+                        {% endif %}
+
+                    {% else %}
+                        {# Other roles sidebar if needed - keep logic or simplified view #}
+                        {% if is_granted('ROLE_PARENT') %}
+                            <div class="nav-section-label">فضاء الأولياء</div>
+                            <a class="nav-link {{ app.request.get('_route') starts with 'app_parent_children' ? 'active' : '' }}" href="{{ path('app_parent_children') }}">
+                                <i class="bi bi-people-fill"></i> ملفات الأطفال
+                            </a>
+                            <a class="nav-link {{ app.request.get('_route') starts with 'app_parent_registration' ? 'active' : '' }}" href="{{ path('app_parent_registration_new') }}">
+                                <i class="bi bi-person-plus-fill"></i> طلبات التسجيل
+                            </a>
+                            <a class="nav-link {{ app.request.get('_route') starts with 'app_parent_sessions' ? 'active' : '' }}" href="{{ path('app_parent_sessions') }}">
+                                <i class="bi bi-calendar-event"></i> جدول الحصص
+                            </a>
+                            <a class="nav-link {{ app.request.get('_route') starts with 'app_parent_reports' ? 'active' : '' }}" href="{{ path('app_parent_reports') }}">
+                                <i class="bi bi-file-earmark-medical"></i> تقارير المتابعة
+                            </a>
+                            <a href="{{ path('app_messaging_index') }}" class="nav-link {{ app.request.get('_route') starts with 'app_messaging' ? 'active' : '' }}">
+                                <i class="bi bi-chat-dots-fill"></i> Messagerie / المراسلة
+                            </a>
+                        {% endif %}
+
+                        {% if is_granted('ROLE_PERSONNEL') and not is_granted('ROLE_ADMIN') %}
+                            <div class="nav-section-label">فضاء الفريق</div>
+                            <a class="nav-link {{ app.request.get('_route') == 'app_specialiste_planning' ? 'active' : '' }}" href="{{ path('app_specialiste_planning') }}">
+                                <i class="bi bi-calendar3"></i> جدولي الزمني
+                            </a>
+                            <a class="nav-link {{ app.request.get('_route') == 'app_specialiste_sessions' ? 'active' : '' }}" href="{{ path('app_specialiste_sessions') }}">
+                                <i class="bi bi-journal-text"></i> حصصي
+                            </a>
+                            <a class="nav-link {{ app.request.get('_route') starts with 'app_specialiste_reports' ? 'active' : '' }}" href="{{ path('app_specialiste_reports') }}">
+                                <i class="bi bi-file-earmark-text"></i> تقارير المتابعة
+                            </a>
+                            <a class="nav-link {{ app.request.get('_route') == 'app_pointage_history' ? 'active' : '' }}" href="{{ path('app_pointage_history') }}">
+                                <i class="bi bi-clock-history"></i> سجل حضوري
+                            </a>
+                            <a class="nav-link {{ app.request.get('_route') == 'app_messaging_index' ? 'active' : '' }}" href="{{ path('app_messaging_index') }}">
+                                <i class="bi bi-chat-dots-fill"></i> المراسلة
                             </a>
                         {% endif %}
                     {% endif %}

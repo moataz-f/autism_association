@@ -35,15 +35,6 @@ class RegistrationFormType extends AbstractType
                 'required' => false,
                 'attr' => ['class' => 'form-control', 'placeholder' => '216...']
             ])
-            ->add('registrationRole', ChoiceType::class, [
-                'label' => 'Je m\'inscris en tant que / أسجل كـ',
-                'choices' => [
-                    'Parent d\'enfant / ولي أمر طفل' => 'PARENT',
-                    'Donateur / متبرع' => 'DONOR',
-                    'Bénévole / متطوع' => 'VOLUNTEER',
-                ],
-                'attr' => ['class' => 'form-select']
-            ])
             ->add('plainPassword', PasswordType::class, [
                 'label' => 'Mot de passe / كلمة المرور',
                 'mapped' => false,

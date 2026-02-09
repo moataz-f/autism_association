@@ -9,7 +9,7 @@
             <div class="card card-2026 p-5 border-0 shadow-lg">
                 <div class="text-center mb-5">
                     <h2 class="fw-900 text-navy mb-2">إنشاء حساب جديد</h2>
-                    <p class="text-muted">انضم إلينا كولي أمر، متبرع، أو متطوع</p>
+                    <p class="text-muted">انضم إلينا كولي أمر طفل</p>
                 </div>
 
                 {{ form_start(registrationForm) }}
@@ -38,11 +38,6 @@
                         {{ form_errors(registrationForm.numtlf) }}
                     </div>
 
-                    <div class="mb-4">
-                        {{ form_label(registrationForm.registrationRole) }}
-                        {{ form_widget(registrationForm.registrationRole) }}
-                        {{ form_errors(registrationForm.registrationRole) }}
-                    </div>
 
                     <div class="mb-4">
                         {{ form_label(registrationForm.plainPassword) }}

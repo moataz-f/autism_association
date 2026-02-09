@@ -67,6 +67,7 @@ class PersonnelController extends AbstractController
                 $user->setNom($personnel->getNom());
                 $user->setPrenom($personnel->getPrenom());
                 $user->setNumtlf($personnel->getTelephone());
+                $user->setIsApproved(true);
                 
                 // Set default password
                 $user->setPassword(
